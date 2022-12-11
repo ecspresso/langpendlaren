@@ -1,261 +1,81 @@
 <!DOCTYPE html>
 <html lang="sv">
-<head>
-  <title>Långpendlarn</title>
-  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-  <link rel="stylesheet" href="style.css">
-  
-  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-  <script type="text/javascript">
-    var Stations = new Array();
-    $(document).ready(function () {
-      $.support.cors = true; // Enable Cross domain requests
-      try {
-        $.ajaxSetup({
-          url: "https://api.trafikinfo.trafikverket.se/v2/data.json",
-          error: function (msg) {
-            if (msg.statusText == "abort") return;
-            alert("Request failed: " + msg.statusText + "\n" + msg.responseText);
-          }
-        });
-      }
-      catch (e) { alert("Ett fel uppstod vid initialisering."); }
-      // Create an ajax loading indicator
-      var loadingTimer;
-      $("#loader").hide();
-      $(document).ajaxStart(function () {
-        loadingTimer = setTimeout(function () {
-          $("#loader").show();
-        }, 200);
-      }).ajaxStop(function () {
-        clearTimeout(loadingTimer);
-        $("#loader").hide();
-      });
-      // Load stations
-      PreloadTrainStations();
-    });
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Långpendlarn</title>
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+        <link rel="stylesheet" href="style.css">
+        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+        <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+        <script src="/frontend/trafikverket.js" type="text/javascript"></script>
+    </head>
 
-    function PreloadTrainStations() {
-      // Request to load all stations
-      var xmlRequest = "<REQUEST>" +
-              // Use your valid authenticationkey
-              "<LOGIN authenticationkey='ab3f9656870c4625adfaaca4b76caeae'/>" +
-              "<QUERY objecttype='TrainStation' schemaversion='1'>" +
-              "<FILTER/>" +
-              "<INCLUDE>Prognosticated</INCLUDE>" +
-              "<INCLUDE>AdvertisedLocationName</INCLUDE>" +
-              "<INCLUDE>LocationSignature</INCLUDE>" +
-              "</QUERY>" +
-              "</REQUEST>";
-      $.ajax({
-        type: "POST",
-        contentType: "text/xml",
-        dataType: "json",
-        data: xmlRequest,
-        success: function (response) {
-          if (response == null) return;
-          try {
-            var stationlist = [];
-            $(response.RESPONSE.RESULT[0].TrainStation).each(function (iterator, item)
-            {
-              // Save a key/value list of stations
-              Stations[item.LocationSignature] = item.AdvertisedLocationName;
-              // Create an array to fill the search field autocomplete.
-              if (item.Prognosticated == true)
-                stationlist.push({ label: item.AdvertisedLocationName, value: item.LocationSignature });
-            });
-            fillSearchWidget(stationlist);
-          }
-          catch (ex) { }
-        }
-      });
-    }
+    <body>
 
-    function fillSearchWidget(data) {
-      $("#station").val("");
-      $("#station").autocomplete({
-        // Make the autocomplete fill with matches that "starts with" only
-        source: function (request, response) {
-          var matches = $.map(data, function (tag) {
-            if (tag.label.toUpperCase().indexOf(request.term.toUpperCase()) === 0) {
-              return {
-                label: tag.label,
-                value: tag.value
-              }
-            }
-          });
-          response(matches);
-        },
-        select: function (event, ui) {
-          var selectedObj = ui.item;
-          $("#station").val(selectedObj.label);
-          // Save selected stations signature
-          $("#station").data("sign", selectedObj.value);
-          return false;
-        },
-        focus: function (event, ui) {
-          var selectedObj = ui.item;
-          // Show station name in search field
-          $("#station").val(selectedObj.label);
-          return false;
-        }
-      });
-    }
-
-    function Search() {
-      var sign = $("#station").data("sign");
-      // Clear html table
-      $('#timeTableDeparture tr:not(:first)').remove();
-
-      // Request to load announcements for a station by its signature
-      var xmlRequest = "<REQUEST>" +
-              "<LOGIN authenticationkey='ab3f9656870c4625adfaaca4b76caeae' />" +
-              "<QUERY objecttype='TrainAnnouncement' " +
-              "orderby='AdvertisedTimeAtLocation' schemaversion='1'>" +
-              "<FILTER>" +
-              "<AND>" +
-              "<OR>" +
-              "<AND>" +
-              "<GT name='AdvertisedTimeAtLocation' " +
-              "value='$dateadd(-00:15:00)' />" +
-              "<LT name='AdvertisedTimeAtLocation' " +
-              "value='$dateadd(14:00:00)' />" +
-              "</AND>" +
-              "<GT name='EstimatedTimeAtLocation' value='$now' />" +
-              "</OR>" +
-              "<EQ name='LocationSignature' value='" + sign + "' />" +
-              "<EQ name='ActivityType' value='Avgang' />" +
-              "</AND>" +
-              "</FILTER>" +
-              // Just include wanted fields to reduce response size.
-              "<INCLUDE>InformationOwner</INCLUDE>" +
-              "<INCLUDE>AdvertisedTimeAtLocation</INCLUDE>" +
-              "<INCLUDE>TrackAtLocation</INCLUDE>" +
-              "<INCLUDE>FromLocation</INCLUDE>" +
-              "<INCLUDE>ToLocation</INCLUDE>" +
-              // Train ID
-              "<INCLUDE>AdvertisedTrainIdent</INCLUDE>" +
-              "</QUERY>" +
-              "</REQUEST>";
-      $.ajax({
-        type: "POST",
-        contentType: "text/xml",
-        dataType: "json",
-        data: xmlRequest,
-        success: function (response) {
-          if (response == null) return;
-          if (response.RESPONSE.RESULT[0].TrainAnnouncement == null)
-            jQuery("#timeTableDeparture tr:last").
-            after("<tr><td colspan='4'>Inga avgångar hittades</td></tr>");
-          try {
-            renderTrainAnnouncement(response.RESPONSE.RESULT[0].TrainAnnouncement);
-          }
-          catch (ex) { }
-        }
-      });
-    }
-
-    function renderTrainAnnouncement(announcement) {
-      $(announcement).each(function (iterator, item) {
-        var advertisedtime = new Date(item.AdvertisedTimeAtLocation);
-        var hours = advertisedtime.getHours()
-        var minutes = advertisedtime.getMinutes()
-        if (minutes < 10) minutes = "0" + minutes
-        var toList = new Array();
-        $(item.ToLocation).each(function (iterator, toItem) {
-          toList.push(Stations[toItem]);
-        });
-        var owner = "";
-        if (item.InformationOwner != null) owner = item.InformationOwner;
-        jQuery("#timeTableDeparture tr:last").
-        after("<tr><td>" + hours + ":" + minutes + "</td><td>" + toList.join(', ') +
-                "</td><td>" + owner + "</td><td style='text-align: center'>" + item.TrackAtLocation + "</td><td>" +
-                // Train ID
-                item.AdvertisedTrainIdent + "</td><td> <button id='selectTrain' type='button'>Välj resa</button> </td></tr>");
-
-                var selectTrain = document.getElementById("selectTrain");
-
-                selectTrain.addEventListener("click", function(e) {
-                console.log("Train ID: " + item.AdvertisedTrainIdent + "Train 2departure time: ");
-    });
-      });
-    }
-
-    
-
-  </script>
-</head>
-
-<body>
-
-  <h1>LångpendlarN</h1>
-
-  <div class="flex-container">
-
-    <div class="trains">
-
-      <h3>Sök avgång</h3>
-
-      <div id="searchbar">
-        <input id="station" type="text" placeholder="Ange stad här..." />
-        <input type="button" value="Visa" onclick="javascript: Search()" />
-        <span id="loader" style="margin-left: 10px">Laddar data ...</span>
-      </div>
-
-      <div id="result">
-        <h3>Avgående tåg</h3>
-        <table id="timeTableDeparture">
-          <tr>
-            <th scope="col" style="width:40px;">Tid</th>
-            <th scope="col" style="width:200px;">Till</th>
-            <th scope="col" style="width:80px;"></th>
-            <th scope="col"  style="width:80px;">Spår</th>
-            <!--Train ID-->
-            <th scope="col"  style="width:80px;">ID</th>
-            <th scope="col"  style="width:80px;">Välj tåg</th>
-          </tr>
-        </table>
-      </div>
+      <header>
+        <h1>LångpendlarN</h1>
+      </header>
 
       
+      <div class="flex-container">
+        <div class="trains">
+        <h3>Sök avgång</h3>
 
+          <div id="searchbar">
+            <input id="station" type="text" placeholder="Ange stad här..." />
+            <input type="button" value="Visa" onclick="javascript: Search()" />
+            <span id="loader" style="margin-left: 10px">Laddar data ...</span>
+          </div>
+
+          <div id="result">
+            <h3>Avgående tåg</h3>
+            <table id="timeTableDeparture">
+              <tr>
+                <th scope="col" style="width:40px;">Tid</th>
+                <th scope="col" style="width:200px;">Till</th>
+                <th scope="col" style="width:80px;"></th>
+                <th scope="col"  style="width:80px;">Spår</th>
+                <!--Train ID-->
+                <th scope="col"  style="width:80px;">ID</th>
+                <th scope="col"  style="width:80px;">Välj tåg</th>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+
+      <div class="spotify">
+        <h3>Spotify sök</h3>
+        <form action="">
+            <input type="hidden" id='hidden_token'>
+            <div class="col-sm-6 form-group row mt-4 px-0">
+                <label for="Genre" class="form-label col-sm-2">Genre:</label>
+                <select name="" id="select_genre" class="form-control form-control-sm col-sm-10">
+                    <option>Select...</option>                    
+                </select>
+            </div>
+            <div class="col-sm-6 form-group row px-0">
+                <label for="Genre" class="form-label col-sm-2">Spellista:</label>
+                <select name="" id="select_playlist" class="form-control form-control-sm col-sm-10">
+                    <option>Select...</option>                    
+                </select>
+            </div>                  
+            <div class="col-sm-6 row form-group px-0">
+                <button type="submit" id="btn_submit" class="btn btn-success col-sm-12">Sök</button>
+            </div>          
+        </form>        
+        <div class="row">
+            <div class="col-sm-6 px-0">
+                <div class="list-group song-list">
+                    
+                </div>                                             
+            </div>
+            <div class="offset-md-1 col-sm-4" id="song-detail">                
+            </div>
+        </div> 
+      </div>
     </div>
-
-    <div class="spotify">
-      
-      <h3>Spotify sök</h3>
-      <form action="">
-          <input type="hidden" id='hidden_token'>
-          <div class="col-sm-6 form-group row mt-4 px-0">
-              <label for="Genre" class="form-label col-sm-2">Genre:</label>
-              <select name="" id="select_genre" class="form-control form-control-sm col-sm-10">
-                  <option>Select...</option>                    
-              </select>
-          </div>
-          <div class="col-sm-6 form-group row px-0">
-              <label for="Genre" class="form-label col-sm-2">Spellista:</label>
-              <select name="" id="select_playlist" class="form-control form-control-sm col-sm-10">
-                  <option>Select...</option>                    
-              </select>
-          </div>                  
-          <div class="col-sm-6 row form-group px-0">
-              <button type="submit" id="btn_submit" class="btn btn-success col-sm-12">Sök</button>
-          </div>          
-      </form>        
-      <div class="row">
-          <div class="col-sm-6 px-0">
-              <div class="list-group song-list">
-                  
-              </div>                                             
-          </div>
-          <div class="offset-md-1 col-sm-4" id="song-detail">                
-          </div>
-      </div> 
-
-    </div>
-
-  </div>
 
   <script src="spotify.js" type="text/javascript"></script>
 </body>
