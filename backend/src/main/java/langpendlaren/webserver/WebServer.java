@@ -15,7 +15,7 @@ public class WebServer {
         trafikverketAPI = new TrafikverketAPI();
         spotifyAPI = new SpotifyAPI();
 
-        addGet("/", trafikverketAPI.postString());
+        addGet("/api/stations", trafikverketAPI.getTrainStops(1));
     }
 
     public void run() {
