@@ -166,11 +166,15 @@ function renderTrainAnnouncement(announcement) {
     after("<tr><td>" + hours + ":" + minutes + "</td><td>" + toList.join(', ') +
             "</td><td>" + owner + "</td><td style='text-align: center'>" + item.TrackAtLocation + "</td><td>" +
             // Train ID
-            item.AdvertisedTrainIdent + "</td><td> <button id='selectTrain' type='button'>Välj resa</button> </td></tr>");
+            item.AdvertisedTrainIdent + "</td><td> <button id='selectTrain' type='button' onclick='clearBox('main_content')'>Välj resa</button> </td></tr>");
 
             var selectTrain = document.getElementById("selectTrain");
             selectTrain.addEventListener("click", function(e) {
             console.log("Train ID: " + item.AdvertisedTrainIdent + " | " + "Departure time: " + depTime);
 });
   });
+}
+
+function clearBox(elementID) {
+  document.getElementById(elementID).innerHTML= "";
 }
