@@ -178,3 +178,25 @@ function renderTrainAnnouncement(announcement) {
 function clearBox(elementID) {
   document.getElementById(elementID).innerHTML= "";
 }
+
+// http://jsfiddle.net/je01otqn/36/
+var departureTime = document.getElementById("departureTime").value;
+var arrivalTime = document.getElementById("arrivalTime").value;
+function calcTimeDiffrence(departureTime, arrivalTime) {
+    departureTime = departureTime.split(":");
+    arrivalTime = arrivalTime.split(":");
+    var startDate = new Date(0, 0, 0, departureTime[0], departureTime[1], 0);
+    var endDate = new Date(0, 0, 0, arrivalTime[0], arrivalTime[1], 0);
+    var diff = endDate.getTime() - startDate.getTime();
+    var hours = Math.floor(diff / 1000 / 60 / 60);
+    diff -= hours * 1000 * 60 * 60;
+    var minutes = Math.floor(diff / 1000 / 60);
+    return (hours < 9 ? "0" : "") + hours + ":" + (minutes < 9 ? "0" : "") + minutes;
+}
+document.getElementById("timeDiffrence").value = calcTimeDiffrence(departureTime, arrivalTime);
+
+/* HTML
+<input id="departureTime" value="11:00">
+<input id="arrivalTime" value="22:40">
+<input id="timeDiffrence">
+*/ 
