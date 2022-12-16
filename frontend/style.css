@@ -1,5 +1,18 @@
+
+/*
 h1 {
     background-color: aquamarine;
+}
+*/
+
+header {
+    background-color: #605DF2;
+    width: 100%;
+    padding: 2px;
+}
+
+h1 {
+    color: white;
 }
 
 .flex-container {
@@ -48,6 +61,17 @@ table
     {
       padding: 8px 8px;
     }
+
+    table tr{
+        border-bottom: 1px solid black;
+    }
+
+    table button {
+        background-color: green;
+        border-radius: 5px;
+    }
+
+
 
 .btn.dropdown-toggle  {
     width:150px;
