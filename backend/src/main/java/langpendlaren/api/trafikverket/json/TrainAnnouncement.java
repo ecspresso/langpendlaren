@@ -1,9 +1,11 @@
-package langpendlaren.trafikverket.json;
+package langpendlaren.api.trafikverket.json;
+
+import langpendlaren.api.JSON;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-public class TrainAnnouncement {
+public class TrainAnnouncement implements JSON {
     private UUID activityId;
     private ActivityType activityType;
     private boolean advertised;
@@ -123,5 +125,10 @@ public class TrainAnnouncement {
 
     public void setTimeAtLocation(String timeAtLocation) {
         this.timeAtLocation = ZonedDateTime.parse(timeAtLocation);
+    }
+
+    @Override
+    public String toString() {
+        return "TrainAnnouncement{" + "activityId=" + activityId + ", activityType=" + activityType + ", advertised=" + advertised + ", advertisedTimeAtLocation=" + advertisedTimeAtLocation + ", advertisedTrainIdent='" + advertisedTrainIdent + '\'' + ", canceled=" + canceled + ", deleted=" + deleted + ", informationOwner='" + informationOwner + '\'' + ", locationSignature='" + locationSignature + '\'' + ", modifiedTime=" + modifiedTime + ", scheduledDepartureDateTime=" + scheduledDepartureDateTime + ", technicalTrainIdent='" + technicalTrainIdent + '\'' + ", timeAtLocation=" + timeAtLocation + '}';
     }
 }

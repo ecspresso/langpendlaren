@@ -1,4 +1,4 @@
-package langpendlaren.trafikverket.json;
+package langpendlaren.api.trafikverket.json;
 
 public class Response {
     private Result result;

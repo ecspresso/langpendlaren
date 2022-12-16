@@ -1,19 +1,10 @@
 package langpendlaren;
 
-import langpendlaren.trafikverket.TrafikverketAPI;
-
-import java.io.UnsupportedEncodingException;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
-import java.util.UUID;
+import langpendlaren.webserver.WebServer;
 
 public class Main {
     public static void main(String[] args) {
-        TrafikverketAPI trafikverketAPI = new TrafikverketAPI();
-        try {
-            trafikverketAPI.post();
-        } catch(UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+        WebServer webServer = new WebServer();
+        webServer.run();
     }
 }

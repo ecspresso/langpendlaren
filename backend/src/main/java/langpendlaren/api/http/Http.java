@@ -1,4 +1,4 @@
-package langpendlaren.http;
+package langpendlaren.api.http;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
@@ -19,25 +19,25 @@ public abstract class Http {
         this.host = host;
     }
 
-    protected void post(HttpPost httpPost) throws IOException {
-        StringBuffer result = new StringBuffer();
+    protected String post(HttpPost httpPost) throws IOException {
+        StringBuilder result = new StringBuilder();
 
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
             try (CloseableHttpResponse response = httpclient.execute(httpPost)) {
-                HttpEntity entity1 = response.getEntity();
+                HttpEntity entity = response.getEntity();
 
                 int status = response.getStatusLine().getStatusCode();
                 System.out.println(status);
 
-                BufferedReader br = new BufferedReader(new InputStreamReader((response.getEntity().getContent())));
+                BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
                 String line;
                 while ((line = br.readLine()) != null) {
                     result.append(line);
                 }
-                EntityUtils.consume(entity1);
+                EntityUtils.consume(entity);
             }
         }
 
-
+        return result.toString();
     }
 }

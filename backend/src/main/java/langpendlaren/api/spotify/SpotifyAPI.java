@@ -1,6 +1,6 @@
-package langpendlaren.spotify;
+package langpendlaren.api.spotify;
 
-import langpendlaren.http.Http;
+import langpendlaren.api.http.Http;
 import org.apache.http.HttpHost;
 
 public class SpotifyAPI extends Http {
