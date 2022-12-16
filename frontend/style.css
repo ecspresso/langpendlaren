@@ -69,6 +69,10 @@ table
     table button {
         background-color: green;
         border-radius: 5px;
+        cursor: pointer;
+    }
+    table button:hover {
+        color: white;
     }
 
 
