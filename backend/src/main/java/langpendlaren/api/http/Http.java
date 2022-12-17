@@ -27,7 +27,7 @@ public abstract class Http {
                 HttpEntity entity = response.getEntity();
 
                 int status = response.getStatusLine().getStatusCode();
-                System.out.println(status);
+                System.out.println(httpPost.getEntity().toString() + status);
 
                 BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
                 String line;

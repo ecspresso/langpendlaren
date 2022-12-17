@@ -5,6 +5,9 @@ import langpendlaren.api.JSON;
 import langpendlaren.api.spotify.SpotifyAPI;
 import langpendlaren.api.trafikverket.TrafikverketAPI;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+
 public class WebServer {
     private final Javalin javalin;
     private final TrafikverketAPI trafikverketAPI;
@@ -16,6 +19,7 @@ public class WebServer {
         spotifyAPI = new SpotifyAPI();
 
         addGet("/api/stations", trafikverketAPI.getTrainStops(1));
+        addAuthorize("/api/spotify/authorize", spotifyAPI.authorize());
     }
 
     public void run() {
@@ -27,6 +31,9 @@ public class WebServer {
     }
 
     private void addGet(String path, String text) {
+        javalin.get(path, context -> context.json(text));
+    }
+    private void addAuthorize(String path, String text) {
         javalin.get(path, context -> context.json(text));
     }
 }
