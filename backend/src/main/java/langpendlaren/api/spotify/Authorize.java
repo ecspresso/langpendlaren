@@ -1,41 +1,40 @@
 package langpendlaren.api.spotify;
 
+import org.apache.hc.core5.http.ParseException;
 import se.michaelthelin.spotify.SpotifyApi;
-import se.michaelthelin.spotify.SpotifyHttpManager;
+import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
+import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
+import se.michaelthelin.spotify.requests.authorization.authorization_code.AuthorizationCodeRefreshRequest;
+import se.michaelthelin.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
 import se.michaelthelin.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
 
+import java.io.IOException;
 import java.net.URI;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 
 public class Authorize {
-    private final SpotifyApi spotifyApi;
-    private final AuthorizationCodeUriRequest auR;
-    public Authorize(String clientId, String clientSecret, String redirectURI, String scope){
-        this.spotifyApi = new SpotifyApi.Builder()
-                .setClientId(clientId)
-                .setClientSecret(clientSecret)
-                .setRedirectUri(SpotifyHttpManager.makeUri(redirectURI))
-                .build();
-        this.auR = spotifyApi.authorizationCodeUri()
-                .scope(scope)
-                .show_dialog(false)
-                .build();
+    private final SpotifyApi spotifyApiWrapper;
+    private final AuthorizationCodeUriRequest authorizationCodeUriRequest;
+    private AuthorizationCodeCredentials authorizationCodeCredentials;
 
-        // Call authorize
-        authorizationUri_Async();
+    public Authorize(SpotifyApi spotifyApiWrapper) {
+        this.spotifyApiWrapper = spotifyApiWrapper;
+        authorizationCodeUriRequest = this.spotifyApiWrapper.authorizationCodeUri().build();
     }
 
-    public void authorizationUri_Async() {
-        try {
-            CompletableFuture<URI> uriFuture = this.auR.executeAsync();
-            URI uri = uriFuture.join();
-            System.out.println("Authority: " + uri.getAuthority() + " URI: " + uri);
-        } catch (CompletionException e) {
-            System.out.println("Error: " + e.getCause().getMessage());
-        } catch (CancellationException e) {
-            System.out.println("Async operation cancelled.");
-        }
+    public URI authorize() {
+        return authorizationCodeUriRequest.execute();
+    }
+
+    public void getAccessToken(String code) throws IOException, ParseException, SpotifyWebApiException {
+        AuthorizationCodeRequest authorizationCodeRequest = spotifyApiWrapper.authorizationCode(code).build(); // Invalid redirect URI
+        authorizationCodeCredentials = authorizationCodeRequest.execute();
+        spotifyApiWrapper.setAccessToken(authorizationCodeCredentials.getAccessToken());
+        spotifyApiWrapper.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+    }
+
+    public void refreshToken() throws IOException, ParseException, SpotifyWebApiException {
+        AuthorizationCodeRefreshRequest authorizationCodeRefreshRequest = spotifyApiWrapper.authorizationCodeRefresh().build();
+        authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
+        spotifyApiWrapper.setAccessToken(authorizationCodeCredentials.getAccessToken());
     }
 }
