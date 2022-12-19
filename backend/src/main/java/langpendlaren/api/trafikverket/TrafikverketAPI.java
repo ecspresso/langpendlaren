@@ -1,6 +1,9 @@
 package langpendlaren.api.trafikverket;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import langpendlaren.api.http.Http;
+import langpendlaren.api.trafikverket.json.StationShortNames;
 import org.apache.http.HttpHost;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -96,7 +99,27 @@ public class TrafikverketAPI extends Http {
         return post(xml);
     }
 
-   
+    public StationShortNames getStationShortNames() {
+        String xml = String.format("""     
+                <REQUEST>
+                      <LOGIN authenticationkey="%s" />
+                      <QUERY objecttype="TrainStation" schemaversion="1">
+                            <FILTER>
+                                  <EQ name="Advertised" value="true" />
+                            </FILTER>
+                            <INCLUDE>AdvertisedLocationName</INCLUDE>
+                            <INCLUDE>LocationSignature</INCLUDE>
+                      </QUERY>
+                </REQUEST>
+                """, apikey);
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.readValue(post(xml), StationShortNames.class);
+        } catch(JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private String post(String xml) {
         HttpPost httpPost = new HttpPost("https://api.trafikinfo.trafikverket.se/v2/data.json");
