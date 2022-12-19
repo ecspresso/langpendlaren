@@ -1,20 +1,12 @@
 package langpendlaren.api.spotify;
 
-import com.neovisionaries.i18n.CountryCode;
-import langpendlaren.api.JSON;
 import langpendlaren.api.http.Http;
 import org.apache.http.HttpHost;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import se.michaelthelin.spotify.SpotifyApi;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 public class SpotifyAPI extends Http{
     public SpotifyAPI() {
