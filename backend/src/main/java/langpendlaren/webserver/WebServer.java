@@ -5,9 +5,6 @@ import langpendlaren.api.JSON;
 import langpendlaren.api.spotify.SpotifyAPI;
 import langpendlaren.api.trafikverket.TrafikverketAPI;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-
 public class WebServer {
     private final Javalin javalin;
     private final TrafikverketAPI trafikverketAPI;
@@ -28,7 +25,15 @@ public class WebServer {
 
 
         addGet("/api/stations", trafikverketAPI.getTrainStops(1));
-        addAuthorize("/api/spotify/authorize", spotifyAPI.authorize());
+
+
+        // Get play lists
+        addGet("/spotify/playlists", spotifyAPI.getCurrentPlayList());
+        // Get play list
+        addGetById("/spotify/playlist/{id}");
+        // Create play list
+        addPut("/spotify/createplaylist/{name}");
+
     }
 
     public void run() {
@@ -42,7 +47,20 @@ public class WebServer {
     private void addGet(String path, String text) {
         javalin.get(path, context -> context.json(text));
     }
-    private void addAuthorize(String path, String text) {
-        javalin.get(path, context -> context.json(text));
+    private void addGetById(String path) {
+        javalin.get(path, context -> {
+            if (path.contains("spotify")) {
+                String playListId = context.pathParam("id");
+                this.spotifyAPI.getPlayList(playListId);
+            }
+        });
+    }
+
+    private void addPut(String path) {
+        javalin.put(path, context -> {
+            String playListName = context.pathParam("name");
+            String playListDesc = context.pathParam("desc");
+            spotifyAPI.createPlayList(playListName, playListDesc);
+        });
     }
 }

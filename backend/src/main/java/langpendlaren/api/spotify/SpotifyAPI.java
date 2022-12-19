@@ -1,44 +1,101 @@
 package langpendlaren.api.spotify;
 
-import langpendlaren.api.http.Http;
-import org.apache.http.HttpHost;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
+import org.apache.hc.core5.http.ParseException;
+import se.michaelthelin.spotify.SpotifyApi;
+import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
+import se.michaelthelin.spotify.model_objects.credentials.ClientCredentials;
+import se.michaelthelin.spotify.model_objects.specification.Paging;
+import se.michaelthelin.spotify.model_objects.specification.Playlist;
+import se.michaelthelin.spotify.model_objects.specification.PlaylistSimplified;
+import se.michaelthelin.spotify.requests.authorization.client_credentials.ClientCredentialsRequest;
+import se.michaelthelin.spotify.requests.data.playlists.CreatePlaylistRequest;
+import se.michaelthelin.spotify.requests.data.playlists.GetListOfUsersPlaylistsRequest;
+import se.michaelthelin.spotify.requests.data.playlists.GetPlaylistRequest;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
-public class SpotifyAPI extends Http{
+public class SpotifyAPI {
+    private static final String clientId = "8b83701f45c34a07b396c5199a7c3998";
+    private static final String clientSecret = "b9e7dfdd05f54d1483cdfecc63e1861c";
+    private static final String redirectURI = "https://localhost:80";
+    private static String scope = "user-read-birthdate,user-read-email";
+    private final SpotifyApi spotifyApi;
+    private final ClientCredentialsRequest ccR;
+    private final String userID = "userID";
+
+
     public SpotifyAPI() {
-        super(new HttpHost("https://accounts.spotify.com/authorize"));
+        // Not sure if the auth need only one time.
+        new Authorize(clientId, clientSecret, redirectURI, scope);
 
-        id = "8b83701f45c34a07b396c5199a7c3998";
-        secret = "b9e7dfdd05f54d1483cdfecc63e1861c";
+        this.spotifyApi = new SpotifyApi.Builder().setClientId(clientId).setClientSecret(clientSecret).build();
+        this.ccR = spotifyApi.clientCredentials().build();
     }
-    private final String id;
-    private final String secret;
-
-    public String authorize() {
-        HttpPost http = new HttpPost("https://accounts.spotify.com/authorize");
-        http.addHeader("contentType", "text/xml");
-        http.addHeader("datatype", "json");
-
-        StringBuilder url = new StringBuilder();
-        String authorizeUrl = "https://accounts.spotify.com/authorize";
-        url.append(authorizeUrl).append("?client_id=").append(id).append("&response_type=code").append("%redirect_uri=").append("https://localhost:80").append("&show_dialog=true").append("&scope=user-read-private user-read-email user-modify-playback-state user-read-playback-position");
 
 
-        StringEntity entity = null;
+
+
+    /**
+     * Get All play lists
+     * @return String
+     */
+    public String getCurrentPlayList(){
+        getAccessToken(); // Update accessToken
+        GetListOfUsersPlaylistsRequest gPlayList = this.spotifyApi.getListOfUsersPlaylists("userId").build();
         try {
-            entity = new StringEntity(url.toString());
-        } catch(UnsupportedEncodingException e) {
-            return null;
+            final Paging<PlaylistSimplified> playlistSimplifiedPaging = gPlayList.execute();
+
+            return "Total: " + playlistSimplifiedPaging.getTotal();
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            return "Error: " + e.getMessage();
         }
-        http.setEntity(entity);
+    }
+
+    /**
+     * Create a play list
+     */
+    public void createPlayList(String name, String dec){
+        getAccessToken();
+        CreatePlaylistRequest createPlayList = this.spotifyApi.createPlaylist(userID, name).public_(false).description(dec).build();
         try {
-            return super.post(http);
-        } catch(IOException e) {
-            return null;
+            Playlist playlist = createPlayList.execute();
+
+            System.out.println("Name: " + playlist.getName());
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+
+    }
+
+    /**
+     * Get a play list
+     */
+    public String getPlayList(String pId){
+        getAccessToken();
+        GetPlaylistRequest getPlayList = this.spotifyApi.getPlaylist(pId).build();
+        try {
+            final Playlist playlist = getPlayList.execute();
+            System.out.println("Name: " + playlist.getName());
+            return playlist.getName();
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Error: " + e.getMessage());
+            return e.getMessage();
+        }
+    }
+
+
+
+
+
+    /**
+     * Get AccessToken each time the request needs
+     */
+    public void getAccessToken() {
+        try {
+            ClientCredentials clientCredentials = this.ccR.execute();
+            this.spotifyApi.setAccessToken(clientCredentials.getAccessToken());
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
 
