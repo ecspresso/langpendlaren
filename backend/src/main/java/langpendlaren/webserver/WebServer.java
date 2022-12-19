@@ -18,6 +18,15 @@ public class WebServer {
         trafikverketAPI = new TrafikverketAPI();
         spotifyAPI = new SpotifyAPI();
 
+        addGet("/api/trains", trafikverketAPI.getTrainStops(1));
+
+        //Avgångar från en viss station, anges genom station signature
+        addGet("/api/departures", trafikverketAPI.getDepartures("Cst"));
+
+        //Förslag på en annan fråga för att hämta ut vilka stationer som ett tåg stannar på
+        addGet("/api/trains/stops", trafikverketAPI.getTrainStopStation(261));
+
+
         addGet("/api/stations", trafikverketAPI.getTrainStops(1));
         addAuthorize("/api/spotify/authorize", spotifyAPI.authorize());
     }
