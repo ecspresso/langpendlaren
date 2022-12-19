@@ -16,10 +16,6 @@ public class TrafikverketAPI extends Http {
     private final String apikey;
 
     public String getTrainStops(int trainId) {
-        HttpPost httpPost = new HttpPost("https://api.trafikinfo.trafikverket.se/v2/data.json");
-        httpPost.addHeader("contentType", "text/xml");
-        httpPost.addHeader("dataType", "json");
-
         String xml = String.format("""
                 <REQUEST>
                     <LOGIN authenticationkey="%s" />
@@ -31,31 +27,13 @@ public class TrafikverketAPI extends Http {
                 </REQUEST>
                 """, apikey, trainId);
 
-
-        StringEntity entity = null;
-        try {
-            entity = new StringEntity(xml);
-        } catch(UnsupportedEncodingException e) {
-            return null;
-        }
-
-        httpPost.setEntity(entity);
-
-        try {
-            return super.post(httpPost);
-        } catch(IOException e) {
-            return null;
-        }
+        return post(xml);
     }
 
     //Anger avgångar från en viss station genom station signature (exempelvis: Cst)
     public String getDepartures(String stationSignature) {
-        HttpPost httpPost = new HttpPost("https://api.trafikinfo.trafikverket.se/v2/data.json");
-        httpPost.addHeader("contentType", "text/xml");
-        httpPost.addHeader("dataType", "json");
-
         String xml = String.format("""
-                <REQUEST> 
+                <REQUEST>
                     <LOGIN authenticationkey="%s" />
                     <QUERY objecttype="TrainAnnouncement"  
                         orderby="AdvertisedTimeAtLocation" schemaversion="1"> 
@@ -86,37 +64,17 @@ public class TrafikverketAPI extends Http {
                 
                 """, apikey, stationSignature);
 
-
-        StringEntity entity = null;
-        try {
-            entity = new StringEntity(xml);
-        } catch(UnsupportedEncodingException e) {
-            return null;
-        }
-
-        httpPost.setEntity(entity);
-
-        try {
-            return super.post(httpPost);
-        } catch(IOException e) {
-            return null;
-        }
+        return post(xml);
     }
 
     //Förslag på en annan fråga till trafikverket
     public String getTrainStopStation(int trainId) {
-        HttpPost httpPost = new HttpPost("https://api.trafikinfo.trafikverket.se/v2/data.json");
-        httpPost.addHeader("contentType", "text/xml");
-        httpPost.addHeader("dataType", "json");
-
         String xml = String.format("""
-                               
                 <REQUEST>
                       <LOGIN authenticationkey="%s" />
                       <QUERY objecttype="TrainAnnouncement" schemaversion="1.3">
                             <FILTER>
                                   <EQ name="AdvertisedTrainIdent" value="%s" />
-                     
                                 <OR>
                                       <AND>
                                             <GT name="AdvertisedTimeAtLocation" value="$dateadd(-00:15:00)" />
@@ -127,16 +85,23 @@ public class TrafikverketAPI extends Http {
                                             <GT name="EstimatedTimeAtLocation" value="$dateadd(00:00:00)" />
                                       </AND>
                                 </OR>
-                                       
                             </FILTER>
+
                             <INCLUDE>LocationSignature</INCLUDE>
                             <INCLUDE>AdvertisedTimeAtLocation</INCLUDE>
                       </QUERY>
                 </REQUEST>
-                                
-                                
                 """, apikey, trainId);
 
+        return post(xml);
+    }
+
+   
+
+    private String post(String xml) {
+        HttpPost httpPost = new HttpPost("https://api.trafikinfo.trafikverket.se/v2/data.json");
+        httpPost.addHeader("contentType", "text/xml");
+        httpPost.addHeader("dataType", "json");
 
         StringEntity entity = null;
         try {
