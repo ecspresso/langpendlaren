@@ -130,13 +130,19 @@ img.track {
     text-align: center;
  }
   
- #search_button input {
+ #search_button button {
     margin-top: 2%;
     border: 5px solid #605DF2;
     border-radius: 10px;
     height: 40px;
     font-weight: bold;
- } 
+}
+#search_button button:hover {
+    background-color: #605DF2;
+    color: white;
+    cursor: pointer;
+}
+
 
 #result {
     text-align: center;
