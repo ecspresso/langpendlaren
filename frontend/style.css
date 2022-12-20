@@ -1,24 +1,20 @@
 
-/*
-h1 {
-    background-color: aquamarine;
-}
-*/
-
 header {
     background-color: #605DF2;
     width: 100%;
     padding: 2px;
 }
-
-h1 {
+header h1 {
     color: white;
+    text-align: center;
 }
+
 
 .flex-container {
     display: flex;
     justify-content: center;
 }
+
 
 /*
 #trains > h3, #searchbar, #result > h3 {
@@ -33,11 +29,6 @@ h1 {
 
 */
 
-h1 {
-    text-align: center;
-}
-
-
 
 .trains {
     width: 50%;
@@ -45,42 +36,17 @@ h1 {
     
 }
 
+
 .spotify {
     width: 50%;
 }
-
-
-
-table
-    {
-      border: 1px solid #000000;
-      border-collapse: collapse;
-      border-spacing: 0px;
-    }
-    table td
-    {
-      padding: 8px 8px;
-    }
-
-    table tr{
-        border-bottom: 1px solid black;
-    }
-
-    table button {
-        background-color: green;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    table button:hover {
-        color: white;
-    }
-
 
 
 .btn.dropdown-toggle  {
     width:150px;
     text-align:left;
 }
+
 
 span.caret {
     position: absolute;
@@ -91,46 +57,39 @@ span.caret {
 label {
     padding-top:5px;
 }
-
 .form-label {
     padding-left:0px !important;
 }
+
 
 img {
     width:140px;
     height:140px;
 }
-
-.btn-success {
-    background-color: #3b7d4a!important;
-}
-
-.btn-success:hover {
-    background-color: #4daf64!important;
-}
-
 img.track {
     border: 1px solid #8a8a8a;
 }
+
 
 #searchbar {
     text-align: center;
     margin-top: 5%;
     display: block;
- }
-  
- #search_station input {
+}
+
+
+#search_station input {
     border: 5px solid #605DF2;
     width: 50%;
     height: 25px;
     border-radius: 10px;
- }
-  
- #search_station ::placeholder {
+}
+#search_station ::placeholder {
     text-align: center;
- }
-  
- #search_button button {
+}
+
+ 
+#search_button button {
     margin-top: 2%;
     border: 5px solid #605DF2;
     border-radius: 10px;
@@ -144,13 +103,17 @@ img.track {
 }
 
 
-#result {
-    text-align: center;
-}
-
 #timeTableDeparture {
+    text-align: center;
+    margin-top: 2%;
     margin-left: auto;
     margin-right: auto;
+    border: 5px solid #605DF2;
+    border-radius: 10px;
+}
+#timeTableDeparture th {
+    font-weight: bold;
+    font-size: 120%;
 }
 
 #calcTime {
