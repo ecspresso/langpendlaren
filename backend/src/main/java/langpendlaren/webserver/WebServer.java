@@ -56,16 +56,16 @@ public class WebServer {
             spotifyAPI.createPlayList(userId, playListName, playListDesc);
         });
 
-        // Skapa URI för att logga in.
-        javalin.get("/spotify/auth", context -> context.json(spotifyAPI.auth()));
-
-        // Returnera koden från Spotify
-        javalin.get("/spotify/auth/{code}", context -> {
-            String code = context.pathParam("code");
-            try {
-                this.spotifyAPI.getAccessToken(code);
-            } catch (IOException | ParseException | SpotifyWebApiException e) {
-                e.printStackTrace();
+        javalin.get("/spotify/auth", context -> {
+            String code = context.queryParam("code");
+            if(code == null) { // Skapa URI för att logga in.
+                context.json(spotifyAPI.auth());
+            } else { // Returnera koden från Spotify
+                try {
+                    this.spotifyAPI.getAccessToken(code);
+                } catch (IOException | ParseException | SpotifyWebApiException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
