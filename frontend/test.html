@@ -5,8 +5,8 @@
        <title>Långpendlaren</title>
        <meta name="viewport" content="width=device-width, initial-scale=1.0">
        <link rel="icon" type="image/x-icon" href="g">
-       <link rel="stylesheet" type="text/css" href="style.css">
-       <script src="trafikverket.js" type="text/javascript"></script>
+       <link rel="stylesheet" type="text/css" href="/frontend/style.css">
+       <script src="/frontend/trafikverket.js" type="text/javascript"></script>
        
    </head>
  
@@ -17,38 +17,41 @@
  
            <main>
             <div>
-                <input id="departureTime" value="11:00">
-                <input id="arrivalTime" value="13:08">
+                <input id="departureTime" value="11:08">
+                <input id="arrivalTime" value="14:49">
                 <input id="timeDiffrence">
             </div>
-
-            <script>
-                var departureTime = document.getElementById("departureTime").value;
-                var arrivalTime = document.getElementById("arrivalTime").value;
-                function calcTimeDiffrence(departureTime, arrivalTime) {
-                    departureTime = departureTime.split(":");
-                    arrivalTime = arrivalTime.split(":");
-                    var startDate = new Date(0, 0, 0, departureTime[0], departureTime[1], 0);
-                    var endDate = new Date(0, 0, 0, arrivalTime[0], arrivalTime[1], 0);
-                    var diff = endDate.getTime() - startDate.getTime();
-                    var hours = Math.floor(diff / 1000 / 60 / 60);
-                    diff -= hours * 1000 * 60 * 60;
-                    var minutes = Math.floor(diff / 1000 / 60);
-                    var timeDiff = (hours < 9 ? "0" : "") + hours + ":" + (minutes < 9 ? "0" : "") + minutes;
-                    console.log(timeDiff)
-                }
-                document.getElementById("timeDiffrence").value = calcTimeDiffrence(departureTime, arrivalTime);
-                document.getElementById('timeDiffrence').innerHTML = timeDiff;
-                
-            </script>
               
            </main>
  
            <footer>
  
            </footer>
- 
    </body>
+
+
+   <script>
+    // http://jsfiddle.net/je01otqn/36/
+    var departureTime = document.getElementById("departureTime").value;
+    var arrivalTime = document.getElementById("arrivalTime").value;
+    function calcTimeDiffrence(departureTime, arrivalTime) {
+        departureTime = departureTime.split(":");
+        arrivalTime = arrivalTime.split(":");
+        var startDate = new Date(0, 0, 0, departureTime[0], departureTime[1], 0);
+        var endDate = new Date(0, 0, 0, arrivalTime[0], arrivalTime[1], 0);
+        var diff = endDate.getTime() - startDate.getTime();
+        var hours = Math.floor(diff / 1000 / 60 / 60);
+        diff -= hours * 1000 * 60 * 60;
+        var minutes = Math.floor(diff / 1000 / 60);
+        var timeDiff = (hours < 9 ? "0" : "") + hours + ":" + (minutes < 9 ? "0" : "") + minutes;
+        console.log(timeDiff)
+        return timeDiff
+    }
+    document.getElementById("timeDiffrence").value = calcTimeDiffrence(departureTime, arrivalTime);
+    document.getElementById('timeDiffrence').innerHTML = timeDiff;
+   </script>
+
+
 </div>
  
 </html>
