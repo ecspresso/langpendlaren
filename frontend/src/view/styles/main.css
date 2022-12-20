@@ -83,10 +83,48 @@ img.track {
     text-align: center;
     margin-top: 5%;
     display: block;
+    font-size: 1rem;
 }
 
 
+
+#showBtn{
+    border: 1px solid #605DF2;
+    padding: 1rem 2rem;
+    background: #605DF2;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    transition: 0.2s;
+}
+#showBtn:hover{
+    border-color: gray;
+    background: gray;
+}
+#clearBtn{
+    border: 1px solid gray;
+    padding: 1rem 2rem;
+    background: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+#clearBtn:hover{
+    background: gainsboro;
+}
+
+#station{
+    padding: 1rem 1rem;
+    border: 0;
+    background: white;
+    border-radius: 5px;
+    border: 1px solid gray;
+}
+#station:hover, #station:focus{
+    background-color: aliceblue;
+}
 #search_station input {
+    padding: 1rem;
     border: 5px solid #605DF2;
     width: 50%;
     height: 25px;
