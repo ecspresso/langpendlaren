@@ -112,3 +112,28 @@ img {
 img.track {
     border: 1px solid #8a8a8a;
 }
+
+#searchbar {
+    text-align: center;
+    margin-top: 5%;
+    display: block;
+ }
+  
+ #search_station input {
+    border: 5px solid #605DF2;
+    width: 50%;
+    height: 25px;
+    border-radius: 10px;
+ }
+  
+ #search_station ::placeholder {
+    text-align: center;
+ }
+  
+ #search_button input {
+    margin-top: 2%;
+    border: 5px solid #605DF2;
+    border-radius: 10px;
+    height: 40px;
+    font-weight: bold;
+ } 
