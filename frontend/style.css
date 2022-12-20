@@ -1,0 +1,114 @@
+
+/*
+h1 {
+    background-color: aquamarine;
+}
+*/
+
+header {
+    background-color: #605DF2;
+    width: 100%;
+    padding: 2px;
+}
+
+h1 {
+    color: white;
+}
+
+.flex-container {
+    display: flex;
+    justify-content: center;
+}
+
+/*
+#trains > h3, #searchbar, #result > h3 {
+    display: flex;
+    justify-content: center;
+}
+
+#trains > #result {
+    display: flex;
+    flex-direction: column;
+}
+
+*/
+
+h1 {
+    text-align: center;
+}
+
+
+
+.trains {
+    width: 50%;
+    padding: 5px;
+    
+}
+
+.spotify {
+    width: 50%;
+}
+
+
+
+table
+    {
+      border: 1px solid #000000;
+      border-collapse: collapse;
+      border-spacing: 0px;
+    }
+    table td
+    {
+      padding: 8px 8px;
+    }
+
+    table tr{
+        border-bottom: 1px solid black;
+    }
+
+    table button {
+        background-color: green;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    table button:hover {
+        color: white;
+    }
+
+
+
+.btn.dropdown-toggle  {
+    width:150px;
+    text-align:left;
+}
+
+span.caret {
+    position: absolute;
+    left: 90%;
+    top: 45%;
+}
+
+label {
+    padding-top:5px;
+}
+
+.form-label {
+    padding-left:0px !important;
+}
+
+img {
+    width:140px;
+    height:140px;
+}
+
+.btn-success {
+    background-color: #3b7d4a!important;
+}
+
+.btn-success:hover {
+    background-color: #4daf64!important;
+}
+
+img.track {
+    border: 1px solid #8a8a8a;
+}
