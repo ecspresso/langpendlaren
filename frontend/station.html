@@ -37,7 +37,7 @@
 
 
                 <script>
-                    var codesEl;
+                    var stations;
                     var jsonData = [
                     {
                         "AdvertisedLocationName": "Alingsås",
@@ -51,14 +51,14 @@
 
                     function printData(Arr) {
                     for(var i=0; i<Arr.length; i++) {
-                        codesEl.innerText += `\n${Arr[i].AdvertisedLocationName}`;
+                        stations.innerText += `\n${Arr[i].AdvertisedLocationName}`;
                     }
                     }
 
                     // it is a case insensitive search
                     function search(ev) {
                     var key = ev.target.value;
-                    codesEl.innerText = null;
+                    stations.innerText = null;
                     
                     printData(jsonData.filter((data)=>{
                         var regex = new RegExp(key, "i");
@@ -67,7 +67,7 @@
                     }
 
                     window.onload = function() {
-                    codesEl = document.getElementById("codes");
+                    stations = document.getElementById("codes");
                     printData(jsonData);
                     }
                 </script>
