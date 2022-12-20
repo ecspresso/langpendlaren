@@ -17,16 +17,26 @@
                    <div id="search_station">
                        <input id="station" type="text" placeholder="Ange station..." onkeyup="search(event)"/>
                    </div>
+
+                    <div id="result">
+                        <table id="timeTableDeparture">
+                          <tr>
+                            <th scope="col" style="width:80px;">Stationsnamn</th>
+                            <th scope="col"  style="width:80px;">Välj station</th>
+                          </tr>
+                          <tr>
+                            <!--Utskrifter från JSON-->
+                            <td><span id="codes"></span></td>
+                          </tr>
+                        </table>
+                      </div>
+    
                    <div id="search_button">
                    <button type="button" value="Sök resa" onclick="">Sök resa</button>
                    </div>
                  </div>
                 
-                 
-                <!--Utskrifter från JSON-->
-                <div>
-                <span id="codes"></span>
-                </div>
+                
 
 
                 <script>
@@ -44,7 +54,7 @@
 
                     function printData(Arr) {
                     for(var i=0; i<Arr.length; i++) {
-                        codesEl.innerText += `\n${Arr[i].AdvertisedLocationName} LocationSignature: ${Arr[i].LocationSignature}`;
+                        codesEl.innerText += `\n${Arr[i].AdvertisedLocationName}`;
                     }
                     }
 
