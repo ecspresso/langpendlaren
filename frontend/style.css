@@ -137,3 +137,12 @@ img.track {
     height: 40px;
     font-weight: bold;
  } 
+
+#result {
+    text-align: center;
+}
+
+#timeTableDeparture {
+    margin-left: auto;
+    margin-right: auto;
+}
