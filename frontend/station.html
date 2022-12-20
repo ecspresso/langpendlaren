@@ -34,52 +34,48 @@
                         </table>
                       </div>
                  </div>
-
-
-                <script>
-                    var stations;
-                    var jsonData = [
-                    {
-                        "AdvertisedLocationName": "Alingsås",
-                        "LocationSignature": "A"
-                    },
-                    {
-                        "AdvertisedLocationName": "Avesta centrum",
-                        "LocationSignature": "Acm"
-                    },
-                    ];
-
-                    function printData(Arr) {
-                    for(var i=0; i<Arr.length; i++) {
-                        stations.innerText += `\n${Arr[i].AdvertisedLocationName}`;
-                    }
-                    }
-
-                    // it is a case insensitive search
-                    function search(ev) {
-                    var key = ev.target.value;
-                    stations.innerText = null;
-                    
-                    printData(jsonData.filter((data)=>{
-                        var regex = new RegExp(key, "i");
-                        return data.AdvertisedLocationName.match(regex) || data.LocationSignature.match(regex);
-                    }));
-                    }
-
-                    window.onload = function() {
-                    stations = document.getElementById("codes");
-                    printData(jsonData);
-                    }
-                </script>
-              
-
-
-
            </main>
  
            <footer>
  
            </footer>
+
+
+           <script>
+            var stations;
+            var jsonData = [
+            {
+                "AdvertisedLocationName": "Alingsås",
+                "LocationSignature": "A"
+            },
+            {
+                "AdvertisedLocationName": "Avesta centrum",
+                "LocationSignature": "Acm"
+            },
+            ];
+
+            function printData(Arr) {
+            for(var i=0; i<Arr.length; i++) {
+                stations.innerText += `\n${Arr[i].AdvertisedLocationName}`;
+            }
+            }
+
+            // it is a case insensitive search
+            function search(ev) {
+            var key = ev.target.value;
+            stations.innerText = null;
+            
+            printData(jsonData.filter((data)=>{
+                var regex = new RegExp(key, "i");
+                return data.AdvertisedLocationName.match(regex) || data.LocationSignature.match(regex);
+            }));
+            }
+
+            window.onload = function() {
+            stations = document.getElementById("codes");
+            printData(jsonData);
+            }
+        </script>
  
    </body>
 </div>
