@@ -33,38 +33,18 @@
                     var codesEl;
                     var jsonData = [
                     {
-                        "name": "amazon",
-                        "code": "aksdhfkjags"
+                        "AdvertisedLocationName": "Alingsås",
+                        "LocationSignature": "A"
                     },
                     {
-                        "name": "aMaZoN",
-                        "code": "qiweuryqew"
+                        "AdvertisedLocationName": "Avesta centrum",
+                        "LocationSignature": "Acm"
                     },
-                    {
-                        "name": "flipkart",
-                        "code": "kjqwherklq"
-                    },
-                    {
-                        "name": "flipkart",
-                        "code": "qmbewnqbwe"
-                    },
-                    {
-                        "name": "flipkart",
-                        "code": "zzvzxcvvnmz"
-                    },
-                    {
-                        "name": "ebay",
-                        "code": "tyjutynf"
-                    },
-                    {
-                        "name": "ebay",
-                        "code": "asgcmngjhjser"
-                    }
                     ];
 
                     function printData(Arr) {
                     for(var i=0; i<Arr.length; i++) {
-                        codesEl.innerText += `\n${Arr[i].name} code: ${Arr[i].code}`;
+                        codesEl.innerText += `\n${Arr[i].AdvertisedLocationName} LocationSignature: ${Arr[i].LocationSignature}`;
                     }
                     }
 
@@ -75,7 +55,7 @@
                     
                     printData(jsonData.filter((data)=>{
                         var regex = new RegExp(key, "i");
-                        return data.name.match(regex) || data.code.match(regex);
+                        return data.AdvertisedLocationName.match(regex) || data.LocationSignature.match(regex);
                     }));
                     }
 
