@@ -191,7 +191,7 @@ function calcTimeDiffrence(departureTime, arrivalTime) {
     var hours = Math.floor(diff / 1000 / 60 / 60);
     diff -= hours * 1000 * 60 * 60;
     var minutes = Math.floor(diff / 1000 / 60);
-    return (hours < 9 ? "0" : "") + hours + ":" + (minutes < 9 ? "0" : "") + minutes;
+    console.log((hours < 9 ? "0" : "") + hours + ":" + (minutes < 9 ? "0" : "") + minutes);
 }
 document.getElementById("timeDiffrence").value = calcTimeDiffrence(departureTime, arrivalTime);
 
