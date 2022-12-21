@@ -21,43 +21,24 @@
                        <input id="station" type="text" placeholder="Ange station..." onkeyup="search(event)"/>
                    </div>
 
-                    <div id="result">
-                        <table id="timeTableDeparture">
-                          <tr>
-                            <th scope="col" style="width:200px;">Station</th>
-                            <th scope="col"  style="width:200px;">Välj station</th>
-                          </tr>
-                          <tr>
-                            <!--Utskrifter från JSON-->
-                            <td><span id="codes"></span></td>
-                            <td id="search_button">
-                                <button type="button" value="Sök resa" onclick="">Sök efter avgångar</button>
-                            </td>
-                          </tr>
-                        </table>
-                      </div>
-                 </div>
+                 <div id="result">
+                    <table id="timeTableDeparture">
+                      <tr>
+                        <th scope="col" style="width:200px;">Station</th>
+                        <th scope="col"  style="width:200px;">Välj station</th>
+                      </tr>
+                      <tr>
+                        <!--Utskrifter från JSON-->
+                        <td id="for_each"></td>
+                        <td id="search_button">
+                            <!-- <button type="button" value="Sök resa" onclick="">Sök efter avgångar</button> -->
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+             </div>
 
-                 <table>
-                    <thead>
-                        <tr>
-                            <th>Stad</th>
-                            <th>Välj stad</th>
-                        </tr>
 
-                        <tr id="for_each">
-                            
-                        </tr>
-
-                        
-                        
-                    </thead>
-
-                    <tbody>
-                        
-                    </tbody>
-                 </table>
-                 <p id="for_each">Hej</p>
            </main>
  
            <footer>
@@ -81,27 +62,17 @@
                 //Path to file
                 readTextFile("/frontend/src/view/cptrafic/data.json", function(information){
                     var data = JSON.parse(information);
-                    var stationList = []
                     data.forEach(element => {
-                        stationList.push(element.AdvertisedLocationName)
-                        console.log(element.AdvertisedLocationName)
-                    console.log(stationList)
-
-                        stationList.forEach(display)
-
-                        function display(item) {
-                            document.getElementById('for_each').innerHTML += '<tr>' + '<td>' + item + '</td>' + '</tr>'
-                        }
+                        document.getElementById('for_each').innerHTML += '<p>' + element.AdvertisedLocationName + '</p>'
+                        document.getElementById('search_button').innerHTML += '<button>' + "Sök efter avgångar" + '</button>'
                     
-                    return stationList
                 })
                 });
-
                 
 
 
 
-
+            /* 
             var stations;
             var jsonData = [
             {
@@ -134,9 +105,8 @@
             window.onload = function() {
             stations = document.getElementById("codes");
             printData(jsonData);
-
-            
             }
+            */
         </script>
  
    </body>
