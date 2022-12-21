@@ -26,8 +26,6 @@ public class SpotifyAPI {
     private final Authorize authorize;
     private final Object lock = new Object();
 
-
-
     public SpotifyAPI() throws URISyntaxException {
         String clientId = "8b83701f45c34a07b396c5199a7c3998";
         String clientSecret = "b9e7dfdd05f54d1483cdfecc63e1861c";
@@ -93,6 +91,20 @@ public class SpotifyAPI {
     }
 
     /**
+     * Authentication
+     * @param code id from user premonition
+     */
+    public void auth(String code) {
+        authorize.auth(code);
+    }
+
+
+
+
+
+    // End Points functions
+
+    /**
      * Get a play list
      */
     public String getPlayList(String pId){
@@ -118,8 +130,39 @@ public class SpotifyAPI {
         }
     }
 
-    public void auth(String code) {
-        authorize.auth(code);
+    //FIXME! implement
+
+    public String getAlbums() {
+        return null;
     }
+
+    public String getAlbumById(String id) {
+        return null;
+    }
+
+    public void deletePlayList(String id) {
+    }
+
+    public void addToPlayList(String pid, String tid) {
+
+    }
+
+    public String searchItem(String name) {
+        return null;
+    }
+
+    public String getArtist(String id) {
+        return null;
+    }
+
+    public String getTopTruckByArtistId(String id) {
+        return null;
+    }
+
+    public String getArtistAlbums(String id) {
+        return null;
+    }
+
+
 }
 
