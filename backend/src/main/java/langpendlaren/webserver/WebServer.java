@@ -54,7 +54,10 @@ public class WebServer {
         javalin.get("/spotify/user/profile", context -> context.json(spotifyAPI.getUserProfile()));
         // -- Albums
         javalin.get("/spotify/album/albums", context -> context.json(spotifyAPI.getAlbums()));
-        javalin.get("/spotify/album/{id}", context -> context.json(spotifyAPI.getAlbumById()));
+        javalin.get("/spotify/album/{id}", context -> {
+            String id = context.pathParam("id");
+            context.json(spotifyAPI.getAlbumById(id));
+        });
         // -- Playlist
         javalin.post("/spotify/playlist/create/{name}/{des}", context -> {
             String name = context.pathParam("name");
