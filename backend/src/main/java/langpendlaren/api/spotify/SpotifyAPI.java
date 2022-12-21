@@ -40,7 +40,7 @@ public class SpotifyAPI {
     public SpotifyAPI() throws URISyntaxException {
         String clientId = "8b83701f45c34a07b396c5199a7c3998";
         String clientSecret = "b9e7dfdd05f54d1483cdfecc63e1861c";
-        URI redirectURI = SpotifyHttpManager.makeUri("http://localhost:8080");
+        URI redirectURI = SpotifyHttpManager.makeUri("http://localhost:8080/");
         this.spotifyApiWrapper = new SpotifyApi.Builder()
                 .setClientId(clientId)
                 .setClientSecret(clientSecret)
@@ -58,8 +58,10 @@ public class SpotifyAPI {
     public URI getLoginPage(){
         final AuthorizationCodeUriRequest authorizationCodeUriRequest = this.spotifyApiWrapper.authorizationCodeUri()
                 .scope(scope)
+                .show_dialog(true)
                 .build();
         URI uri = authorizationCodeUriRequest.execute();
+        System.out.println(uri);
         return uri;
     }
 
@@ -85,7 +87,7 @@ public class SpotifyAPI {
             return user.getId();
         } catch(IOException | SpotifyWebApiException | ParseException e) {
             System.err.println(e);
-            return null;
+            return e.getMessage();
         }
     }
 

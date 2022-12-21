@@ -25,9 +25,11 @@ public class SpotifyEndPoints {
 
         // Authorization
         javalin.get("/spotify/login", context -> context.json(spotifyAPI.getLoginPage()));
-        javalin.post("/spotify/auth/{code}", context -> {
+        javalin.get("/spotify/auth/{code}", context -> {
             String code = context.pathParam("code");
+            System.out.println(code);
             spotifyAPI.auth(code);
+            context.json(code);
         });
 
 

@@ -15,9 +15,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class Authorize {
-    private final SpotifyApi spotifyApiWrapper;
     private final AuthorizationCodeUriRequest authorizationCodeUriRequest;
-    private AuthorizationCodeCredentials authorizationCodeCredentials;
+    private final SpotifyApi spotifyApiWrapper;
     private final Object lock = new Object();
 
 
@@ -32,11 +31,12 @@ public class Authorize {
      * @return
      */
     public String auth(String code){
+        System.out.println("auth");
         final AuthorizationCodeRequest authorizationCodeRequest = this.spotifyApiWrapper.authorizationCode(code)
                 .build();
+
         try {
             final AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
-
             this.spotifyApiWrapper.setAccessToken(authorizationCodeCredentials.getAccessToken());
             this.spotifyApiWrapper.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
             updateToken();
