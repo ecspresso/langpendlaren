@@ -7,6 +7,9 @@
        <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
        <link rel="stylesheet" href="../styles/main.css">
+       <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+       <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script> 
+       <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
    </head>
  
    <body>
@@ -18,7 +21,7 @@
                <div id="searchbar">
                 <h3 class="pagetitle">Sök efter station</h3>
                    <div id="search_station">
-                       <input id="station" type="text" placeholder="Ange station..." onkeyup="search(event)"/>
+                       <input id="station" type="text" placeholder="Ange station..." onkeyup="search()"/>
                    </div>
 
                  <div id="result">
@@ -27,13 +30,7 @@
                         <th scope="col" style="width:200px;">Station</th>
                         <th scope="col"  style="width:200px;">Välj station</th>
                       </tr>
-                      <tr>
-                        <!--Utskrifter från JSON-->
-                        <td id="station_data"></td>
-                        <td id="search_button">
-                            <!-- <button type="button" value="Sök resa" onclick="">Sök efter avgångar</button> -->
-                        </td>
-                      </tr>
+                      <!--Utskrifter från JSON-->
                     </table>
                   </div>
              </div>
@@ -63,49 +60,33 @@
                 readTextFile("/frontend/src/view/cptrafic/data.json", function(information){
                     var data = JSON.parse(information);
                     data.forEach(element => {
-                        document.getElementById('station_data').innerHTML += '<p>' + element.AdvertisedLocationName + '</p>'
-                        document.getElementById('search_button').innerHTML += '<button>' + "Sök efter avgångar" + '</button>'
+                    //Create HTML elements in table
+                    jQuery("#timeTableDeparture tr:last").
+                    after("<tr><td>" + element.AdvertisedLocationName + "</td>" + "<td id='search_button'> <button type='button'> Sök efter avgångar </button> </td></tr>");
                 })
                 });
 
+                function search() {
+                // Declare variables
+                var input, filter, table, tr, td, i, txtValue;
+                input = document.getElementById("station");
+                filter = input.value.toUpperCase();
+                table = document.getElementById("timeTableDeparture");
+                tr = table.getElementsByTagName("tr");
 
-
-
-            /* 
-            var stations;
-            var jsonData = [
-            {
-                "AdvertisedLocationName": "Alingsås",
-                "LocationSignature": "A"
-            },
-            {
-                "AdvertisedLocationName": "Avesta centrum",
-                "LocationSignature": "Acm"
-            },
-            ];
-
-            function printData(Arr) {
-            for(var i=0; i<Arr.length; i++) {
-                stations.innerText += `\n${Arr[i].AdvertisedLocationName}`;
-            }
-            }
-
-            // it is a case insensitive search
-            function search(ev) {
-            var key = ev.target.value;
-            stations.innerText = null;
-            
-            printData(jsonData.filter((data)=>{
-                var regex = new RegExp(key, "i");
-                return data.AdvertisedLocationName.match(regex) || data.LocationSignature.match(regex);
-            }));
-            }
-
-            window.onload = function() {
-            stations = document.getElementById("codes");
-            printData(jsonData);
-            }
-            */
+                // Loop through all table rows, and hide those who don't match the search query
+                for (i = 0; i < tr.length; i++) {
+                    td = tr[i].getElementsByTagName("td")[0];
+                    if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                    }
+                }
+                }
         </script>
  
    </body>
