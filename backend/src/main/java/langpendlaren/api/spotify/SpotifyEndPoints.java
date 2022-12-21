@@ -56,7 +56,7 @@ public class SpotifyEndPoints {
         javalin.get("/spotify/playlist/all", context -> context.json(spotifyAPI.getAllPlayList()));
         javalin.put("/spotify/playlist/deletetracks/{pid}/{tids}", context -> {
             String pId = context.pathParam("pid");
-            String[] tIds = context.pathParam("tids");
+            String tIds = context.pathParam("tids");
             spotifyAPI.removeItemFromPlayList(pId, tIds);
         });
 
@@ -66,7 +66,7 @@ public class SpotifyEndPoints {
             context.json(spotifyAPI.getAlbumById(id));
         });
         javalin.get("/spotify/album/{ids}", context ->{
-            String[] ids = context.pathParam("ids");
+            String ids = context.pathParam("ids");
             context.json(spotifyAPI.getAlbums(ids));
         });
 

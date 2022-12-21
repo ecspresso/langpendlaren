@@ -152,7 +152,7 @@ public class SpotifyAPI {
      * @param pId play list id
      * @param tIds truck ids
      */
-    public String removeItemFromPlayList(String pId, String[] tIds){
+    public String removeItemFromPlayList(String pId, String tIds){
         final JsonArray trackJson = JsonParser.parseString("[{\"localhost:8080\":\"spotify:track:01iyCAUm8EvOFqVWYJ3dVX\"}]").getAsJsonArray();
         System.out.println("Track JSON: " + trackJson);
         final RemoveItemsFromPlaylistRequest removeItemsFromPlaylistRequest = this.spotifyApiWrapper
@@ -207,7 +207,7 @@ public class SpotifyAPI {
      * @param ids album ids
      * @return list of albums
      */
-    public ArrayList<Map> getAlbums(String[] ids) {
+    public ArrayList<Map> getAlbums(String ids) {
         final GetSeveralAlbumsRequest getSeveralAlbumsRequest = this.spotifyApiWrapper.getSeveralAlbums(ids)
                 .build();
         try {
