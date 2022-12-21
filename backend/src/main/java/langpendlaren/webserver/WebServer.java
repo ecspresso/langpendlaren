@@ -19,6 +19,7 @@ public class WebServer {
                 });
             });
         });
+
         trafikverketAPI = new TrafikverketAPI();
         try {
             spotifyAPI = new SpotifyAPI();
@@ -53,7 +54,10 @@ public class WebServer {
         // -- User
         javalin.get("/spotify/user/profile", context -> context.json(spotifyAPI.getUserProfile()));
         // -- Albums
-        javalin.get("/spotify/album/albums", context -> context.json(spotifyAPI.getAlbums()));
+        javalin.get("/spotify/album/{ids}", context ->{
+            String[] ids = context.pathParam("ids");
+            context.json(spotifyAPI.getAlbums(ids));
+        });
         javalin.get("/spotify/album/{id}", context -> {
             String id = context.pathParam("id");
             context.json(spotifyAPI.getAlbumById(id));
