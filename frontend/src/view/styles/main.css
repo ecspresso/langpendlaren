@@ -443,4 +443,23 @@ img.track {
 	display: block;
 	margin-top: 5%;
 	margin-bottom: 5%;
+	text-align: center;
+}
+
+#station-wraper {
+	text-align: center;
+	margin: auto;
+}
+
+#station {
+	text-align: center;
+	margin: auto;
+}
+
+.trains h3 {
+	text-align: center;
+}
+
+#showBtn {
+	margin-top: 2%;
 }
