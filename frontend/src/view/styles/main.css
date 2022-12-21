@@ -166,3 +166,9 @@ img.track {
     margin-top: 5%;
     text-align: center;
 }
+
+.pagetitle {
+    text-align: center;
+    font-weight: bold;
+    font-size: 150%;
+}
