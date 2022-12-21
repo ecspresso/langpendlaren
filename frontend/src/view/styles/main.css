@@ -438,3 +438,9 @@ img.track {
 .container {
 	margin-top: 10%;
 }
+
+#searchbar {
+	display: block;
+	margin-top: 5%;
+	margin-bottom: 5%;
+}

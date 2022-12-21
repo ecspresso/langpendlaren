@@ -6,5 +6,9 @@
     {
         "AdvertisedLocationName": "Avesta centrum",
         "LocationSignature": "Acm"
+    },
+    {
+        "AdvertisedLocationName": "Alm",
+        "LocationSignature": "Am"
     }
 ]
