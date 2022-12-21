@@ -37,6 +37,27 @@
                         </table>
                       </div>
                  </div>
+
+                 <table>
+                    <thead>
+                        <tr>
+                            <th>Stad</th>
+                            <th>Välj stad</th>
+                        </tr>
+
+                        <tr id="for_each">
+                            
+                        </tr>
+
+                        
+                        
+                    </thead>
+
+                    <tbody>
+                        
+                    </tbody>
+                 </table>
+                 <p id="for_each">Hej</p>
            </main>
  
            <footer>
@@ -65,9 +86,20 @@
                         stationList.push(element.AdvertisedLocationName)
                         console.log(element.AdvertisedLocationName)
                     console.log(stationList)
+
+                        stationList.forEach(display)
+
+                        function display(item) {
+                            document.getElementById('for_each').innerHTML += '<tr>' + '<td>' + item + '</td>' + '</tr>'
+                        }
+                    
                     return stationList
                 })
                 });
+
+                
+
+
 
 
             var stations;
@@ -102,6 +134,8 @@
             window.onload = function() {
             stations = document.getElementById("codes");
             printData(jsonData);
+
+            
             }
         </script>
  
