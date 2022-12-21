@@ -23,6 +23,10 @@ header h1 {
     justify-content: center;
 }
 
+.center_content {
+    text-align: center;
+}
+
 
 /*
 #trains > h3, #searchbar, #result > h3 {
