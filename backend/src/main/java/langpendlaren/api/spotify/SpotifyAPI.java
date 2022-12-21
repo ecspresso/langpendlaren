@@ -128,7 +128,7 @@ public class SpotifyAPI {
         }
     }
 
-    //FIXME! implement
+    //FIXME! implement the following functions (tomorrow)
 
     public String getAlbums(String[] ids) {
         final GetSeveralAlbumsRequest getSeveralAlbumsRequest = this.spotifyApiWrapper.getSeveralAlbums(ids)
