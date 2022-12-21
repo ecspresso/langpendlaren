@@ -29,7 +29,7 @@
                       </tr>
                       <tr>
                         <!--Utskrifter från JSON-->
-                        <td id="for_each"></td>
+                        <td id="station_data"></td>
                         <td id="search_button">
                             <!-- <button type="button" value="Sök resa" onclick="">Sök efter avgångar</button> -->
                         </td>
@@ -63,7 +63,7 @@
                 readTextFile("/frontend/src/view/cptrafic/data.json", function(information){
                     var data = JSON.parse(information);
                     data.forEach(element => {
-                        document.getElementById('for_each').innerHTML += '<p>' + element.AdvertisedLocationName + '</p>'
+                        document.getElementById('station_data').innerHTML += '<p>' + element.AdvertisedLocationName + '</p>'
                         document.getElementById('search_button').innerHTML += '<button>' + "Sök efter avgångar" + '</button>'
                 })
                 });
