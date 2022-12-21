@@ -238,7 +238,7 @@ img.track {
 }
 
 .screen {		
-	background: linear-gradient(90deg, #5D54A4, #7C78B8);		
+	background: linear-gradient(90deg, #605DF2, #7C78B8);		
 	position: relative;	
 	height: 600px;
 	width: 360px;	
@@ -279,7 +279,7 @@ img.track {
 .screen__background__shape2 {
 	height: 220px;
 	width: 220px;
-	background: #6C63AC;	
+	background: #605DF2;	
 	top: -172px;
 	right: 0;	
 	border-radius: 32px;
@@ -288,7 +288,7 @@ img.track {
 .screen__background__shape3 {
 	height: 540px;
 	width: 190px;
-	background: linear-gradient(270deg, #5D54A4, #6A679E);
+	background: linear-gradient(270deg, #605DF2, #6A679E);
 	top: -24px;
 	right: 0;	
 	border-radius: 32px;
@@ -297,7 +297,7 @@ img.track {
 .screen__background__shape4 {
 	height: 400px;
 	width: 200px;
-	background: #7E7BB9;	
+	background: #605DF2;	
 	top: 420px;
 	right: 50px;	
 	border-radius: 60px;
@@ -317,7 +317,7 @@ img.track {
 .login__icon {
 	position: absolute;
 	top: 30px;
-	color: #7875B5;
+	color: #605DF2;
 }
 
 .login__input {
@@ -335,7 +335,7 @@ img.track {
 .login__input:focus,
 .login__input:hover {
 	outline: none;
-	border-bottom-color: #6A679E;
+	border-bottom-color: #605DF2;
 }
 
 .login__submit {
@@ -361,6 +361,12 @@ img.track {
 .login__submit:hover {
 	border-color: #6A679E;
 	outline: none;
+	background-color: #605DF2;
+	color: white;
+}
+
+.button__text {
+	text-align: center;
 }
 
 .button__icon {
@@ -429,3 +435,6 @@ img.track {
 	margin-bottom: 10px;
   }
 
+.container {
+	margin-top: 10%;
+}
