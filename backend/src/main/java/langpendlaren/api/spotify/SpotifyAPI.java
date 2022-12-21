@@ -116,7 +116,7 @@ public class SpotifyAPI {
      * Get All play lists of the current user
      * @return String
      */
-    public String getCurrentPlayLists(){
+    public String getAllPlayList(){
         GetListOfUsersPlaylistsRequest gPlayList;
         String userId = getUserId();
 
@@ -149,14 +149,14 @@ public class SpotifyAPI {
 
     /**
      * Remove item (tracks) from play list
-     * @param pid play list id
-     * @param tracks tracks
+     * @param pId play list id
+     * @param tIds truck ids
      */
-    public String removeItemFromPlayList(String pid, String tracks){
+    public String removeItemFromPlayList(String pId, String[] tIds){
         final JsonArray trackJson = JsonParser.parseString("[{\"localhost:8080\":\"spotify:track:01iyCAUm8EvOFqVWYJ3dVX\"}]").getAsJsonArray();
         System.out.println("Track JSON: " + trackJson);
         final RemoveItemsFromPlaylistRequest removeItemsFromPlaylistRequest = this.spotifyApiWrapper
-                .removeItemsFromPlaylist(pid, trackJson)
+                .removeItemsFromPlaylist(pId, trackJson)
                 .build();
 
         try {
@@ -179,14 +179,14 @@ public class SpotifyAPI {
 
     /**
      * Add a track to play list.
-     * @param pid playlist id
-     * @param tid track id
+     * @param pId playlist id
+     * @param tId track id
      * @return confirmation
      */
-    public String addToPlayList(String pid, String tid) {
+    public String addToPlayList(String pId, String tId) {
         final String[] uris = new String[]{"spotify:track:01iyCAUm8EvOFqVWYJ3dVX", "spotify:episode:4GI3dxEafwap1sFiTGPKd1"};
         final AddItemsToPlaylistRequest addItemsToPlaylistRequest = this.spotifyApiWrapper
-                .addItemsToPlaylist(pid, uris)
+                .addItemsToPlaylist(pId, uris)
                 .build();
 
         try {
