@@ -7,10 +7,11 @@
         <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
         <link rel="stylesheet" href="./styles/main.css">
+        <script src="https://kit.fontawesome.com/f6db73d1df.js" crossorigin="anonymous"></script>
         <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
         <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
         <script src="../logic/trafic/trafikverket.js" type="text/javascript"></script>
-        <script src="../logic/main/functionality.js" type="text/javascript"></script>
+        <script src="../logic/main/functionality.js" type="text/javascript" defer></script>
     </head>
 
     <body>
@@ -27,8 +28,10 @@
           <h3>Sök avgång</h3>
 
             <div id="searchbar">
-              <input id="clearBtn" type="button" value="Rensa">
-              <input id="station" type="text" placeholder="Ange stad här..." />
+              <div id="station-wraper">
+                <input id="station" type="text" placeholder="Ange stad här..." />
+                <i id="clearBtn" class="fa-solid fa-xmark"></i>
+              </div>
               <input id="showBtn" type="button" value="Visa" onclick="javascript: Search()" />
               <span id="loader" style="margin-left: 10px">Laddar data ...</span>
             </div>

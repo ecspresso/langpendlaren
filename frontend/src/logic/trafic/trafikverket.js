@@ -138,7 +138,7 @@ function Search() {
       if (response == null) return;
       if (response.RESPONSE.RESULT[0].TrainAnnouncement == null)
         jQuery("#timeTableDeparture tr:last").
-        after("<tr><td colspan='4'>Inga avgångar hittades</td></tr>");
+        after('<tr class="list"><td colspan="4">Inga avgångar hittades</td></tr>');
       try {
         renderTrainAnnouncement(response.RESPONSE.RESULT[0].TrainAnnouncement);
       }

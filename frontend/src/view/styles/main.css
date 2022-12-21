@@ -6,6 +6,13 @@ body{
     background: white;
 }
 
+h3{
+	color: #333;
+}
+h1{
+	padding: 0.5rem;
+}
+
 
 header {
     background-color: #605DF2;
@@ -21,6 +28,8 @@ header h1 {
 .flex-container {
     display: flex;
     justify-content: center;
+	width: 100%;
+	height: 100%;
 }
 
 .center_content {
@@ -41,11 +50,12 @@ header h1 {
 
 */
 
-
-.trains {
-    width: 50%;
-    padding: 5px;
-    
+.trains{
+	width: 90%;
+	padding: 2rem 5rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
 }
 
 
@@ -84,9 +94,13 @@ img.track {
 
 
 #searchbar {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	gap: 1px;
+	justify-content: center;
     text-align: center;
-    margin-top: 5%;
-    display: block;
     font-size: 1rem;
 }
 
@@ -105,24 +119,48 @@ img.track {
     border-color: gray;
     background: gray;
 }
-#clearBtn{
-    border: 1px solid gray;
-    padding: 1rem 2rem;
-    background: white;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-#clearBtn:hover{
-    background: gainsboro;
+#station-wraper{
+	border: 1px solid gray ;
+	border-radius: 5px;
+	background: white;
+	width: 60%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 
+
+ #station-wraper i{
+	padding: 0 1rem;
+	font-size: 1rem;
+	color: gray;
+	transition: 0.2s;
+}
+ #station-wraper i:hover{
+	color: #333;
+	cursor: pointer;
+ }
+
+
+ #selectTrain{
+	background: #605DF2;
+	color: white;
+	width: 100%;
+	height: 40px;
+	border: none;
+	transition: 0.2s;
+}
+
+#selectTrain:hover{
+	background: #333;
+	cursor: pointer;
+}
+
+
 #station{
+	width: 100%;
     padding: 1rem 1rem;
-    border: 0;
-    background: white;
-    border-radius: 5px;
-    border: 1px solid gray;
+	border: none;
 }
 #station:hover, #station:focus{
     background-color: aliceblue;
@@ -154,17 +192,34 @@ img.track {
 
 
 #timeTableDeparture {
+	padding: 1rem;
     text-align: center;
     margin-top: 2%;
     margin-left: auto;
     margin-right: auto;
-    border: 5px solid #605DF2;
+    border: 5px solid #eee;
     border-radius: 10px;
 }
-#timeTableDeparture th {
-    font-weight: bold;
-    font-size: 120%;
+#timeTableDeparture tbody {
+    text-align: center;
+    margin-top: 2%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 10px;
 }
+
+#timeTableDeparture th {
+	border-bottom: 1px solid gray;
+	width: 100%;
+	height: 100%;
+    font-weight: bold;
+	padding: 0.5rem;
+}
+
+#timeTableDeparture td {
+	border-bottom: 1px solid lightgray;
+}
+
 
 #calcTime {
     margin-top: 5%;
@@ -176,6 +231,7 @@ img.track {
     font-weight: bold;
     font-size: 150%;
 }
+
 
 /* Login form */
 @import url('https://fonts.googleapis.com/css?family=Raleway:400,700');

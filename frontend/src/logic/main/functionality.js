@@ -1,16 +1,32 @@
-console.log("file")
-const clearBtn = document
-  .getElementById("clearBtn")
-  .addEventListener("click", () => {
-    resetSearch();
-  });
-
 
 
 // Basic functions
-const resetSearch = () => {
-  console.log("restS")
-  document.getElementById("main_content").innerHTML = "";
+const setUpView = () => {
+  const clearBtn = document.getElementById("clearBtn");
+  const searchInput = document.getElementById("station");
+  const timeTable = document.getElementById("timeTableDeparture");
+
+  
+  searchInput.onmouseout = () => {
+    const value = searchInput.value;
+    if(value == ""){
+      clearBtn.setAttribute("disabled", "");
+    }
+    clearBtn.disabled = false;
+  }
+
+  clearBtn.addEventListener("click", () => {
+    clearSearchInput(searchInput);
+  });
+
+}
+
+const clearSearchInput = (searchInput) => {
+  searchInput.value = "";
+  clearBtn.disabled;
+  timeTable.innerH
 };
 const changeTheView = () => {};
 const resetSetting = () => {};
+
+setUpView();
