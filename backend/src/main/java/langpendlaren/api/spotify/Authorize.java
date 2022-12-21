@@ -10,31 +10,61 @@ import se.michaelthelin.spotify.requests.authorization.authorization_code.Author
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Authorize {
     private final SpotifyApi spotifyApiWrapper;
     private final AuthorizationCodeUriRequest authorizationCodeUriRequest;
     private AuthorizationCodeCredentials authorizationCodeCredentials;
+    private final Object lock = new Object();
+
 
     public Authorize(SpotifyApi spotifyApiWrapper) {
         this.spotifyApiWrapper = spotifyApiWrapper;
         authorizationCodeUriRequest = this.spotifyApiWrapper.authorizationCodeUri().build();
     }
 
-    public URI authorize() {
-        return authorizationCodeUriRequest.execute();
+    /**
+     * To authenticate
+     * @param code an id from login page come back
+     * @return
+     */
+    public String auth(String code){
+        final AuthorizationCodeRequest authorizationCodeRequest = this.spotifyApiWrapper.authorizationCode(code)
+                .build();
+        try {
+            final AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRequest.execute();
+
+            this.spotifyApiWrapper.setAccessToken(authorizationCodeCredentials.getAccessToken());
+            this.spotifyApiWrapper.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+            updateToken();
+            System.out.println("Expires in: " + authorizationCodeCredentials.getExpiresIn() + " token: " + authorizationCodeCredentials.getAccessToken());
+            return authorizationCodeCredentials.getAccessToken();
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Error: " + e.getMessage());
+            return e.getMessage();
+        }
     }
 
-    public void getAccessToken(String code) throws IOException, ParseException, SpotifyWebApiException {
-        AuthorizationCodeRequest authorizationCodeRequest = spotifyApiWrapper.authorizationCode(code).build(); // Invalid redirect URI
-        authorizationCodeCredentials = authorizationCodeRequest.execute();
-        spotifyApiWrapper.setAccessToken(authorizationCodeCredentials.getAccessToken());
-        spotifyApiWrapper.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+    public void refreshToken() {
+        ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+        service.scheduleAtFixedRate(() -> {
+            synchronized(lock) {
+                updateToken();
+            }
+        }, 59, 59, TimeUnit.MINUTES);
     }
-
-    public void refreshToken() throws IOException, ParseException, SpotifyWebApiException {
-        AuthorizationCodeRefreshRequest authorizationCodeRefreshRequest = spotifyApiWrapper.authorizationCodeRefresh().build();
-        authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
-        spotifyApiWrapper.setAccessToken(authorizationCodeCredentials.getAccessToken());
+    public void updateToken(){
+        final AuthorizationCodeRefreshRequest authorizationCodeRefreshRequest = this.spotifyApiWrapper.authorizationCodeRefresh()
+                .build();
+        try {
+            final AuthorizationCodeCredentials authorizationCodeCredentials = authorizationCodeRefreshRequest.execute();
+            this.spotifyApiWrapper.setAccessToken(authorizationCodeCredentials.getAccessToken());
+            System.out.println("Expires in: " + authorizationCodeCredentials.getExpiresIn());
+        } catch (IOException | SpotifyWebApiException | ParseException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }
 }

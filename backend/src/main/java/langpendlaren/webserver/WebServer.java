@@ -3,10 +3,7 @@ package langpendlaren.webserver;
 import io.javalin.Javalin;
 import langpendlaren.api.spotify.SpotifyAPI;
 import langpendlaren.api.trafikverket.TrafikverketAPI;
-import org.apache.hc.core5.http.ParseException;
-import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 
-import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class WebServer {
@@ -15,7 +12,13 @@ public class WebServer {
     private final SpotifyAPI spotifyAPI;
 
     public WebServer() {
-        javalin = Javalin.create();
+        javalin = Javalin.create(config -> {
+            config.plugins.enableCors(cors -> {
+                cors.add(it -> {
+                    it.anyHost();
+                });
+            });
+        });
         trafikverketAPI = new TrafikverketAPI();
         try {
             spotifyAPI = new SpotifyAPI();
@@ -38,44 +41,37 @@ public class WebServer {
         javalin.get("/trafikverket/stations", context -> context.json(trafikverketAPI.getTrainStops(1)));
 
 
-        // SPOTIFY //
-        // Get play lists
-        javalin.get("/spotify/playlists", context -> context.json(spotifyAPI.getCurrentPlayList()));
 
-        // Get play list
-        javalin.get("/spotify/playlist/{id}", context -> {
-            String playListId = context.pathParam("id");
-            this.spotifyAPI.getPlayList(playListId);
-        });
 
-        // Create play list
-        javalin.put("/spotify/createplaylist/{userId}/{name}", context -> {
-            String playListName = context.pathParam("name");
-            String playListDesc = context.pathParam("desc");
-            String userId = context.pathParam("userId");
-            spotifyAPI.createPlayList(userId, playListName, playListDesc);
-        });
-
-        // Skapa URI för att logga in.
-        javalin.get("/spotify/auth", context -> context.json(spotifyAPI.auth()));
-
-        // Returnera koden från Spotify
-        javalin.get("/spotify/auth/{code}", context -> {
+        // Authorize
+        javalin.get("/spotify/login", context -> context.json(spotifyAPI.getLoginAddress()));
+        javalin.post("/spotify/auth/{code}", context -> {
             String code = context.pathParam("code");
-            try {
-                this.spotifyAPI.getAccessToken(code);
-            } catch (IOException | ParseException | SpotifyWebApiException e) {
-                e.printStackTrace();
-            }
+            spotifyAPI.auth(code);
         });
 
-        // Hämta Spotify user Id
-        javalin.get("/spotify/me", context -> {
-            spotifyAPI.me();
-        });
+        // -- User
+        javalin.get("/spotify/user/profile", context -> context.json(spotifyAPI.getUserProfile()));
+        // -- Albums
+        javalin.get("/spotify/album/albums", context -> context.json(spotifyAPI.getAlbums()));
+        javalin.get("/spotify/album/{id}", context -> context.json(spotifyAPI.getAlbumById()));
+        // -- Playlist
+        javalin.post("/spotify/playlist/create/{name}/{des}", context -> spotifyAPI.createPlayList(context.pathParam("name"), context.pathParam("des")));
+        javalin.post("/spotify/playlist/delete/{id}", context -> spotifyAPI.deletePlayList(context.pathParam("id")));
+        javalin.put("/spotify/playlist/add/{pid}/{tid}", context -> spotifyAPI.addToPlayList(context.pathParam("pid"), context.pathParam("tid")));
+        javalin.get("/spotify/playlist/current", context -> context.json(spotifyAPI.getCurrentPlayList()));
+        // -- Search
+        javalin.get("/spotify/search/{name}", context -> context.json(spotifyAPI.searchItem(context.pathParam("name"))));
+        // -- Artists
+        javalin.get("/spotify/artist/profile/{id}", context -> context.json(spotifyAPI.getArtist(context.pathParam("id"))));
+        javalin.get("/spotify/artist/toptrack", context -> context.json(spotifyAPI.getArtistTopTruck()));
+        javalin.get("/spotify/artist/albums/{id}", context -> context.json(spotifyAPI.getArtistAlbums(context.pathParam("id"))));
     }
 
+
+
+
     public void run() {
-        javalin.start(80);
+        javalin.start(8080);
     }
 }
