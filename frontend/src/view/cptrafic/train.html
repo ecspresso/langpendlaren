@@ -41,7 +41,6 @@
 
 <script src="../../logic/trafic/events.js" type="text/javascript"></script>
   <script>
-  
     const getTrains = async () => {
         const data = await fetch(`http://localhost/trafikverket/trains`, {method: "GET"}).then((res) => res.json()).catch((e) => console.assert(e));
         const trainAnnouncements = data.RESPONSE.RESULT[0].TrainAnnouncement;
