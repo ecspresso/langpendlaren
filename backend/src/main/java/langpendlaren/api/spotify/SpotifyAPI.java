@@ -6,6 +6,7 @@ import com.neovisionaries.i18n.CountryCode;
 import org.apache.hc.core5.http.ParseException;
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
+import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 import se.michaelthelin.spotify.model_objects.special.SnapshotResult;
 import se.michaelthelin.spotify.model_objects.specification.Album;
 import se.michaelthelin.spotify.model_objects.specification.AlbumSimplified;
@@ -15,7 +16,6 @@ import se.michaelthelin.spotify.model_objects.specification.Playlist;
 import se.michaelthelin.spotify.model_objects.specification.PlaylistSimplified;
 import se.michaelthelin.spotify.model_objects.specification.Track;
 import se.michaelthelin.spotify.model_objects.specification.User;
-import se.michaelthelin.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
 import se.michaelthelin.spotify.requests.data.albums.GetAlbumRequest;
 import se.michaelthelin.spotify.requests.data.albums.GetSeveralAlbumsRequest;
 import se.michaelthelin.spotify.requests.data.artists.GetArtistRequest;
@@ -30,7 +30,9 @@ import se.michaelthelin.spotify.requests.data.search.simplified.SearchPlaylistsR
 import se.michaelthelin.spotify.requests.data.search.simplified.SearchTracksRequest;
 import se.michaelthelin.spotify.requests.data.users_profile.GetCurrentUsersProfileRequest;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -39,7 +41,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
-import java.util.concurrent.*;
 
 public class SpotifyAPI {
     // Spotify wrapper
@@ -87,20 +88,12 @@ public class SpotifyAPI {
 
     /**
      * Authentication
+     *
      * @param code an id from user acceptation
+     * @return AuthorizationCodeCredentials som innehåller access token och refresh token.
      */
-    public void auth(String code) throws IOException, ParseException, SpotifyWebApiException {
-        authorize.getAccessToken(code);
-        ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-        service.scheduleAtFixedRate(() -> {
-            try {
-                synchronized(lock) {
-                    authorize.refreshToken();
-                }
-            } catch (IOException | ParseException | SpotifyWebApiException e) {
-                throw new RuntimeException(e);
-            }
-        }, 59, 59, TimeUnit.MINUTES);
+    public AuthorizationCodeCredentials auth(String code) throws IOException, ParseException, SpotifyWebApiException {
+        return authorize.getAccessToken(code);
     }
 
     // User
@@ -110,24 +103,28 @@ public class SpotifyAPI {
      * @return user id
      */
     public String getUserId() {
+        String userId;
+
         GetCurrentUsersProfileRequest userProfile = spotifyApiWrapper.getCurrentUsersProfile().build();
         try {
-            User user = userProfile.execute();
-            return user.getId();
+            userId = userProfile.execute().getId();
         } catch(IOException | SpotifyWebApiException | ParseException e) {
-            System.err.println(e);
-            return e.getMessage();
+            e.printStackTrace();
+            userId = e.getMessage();
         }
+
+        return userId;
     }
 
     // Playlist
 
     /**
      */
-    public String createPlayList(String name, String dec){
+    public String createPlayList(String accessToken, String name, String dec){
         CreatePlaylistRequest createPlayList;
         String userId = getUserId();
         synchronized(lock) {
+            this.spotifyApiWrapper.setAccessToken(accessToken);
             createPlayList = this.spotifyApiWrapper.createPlaylist(userId, name).public_(false).description(dec).build();
         }
 
@@ -136,7 +133,7 @@ public class SpotifyAPI {
             System.out.println("Name: " + playlist.getName());
             return playlist.getName();
         } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Error: " + e.getMessage());
+            e.printStackTrace();
             return null;
         }
 
@@ -146,11 +143,12 @@ public class SpotifyAPI {
      * Get All play lists of the current user
      * @return String
      */
-    public String getAllPlayList(){
+    public String getAllPlayList(String accessToken){
         GetListOfUsersPlaylistsRequest gPlayList;
         String userId = getUserId();
 
         synchronized(lock) {
+            this.spotifyApiWrapper.setAccessToken(accessToken);
             gPlayList = this.spotifyApiWrapper.getListOfUsersPlaylists(userId).build();
         }
 
@@ -165,8 +163,12 @@ public class SpotifyAPI {
     /**
      * Get a play list by id
      */
-    public String getPlayListById(String id){
-        GetPlaylistRequest getPlayList = this.spotifyApiWrapper.getPlaylist(id).build();
+    public String getPlayListById(String accessToken, String id){
+        GetPlaylistRequest getPlayList;
+        synchronized(lock) {
+            this.spotifyApiWrapper.setAccessToken(accessToken);
+            getPlayList = this.spotifyApiWrapper.getPlaylist(id).build();
+        }
         try {
             final Playlist playlist = getPlayList.execute();
             System.out.println("Name: " + playlist.getName());
@@ -182,12 +184,17 @@ public class SpotifyAPI {
      * @param pId play list id
      * @param tIds truck ids
      */
-    public String removeItemFromPlayList(String pId, String tIds){
+    public String removeItemFromPlayList(String accessToken, String pId, String tIds){
         final JsonArray trackJson = JsonParser.parseString("[{\"localhost:8080\":\"spotify:track:01iyCAUm8EvOFqVWYJ3dVX\"}]").getAsJsonArray();
         System.out.println("Track JSON: " + trackJson);
-        final RemoveItemsFromPlaylistRequest removeItemsFromPlaylistRequest = this.spotifyApiWrapper
+        final RemoveItemsFromPlaylistRequest removeItemsFromPlaylistRequest ;
+
+        synchronized(lock) {
+            this.spotifyApiWrapper.setAccessToken(accessToken);
+            removeItemsFromPlaylistRequest = this.spotifyApiWrapper
                 .removeItemsFromPlaylist(pId, trackJson)
                 .build();
+        }
 
         try {
             final SnapshotResult snapshotResult = removeItemsFromPlaylistRequest.execute();

@@ -1,7 +1,10 @@
 package langpendlaren.api.spotify;
 
+
 import io.javalin.Javalin;
-import org.eclipse.jetty.http.*;
+import io.javalin.http.Context;
+import io.javalin.http.Handler;
+import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 
 import java.net.URISyntaxException;
 
@@ -30,7 +33,9 @@ public class SpotifyEndPoints {
 
         javalin.get("/spotify/authenticated", context -> {
             String code = context.queryParam("code");
-            spotifyAPI.auth(code);
+            AuthorizationCodeCredentials tokens = spotifyAPI.auth(code);
+            context.cookie("accessToken", tokens.getAccessToken(), tokens.getExpiresIn());
+            context.cookie("refreshToken", tokens.getRefreshToken());
         });
 
         // -- User
@@ -40,7 +45,8 @@ public class SpotifyEndPoints {
         javalin.post("/spotify/playlist/create/{name}/{des}", context -> {
             String name = context.pathParam("name");
             String des = context.pathParam("des");
-            spotifyAPI.createPlayList(name, des);
+
+            context.result(spotifyAPI.createPlayList(getAccessToken(context), name, des));
         });
         javalin.post("/spotify/playlist/delete/{id}", context -> {
             String id = context.pathParam("id");
@@ -49,17 +55,17 @@ public class SpotifyEndPoints {
         javalin.put("/spotify/playlist/add/{pid}/{tid}", context -> {
             String pId = context.pathParam("pid");
             String tId = context.pathParam("tid");
-            spotifyAPI.addToPlayList(pId, tId);
+            context.result(spotifyAPI.addToPlayList(pId, tId));
         });
         javalin.get("/spotify/playlist/{id}", context -> {
             String id = context.pathParam("id");
-            context.json(spotifyAPI.getPlayListById(id));
+            context.json(spotifyAPI.getPlayListById(getAccessToken(context), id));
         });
-        javalin.get("/spotify/playlist/all", context -> context.json(spotifyAPI.getAllPlayList()));
+        javalin.get("/spotify/playlist/all", context -> context.json(spotifyAPI.getAllPlayList(getAccessToken(context))));
         javalin.put("/spotify/playlist/deletetracks/{pid}/{tids}", context -> {
             String pId = context.pathParam("pid");
             String tIds = context.pathParam("tids");
-            spotifyAPI.removeItemFromPlayList(pId, tIds);
+            context.result(spotifyAPI.removeItemFromPlayList(getAccessToken(context), pId, tIds));
         });
 
         // -- Albums
@@ -95,5 +101,10 @@ public class SpotifyEndPoints {
             String id = context.pathParam("id");
             context.json(spotifyAPI.getArtistAlbums(id));
         });
+    }
+
+    private String getAccessToken(Context context) {
+        // TODO Kontrollera kaka och förnya vid behov.
+        return context.cookie("accessToken");
     }
 }
