@@ -439,6 +439,7 @@ img.track {
 	margin-top: 10%;
 }
 
+
 #searchbar {
 	display: block;
 	margin-top: 5%;
@@ -446,20 +447,25 @@ img.track {
 	text-align: center;
 }
 
+
 #station-wraper {
 	text-align: center;
 	margin: auto;
 }
-
 #station {
 	text-align: center;
 	margin: auto;
 }
-
 .trains h3 {
 	text-align: center;
 }
 
+
 #showBtn {
 	margin-top: 2%;
+}
+
+
+#result {
+	height: 15em; overflow: auto; 
 }

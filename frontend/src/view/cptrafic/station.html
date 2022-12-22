@@ -34,14 +34,10 @@
                     </table>
                   </div>
              </div>
-
+             
            </main>
- 
-           <footer>
- 
-           </footer>
-
         </body>
+    </html>
 
            <script>
                 // Read file
@@ -61,7 +57,7 @@
                     var data = JSON.parse(information);
                     data.forEach(element => {
                     //Create HTML elements in table
-                    jQuery("#timeTableDeparture tr:last").
+                    jQuery("#timeTableDeparture tr:last").                                                                      // Sök efter avgångar?
                     after("<tr><td>" + element.AdvertisedLocationName + "</td>" + "<td id='search_button'> <button type='button'> Välj denna station </button> </td></tr>");
                 })
                 });
@@ -88,6 +84,3 @@
                 }
                 }
             </script>
-</div>
- 
-</html>
