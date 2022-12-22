@@ -88,4 +88,12 @@
                 }
             }
             }
+
+            document.getElementById("login").addEventListener("click", async () => {
+            const result = await fetch('http://localhost/trafikverket/trains', {
+                  method: "GET"
+                });
+              const data = await result.json();
+              console.log(data);
+            };
         </script>
