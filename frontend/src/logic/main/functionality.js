@@ -32,5 +32,5 @@ const resetSetting = () => {};
 setUpView();
 
 function spotifyLogin() {
-    ipc.send('openChildWindow');
+    ipc.send('spotifyLogin');
 }

@@ -1,12 +1,12 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
-app.commandLine.appendSwitch('trace-warnings'); // Visa felmeddelanden.
-
+const fetch = require('electron-fetch').default
 let mainWindow;
 
+app.commandLine.appendSwitch('trace-warnings'); // Visa felmeddelanden.
 function createMainWindow() {
-    const mainWindow = new BrowserWindow({
-        width: 600,
-        height: 800,
+    mainWindow = new BrowserWindow({
+        width: 1000,
+        height: 1000,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false
@@ -14,43 +14,34 @@ function createMainWindow() {
         show: false
     });
 
-    mainWindow.loadFile('./src/view/main.html')
+    mainWindow.loadFile('./src/view/main.html').then(() => {
+        mainWindow.webContents.on('will-redirect', function (event, newUrl) {
+            console.log(event);
+            afterSpotifyLogin(newUrl);
+        });
+    })
 
-    mainWindow.maximize();
+    //mainWindow.maximize();
     mainWindow.show();
 }
 
-
-function createSpotifyWindow() {
-    spotifyWindow = new BrowserWindow({
-        width: 1000,
-        height: 700,
-        modal: true,
-        show: false,
-        parent: mainWindow, // Make sure to add parent window here
-
-        // Make sure to add webPreferences with below configuration
-        webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
-            enableRemoteModule: true,
-        },
-    });
-
-    // Child window loads settings.html file
-    spotifyWindow.loadFile('./src/view/cpspotify/login_spotify.html');
-
-    spotifyWindow.once("ready-to-show", () => {
-        spotifyWindow.show();
-    });
+function afterSpotifyLogin(newUrl) {
+    fetch(newUrl)
+        .then(() => {
+            alert("ANROPA http://localhost/spotify/authenticated?code=...")
+            mainWindow.loadFile('./src/view/cpspotify/playlist.html')
+        })
+        .catch(mainWindow.loadFile('./src/view/error.html'))
 }
 
-ipcMain.on("openChildWindow", (event, arg) => {
-    createSpotifyWindow();
+ipcMain.on("spotifyLogin", (event, arg) => {
+    fetch('http://localhost/spotify/login').then(res => res.json()).then(json => {
+        mainWindow.loadURL(json)
+    })
 });
 
 app.whenReady().then(() => {
-    createMainWindow()
+    createMainWindow();
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createMainWindow()
@@ -60,4 +51,5 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
 })
+
 
