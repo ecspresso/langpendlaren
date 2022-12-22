@@ -1,11 +1,12 @@
 package langpendlaren.api.spotify;
 
 import io.javalin.Javalin;
+import org.eclipse.jetty.http.*;
 
 import java.net.URISyntaxException;
 
 public class SpotifyEndPoints {
-    private Javalin javalin;
+    private final Javalin javalin;
     private final SpotifyAPI spotifyAPI;
 
     public SpotifyEndPoints(Javalin javalin){
@@ -26,13 +27,10 @@ public class SpotifyEndPoints {
 
         // Authorization
         javalin.get("/spotify/login", context -> context.json(spotifyAPI.getLoginPage()));
-        javalin.get("/spotify/authenticated", context -> {
-            String code = context.queryParam("code");
-            System.out.println(code);
-            spotifyAPI.auth(code);
-            context.json(code);
-        });
 
+        javalin.get("/spotify/authenticated", context -> {
+            spotifyAPI.auth(context.queryParam("code"));
+        });
 
         // -- User
         javalin.get("/spotify/user/profile", context -> context.json(spotifyAPI.getUserId())); //FIXME! a possible way can be to return all profile
