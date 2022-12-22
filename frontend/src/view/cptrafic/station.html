@@ -13,80 +13,79 @@
    </head>
  
    <body>
-           <header>
-               <h1>Långpendlaren</h1>
-           </header>
- 
-           <main>
-               <div id="searchbar">
-                <h3 class="pagetitle">Sök efter station</h3>
-                   <div id="search_station">
-                       <input id="station" type="text" placeholder="Ange station..." onkeyup="search()"/>
-                   </div>
+        <header>
+            <h1>Långpendlaren</h1>
+        </header>
 
-                 <div id="result" class="limit">
-                    <table id="timeTableDeparture">
-                      <tr>
-                        <th scope="col" style="width:200px;">Station</th>
-                        <th scope="col"  style="width:200px;">Välj station</th>
-                      </tr>
-                      <!--Utskrifter från JSON-->
-                    </table>
-                  </div>
-             </div>
-             
-           </main>
-        </body>
-    </html>
+        <main>
+            <div id="searchbar">
+            <h3 class="pagetitle">Sök efter station</h3>
+                <div id="search_station">
+                    <input id="station" type="text" placeholder="Ange station..." onkeyup="search()"/>
+                </div>
 
-           <script>
-                // Read file
-                function readTextFile(file, callback) {
-                var rawFile = new XMLHttpRequest();
-                rawFile.overrideMimeType("application/json");
-                rawFile.open("GET", file, true);
-                rawFile.onreadystatechange = function() {
-                    if (rawFile.readyState === 4 && rawFile.status == "200") {
-                        callback(rawFile.responseText);
-                    }
+                <div id="result" class="limit">
+                <table id="timeTableDeparture">
+                    <tr>
+                    <th scope="col" style="width:200px;">Station</th>
+                    <th scope="col"  style="width:200px;">Välj station</th>
+                    </tr>
+                    <!--Utskrifter från JSON-->
+                </table>
+                </div>
+            </div>
+            
+        </main>
+    </body>
+</html>
+
+        <script>
+            // Read file
+            function readTextFile(file, callback) {
+            var rawFile = new XMLHttpRequest();
+            rawFile.overrideMimeType("application/json");
+            rawFile.open("GET", file, true);
+            rawFile.onreadystatechange = function() {
+                if (rawFile.readyState === 4 && rawFile.status == "200") {
+                    callback(rawFile.responseText);
                 }
-                rawFile.send(null);
-                }
-                //Path to file
-                readTextFile("/frontend/src/view/cptrafic/data.json", function(information){
-                    var data = JSON.parse(information);
-                    data.forEach(element => {
-                    //Create HTML elements in table
-                    jQuery("#timeTableDeparture tr:last").                                                                      // Sök efter avgångar?
-                    after("<tr><td>" + element.AdvertisedLocationName + "</td>" + "<td id='search_button'> <button type='button'> Välj denna station </button> </td></tr>");
-                    
-                    /* Log all stations from current JSON
-                    data.forEach(item => {
-                    console.log(item.AdvertisedLocationName);
-                    })
-                    */
+            }
+            rawFile.send(null);
+            }
+            //Path to file
+            readTextFile("/frontend/src/view/cptrafic/data.json", function(information){
+                var data = JSON.parse(information);
+                data.forEach(element => {
+                //Create HTML elements in table
+                jQuery("#timeTableDeparture tr:last").                                                                      // Sök efter avgångar?
+                after("<tr><td>" + element.AdvertisedLocationName + "</td>" + "<td id='search_button'> <button type='button'> Välj denna station </button> </td></tr>");
+                
+                /* Log all stations from current JSON
+                data.forEach(item => {
+                console.log(item.AdvertisedLocationName);
                 })
-                });
+                */
+            })
+            });
 
-                function search() {
-                // Declare variables
-                var input, filter, table, tr, td, i, txtValue;
-                input = document.getElementById("station");
-                filter = input.value.toUpperCase();
-                table = document.getElementById("timeTableDeparture");
-                tr = table.getElementsByTagName("tr");
+            function search() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("station");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("timeTableDeparture");
+            tr = table.getElementsByTagName("tr");
 
-                // Loop through all table rows, and hide those who don't match the search query
-                for (i = 0; i < tr.length; i++) {
-                    td = tr[i].getElementsByTagName("td")[0];
-                    if (td) {
-                    txtValue = td.textContent || td.innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
-                    } else {
-                        tr[i].style.display = "none";
-                    }
-                    }
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
                 }
                 }
-            </script>
+            }
+            }
+        </script>

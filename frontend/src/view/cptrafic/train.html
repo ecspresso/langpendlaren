@@ -36,15 +36,8 @@
               </div>
             </div>
               
-           </main>
- 
-           <footer>
- 
-           </footer>
- 
-   </body>
-</div>
- 
+          </main> 
+    </body>
 </html>
 
       <script>
@@ -68,8 +61,7 @@
               var hours = advertisedtime.getHours()
               var minutes = advertisedtime.getMinutes()
               if (minutes < 10) minutes = "0" + minutes
-              if (hours < 10) hours = "0" + hours  
-              console.log(data)
+              if (hours < 10) hours = "0" + hours
             //Create HTML elements in table
             jQuery("#timeTableDeparture tr:last").
             after("<tr><td>" + hours + ":" + minutes + "<td>" + element.ToLocation.LocationName + "</td>" + "<td>" + element.TrackAtLocation + "</td>" + 

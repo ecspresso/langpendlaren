@@ -31,44 +31,35 @@
               </div>
             </div>
               
-           </main>
- 
-           <footer>
- 
-           </footer>
- 
+        </main>
    </body>
-</div>
- 
 </html>
 
-
-    <script>
-      // Read file
-      function readTextFile(file, callback) {
-      var rawFile = new XMLHttpRequest();
-      rawFile.overrideMimeType("application/json");
-      rawFile.open("GET", file, true);
-      rawFile.onreadystatechange = function() {
-          if (rawFile.readyState === 4 && rawFile.status == "200") {
-              callback(rawFile.responseText);
-          }
-      }
-      rawFile.send(null);
-      }
-      //Path to file
-      readTextFile("/frontend/src/view/cptrafic/stop.json", function(information){
-          var data = JSON.parse(information);
-          data.forEach(element => {
-            var advertisedtime = new Date(element.AdvertisedTimeAtLocation);
-            var hours = advertisedtime.getHours()
-            var minutes = advertisedtime.getMinutes()
-            if (minutes < 10) minutes = "0" + minutes
-            if (hours < 10) hours = "0" + hours  
-            console.log(data)
-          //Create HTML elements in table
-          jQuery("#timeTableDeparture tr:last").
-          after("<tr><td>" + hours + ":" + minutes + "<td>" + element.LocationSignature + "</td>" 
-            + "<td id='search_button'> <button type='button'>Välj station</button> </td></tr>");
-        })})
-    </script>
+      <script>
+        // Read file
+        function readTextFile(file, callback) {
+        var rawFile = new XMLHttpRequest();
+        rawFile.overrideMimeType("application/json");
+        rawFile.open("GET", file, true);
+        rawFile.onreadystatechange = function() {
+            if (rawFile.readyState === 4 && rawFile.status == "200") {
+                callback(rawFile.responseText);
+            }
+        }
+        rawFile.send(null);
+        }
+        //Path to file
+        readTextFile("/frontend/src/view/cptrafic/stop.json", function(information){
+            var data = JSON.parse(information);
+            data.forEach(element => {
+              var advertisedtime = new Date(element.AdvertisedTimeAtLocation);
+              var hours = advertisedtime.getHours()
+              var minutes = advertisedtime.getMinutes()
+              if (minutes < 10) minutes = "0" + minutes
+              if (hours < 10) hours = "0" + hours
+            //Create HTML elements in table
+            jQuery("#timeTableDeparture tr:last").
+            after("<tr><td>" + hours + ":" + minutes + "<td>" + element.LocationSignature + "</td>" 
+              + "<td id='search_button'> <button type='button'>Välj station</button> </td></tr>");
+          })})
+      </script>
