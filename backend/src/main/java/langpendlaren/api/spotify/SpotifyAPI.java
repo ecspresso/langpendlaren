@@ -41,6 +41,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.concurrent.*;
 
 public class SpotifyAPI {
     // Spotify wrapper
@@ -73,7 +74,6 @@ public class SpotifyAPI {
         this.spotifyApiWrapper = new SpotifyApi.Builder().setClientId(clientId).setClientSecret(clientSecret).setRedirectUri(redirectURI).build();
         // Klass för att hantera Spotify inloggning.
         authorize = new Authorize(spotifyApiWrapper);
-        authorize.refreshToken();
     }
 
     /**
@@ -81,23 +81,26 @@ public class SpotifyAPI {
      * @return link to spotify account
      */
     public URI getLoginPage(){
-        final AuthorizationCodeUriRequest authorizationCodeUriRequest = this.spotifyApiWrapper.authorizationCodeUri()
-                .scope(scope)
-                .show_dialog(true)
-                .build();
-        URI uri = authorizationCodeUriRequest.execute();
-        System.out.println(uri);
-        return uri;
+        return authorize.authorize();
     }
 
     /**
      * Authentication
      * @param code an id from user acceptation
      */
-    public void auth(String code) {
-        authorize.auth(code);
+    public void auth(String code) throws IOException, ParseException, SpotifyWebApiException {
+        authorize.getAccessToken(code);
+        ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+        service.scheduleAtFixedRate(() -> {
+            try {
+                synchronized(lock) {
+                    authorize.refreshToken();
+                }
+            } catch (IOException | ParseException | SpotifyWebApiException e) {
+                throw new RuntimeException(e);
+            }
+        }, 59, 59, TimeUnit.MINUTES);
     }
-
 
     // User
 
