@@ -1,84 +1,118 @@
 <!DOCTYPE html>
-<html lang="sv">
-   <head>
-       <meta charset="utf-8">
-       <title>Långpendlaren</title>
-       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-       <link rel="icon" type="image/x-icon" href="g">
-       <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
-       <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-       <link rel="stylesheet" href="../styles/main.css">
-       <link rel="stylesheet" href="./frontend/src/view/styles/main.css">
-       <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-       <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script> 
-       <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-   </head>
- 
-   <body>
-           <header>
-               <h1>Långpendlaren</h1>
-           </header>
- 
-           <main>
-            <div id="result">
-                <h3 class="pagetitle">Avgående tåg</h3>
-                <table id="timeTableDeparture">
-                  <tr>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Långpendlaren</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="g">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="./frontend/src/view/styles/main.css">
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+  </head>
+
+  <body>
+    <header>
+        <h1>Långpendlaren</h1>
+    </header>
+  
+    <main>
+        <div id="result">
+            <h3 class="pagetitle">Avgående tåg</h3>
+            <table id="timeTableDeparture">
+                <tr>
                     <th scope="col" style="width:40px;">Tid</th>
                     <th scope="col" style="width:200px;">Till</th>
-                    <th scope="col"  style="width:80px;">Spår</th>
+                    <th scope="col" style="width:80px;">Spår</th>
                     <!--Train ID-->
-                    <th scope="col"  style="width:80px;">ID</th>
-                    <th scope="col"  style="width:80px;">Välj tåg</th>
-                  </tr>
-                  <!--Utskrifter från JSON-->
-                </table>
-              </div>
-            </div>
-              
-          </main> 
-    </body>
+                    <th scope="col" style="width:80px;">ID</th>
+                    <th scope="col" style="width:80px;">Välj tåg</th>
+                </tr>
+                <!--Utskrifter från JSON-->
+            </table>
+        </div>
+    </div>
+  </body>
 </html>
 
-      <script>
+<script src="../../logic/trafic/events.js" type="text/javascript"></script>
+  <script>
+  
+    const getTrains = async () => {
+        const data = await fetch(`http://localhost/trafikverket/trains`, {method: "GET"}).then((res) => res.json()).catch((e) => console.assert(e));
+        const trainAnnouncements = data.RESPONSE.RESULT[0].TrainAnnouncement;
+        renderTrainAnnouncement(trainAnnouncements);
+    };
+     getTrains();
+  
+  function renderTrainAnnouncement(announcement) {
+    $(announcement).each(function (iterator, item) {
+        var advertisedtime = new Date(item.AdvertisedTimeAtLocation);
+        var hours = advertisedtime.getHours()
+        var minutes = advertisedtime.getMinutes()
+        if (minutes < 10) 
+            minutes = "0" + minutes
+        
+        if (hours < 10) 
+            hours = "0" + hours
+        
+        // Departure time
+        var depTime = (hours + ":" + minutes)
+        var toList = new Array();
+        
+        $(item.ToLocation).each(function (iterator, toItem) {
+            toList.push(String(toItem));
+        });
+        
+        var owner = "";
+        if (item.InformationOwner != null) 
+            owner = item.InformationOwner;
+        
+        jQuery("#timeTableDeparture tr:last").after("<tr><td>" + hours + ":" + minutes + "</td><td>" + item.ToLocation[0].LocationName + "</td><td>" + owner + "</td><td style='text-align: center'>" + item.TrackAtLocation + "</td><td>" +
+        // Train ID
+        item.AdvertisedTrainIdent + "</td><td> <button id='selectTrain' type='button' onclick='clearBox('main_content')'>Välj resa</button> </td></tr>");
+  
+        var selectTrain = document.getElementById("selectTrain");
+        selectTrain.addEventListener("click", function (e) {
+            console.log("Train ID: " + item.AdvertisedTrainIdent + " | " + "Departure time: " + depTime);
+        });
+    });
+  }
+  
 
-        const getTrains = async () => {
-            const data = await fetch(`http://localhost/trafikverket/trains`, {method: "GET"}).then((res) => res.json()).catch((e) => console.assert(e));
-            const trainAnnouncements = data.RESPONSE.RESULT[0].TrainAnnouncement;
-            for (const train of trainAnnouncements) {
-                jQuery("#timeTableDeparture tr:last").
-                after("<tr><td>" + train.AdvertisedTimeAtLocation + ":" + "" + "<td>" + train.ToLocation[0].LocationName + "</td>" + "<td>" + train.TrackAtLocation + "</td>" + 
-                "<td>" + train.AdvertisedTrainIdent + "</td>" + "<td id='search_button'> <button type='button'>Välj tåg</button> </td></tr>");
-            }
-        };
-      getTrains();
+            // This code commented for now!
+  
+  // // Read file
+  // function readTextFile(file, callback) {
+  // var rawFile = new XMLHttpRequest();
+  // rawFile.overrideMimeType("application/json");
+  // rawFile.open("GET", file, true);
+  // rawFile.onreadystatechange = function() {
+  //     if (rawFile.readyState === 4 && rawFile.status == "200") {
+  //         callback(rawFile.responseText);
+  //     }
+  // }
+  // rawFile.send(null);
+  // }
+  // //Path to file
+  // readTextFile("/frontend/src/view/cptrafic/trains.json", function(information){
+  //     var data = JSON.parse(information);
+  //     data.forEach(element => {
+  //       var advertisedtime = new Date(element.AdvertisedTimeAtLocation);
+  //       var hours = advertisedtime.getHours()
+  //       var minutes = advertisedtime.getMinutes()
+  //       if (minutes < 10) minutes = "0" + minutes
+  //       if (hours < 10) hours = "0" + hours
+  //     //Create HTML elements in table
+  //     jQuery("#timeTableDeparture tr:last").
+  //     after("<tr><td>" + hours + ":" + minutes + "<td>" + element.ToLocation.LocationName + "</td>" + "<td>" + element.TrackAtLocation + "</td>" +
+  //     "<td>" + element.AdvertisedTrainIdent + "</td>" + "<td id='search_button'> <button type='button'>Välj tåg</button> </td></tr>");
+  // })})
+  
+  </script>
 
 
-
-        // // Read file
-        // function readTextFile(file, callback) {
-        // var rawFile = new XMLHttpRequest();
-        // rawFile.overrideMimeType("application/json");
-        // rawFile.open("GET", file, true);
-        // rawFile.onreadystatechange = function() {
-        //     if (rawFile.readyState === 4 && rawFile.status == "200") {
-        //         callback(rawFile.responseText);
-        //     }
-        // }
-        // rawFile.send(null);
-        // }
-        // //Path to file
-        // readTextFile("/frontend/src/view/cptrafic/trains.json", function(information){
-        //     var data = JSON.parse(information);
-        //     data.forEach(element => {
-        //       var advertisedtime = new Date(element.AdvertisedTimeAtLocation);
-        //       var hours = advertisedtime.getHours()
-        //       var minutes = advertisedtime.getMinutes()
-        //       if (minutes < 10) minutes = "0" + minutes
-        //       if (hours < 10) hours = "0" + hours
-        //     //Create HTML elements in table
-        //     jQuery("#timeTableDeparture tr:last").
-        //     after("<tr><td>" + hours + ":" + minutes + "<td>" + element.ToLocation.LocationName + "</td>" + "<td>" + element.TrackAtLocation + "</td>" + 
-        //     "<td>" + element.AdvertisedTrainIdent + "</td>" + "<td id='search_button'> <button type='button'>Välj tåg</button> </td></tr>");
-        //   })})
-      </script>

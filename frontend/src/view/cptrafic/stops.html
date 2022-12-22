@@ -13,30 +13,73 @@
    </head>
  
    <body>
-           <header>
-               <h1>Långpendlaren</h1>
-           </header>
- 
-           <main>
-            <div id="result">
-                <h3 class="pagetitle">Hållplatser</h3>
-                <table id="timeTableDeparture">
-                  <tr>
-                    <th scope="col" style="width:40px;">Ankomsttid</th>
-                    <th scope="col" style="width:200px;">Station</th>
-                    <th scope="col"  style="width:150px;">Välj station</th>
-                  </tr>
-                  <!--Utskrifter från JSON-->
-                </table>
-              </div>
-            </div>
-              
+        <header>
+            <h1>Långpendlaren</h1>
+        </header>
+
+        <main>
+        <div id="result">
+            <h3 class="pagetitle">Hållplatser</h3>
+            <table id="timeTableDeparture">
+              <tr>
+                <th scope="col" style="width:40px;">Ankomsttid</th>
+                <th scope="col" style="width:200px;">Station</th>
+                <th scope="col"  style="width:150px;">Välj station</th>
+              </tr>
+              <!--Utskrifter från JSON-->
+            </table>
+          </div>
+        </div>
         </main>
    </body>
 </html>
-
+      <script src="../../logic/trafic/events.js" type="text/javascript"></script>
       <script>
-        
+        const getStops = async () => {
+                const data = await fetch(`http://localhost/trafikverket/trains/stops`, {method: "GET"}).then((res) => res.json()).catch((e) => console.assert(e));
+                const trainAnnouncements = data.RESPONSE.RESULT[0].TrainAnnouncement;
+                console.log(trainAnnouncements);
+                renderTrainAnnouncement(trainAnnouncements)
+            };
+            getStops();
+            
+            function renderTrainAnnouncement(announcement) {
+                $(announcement).each(function (iterator, item) {
+                    var advertisedtime = new Date(item.AdvertisedTimeAtLocation);
+                    var hours = advertisedtime.getHours()
+                    var minutes = advertisedtime.getMinutes()
+                    if (minutes < 10) 
+                        minutes = "0" + minutes
+                    
+                    if (hours < 10) 
+                        hours = "0" + hours
+                    
+                    // Departure time
+                    var depTime = (hours + ":" + minutes)
+                    var toList = new Array();
+                    
+                    $(item.ToLocation).each(function (iterator, toItem) {
+                        toList.push(String(toItem));
+                    });
+                    
+                    var owner = "";
+                    if (item.InformationOwner != null) 
+                        owner = item.InformationOwner;
+                    
+                        jQuery("#timeTableDeparture tr:last").
+                        after("<tr><td>" + hours + ":" + minutes + "<td>" + item.LocationSignature + "</td>" 
+                          + "<td id='search_button'> <button type='button' id='selectTrain'>Välj station</button> </td></tr>");
+                      
+                    var selectTrain = document.getElementById("selectTrain");
+                    selectTrain.addEventListener("click", function (e) {
+                        console.log("Train ID: " + item.AdvertisedTrainIdent + " | " + "Departure time: " + depTime);
+                    });
+                });
+              }
+              
+
+            // This code commented for now!
+
         // // Read file
         // function readTextFile(file, callback) {
         // var rawFile = new XMLHttpRequest();
