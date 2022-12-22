@@ -42,27 +42,16 @@
 
       <script>
 
-        const getStations = async () => {
-            const station = document.getElementById("station");
-            const data = await fetch(`http://localhost/trafikverket/stations`, {method: "GET"}).then((res) => res.json()).catch((e) => console.assert(e));
-
+        const getTrains = async () => {
+            const data = await fetch(`http://localhost/trafikverket/trains`, {method: "GET"}).then((res) => res.json()).catch((e) => console.assert(e));
             const trainAnnouncements = data.RESPONSE.RESULT[0].TrainAnnouncement;
             for (const train of trainAnnouncements) {
-                const ActivityId = train.ActivityId;
-                const ActivityType = train.ActivityType;
-                const Advertised = train.Advertised;
-                const AdvertisedTimeAtLocation = train.AdvertisedTimeAtLocation;
-                const FromLocation = train.FromLocation[0].LocationName;
-                const ToLocation = train.ToLocation;
-                const TrackAtLocation = train.TrackAtLocation;
-                const ScheduledDepartureDateTime = train.ScheduledDepartureDateTime;
-                const Owner = train.InformationOwner;
                 jQuery("#timeTableDeparture tr:last").
-                after("<tr><td>" + AdvertisedTimeAtLocation + ":" + "" + "<td>" + train.ToLocation[0].LocationName + "</td>" + "<td>" + train.TrackAtLocation + "</td>" + 
+                after("<tr><td>" + train.AdvertisedTimeAtLocation + ":" + "" + "<td>" + train.ToLocation[0].LocationName + "</td>" + "<td>" + train.TrackAtLocation + "</td>" + 
                 "<td>" + train.AdvertisedTrainIdent + "</td>" + "<td id='search_button'> <button type='button'>Välj tåg</button> </td></tr>");
             }
         };
-      getStations();
+      getTrains();
 
 
 
