@@ -181,3 +181,6 @@ $RECYCLE.BIN/
 /frontend/.idea/*
 /backend/target/*
 /backedn/langendlare.iml
+backend/pom.xml
+backend/langpendlaren.iml
+backend/langpendlare.iml
