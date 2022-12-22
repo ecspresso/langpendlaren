@@ -8,7 +8,7 @@
        <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
        <link rel="stylesheet" href="../styles/main.css">
-       <link rel="stylesheet" type="text/css" href="/frontend/src/view/styles/main.css">
+       <link rel="stylesheet" href="./frontend/src/view/styles/main.css">
        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
        <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script> 
        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
@@ -41,30 +41,55 @@
 </html>
 
       <script>
-        // Read file
-        function readTextFile(file, callback) {
-        var rawFile = new XMLHttpRequest();
-        rawFile.overrideMimeType("application/json");
-        rawFile.open("GET", file, true);
-        rawFile.onreadystatechange = function() {
-            if (rawFile.readyState === 4 && rawFile.status == "200") {
-                callback(rawFile.responseText);
+
+        const getStations = async () => {
+            const station = document.getElementById("station");
+            const data = await fetch(`http://localhost/trafikverket/stations`, {method: "GET"}).then((res) => res.json()).catch((e) => console.assert(e));
+
+            const trainAnnouncements = data.RESPONSE.RESULT[0].TrainAnnouncement;
+            for (const train of trainAnnouncements) {
+                const ActivityId = train.ActivityId;
+                const ActivityType = train.ActivityType;
+                const Advertised = train.Advertised;
+                const AdvertisedTimeAtLocation = train.AdvertisedTimeAtLocation;
+                const FromLocation = train.FromLocation[0].LocationName;
+                const ToLocation = train.ToLocation;
+                const TrackAtLocation = train.TrackAtLocation;
+                const ScheduledDepartureDateTime = train.ScheduledDepartureDateTime;
+                const Owner = train.InformationOwner;
+                jQuery("#timeTableDeparture tr:last").
+                after("<tr><td>" + AdvertisedTimeAtLocation + ":" + "" + "<td>" + train.ToLocation[0].LocationName + "</td>" + "<td>" + train.TrackAtLocation + "</td>" + 
+                "<td>" + train.AdvertisedTrainIdent + "</td>" + "<td id='search_button'> <button type='button'>Välj tåg</button> </td></tr>");
             }
-        }
-        rawFile.send(null);
-        }
-        //Path to file
-        readTextFile("/frontend/src/view/cptrafic/trains.json", function(information){
-            var data = JSON.parse(information);
-            data.forEach(element => {
-              var advertisedtime = new Date(element.AdvertisedTimeAtLocation);
-              var hours = advertisedtime.getHours()
-              var minutes = advertisedtime.getMinutes()
-              if (minutes < 10) minutes = "0" + minutes
-              if (hours < 10) hours = "0" + hours
-            //Create HTML elements in table
-            jQuery("#timeTableDeparture tr:last").
-            after("<tr><td>" + hours + ":" + minutes + "<td>" + element.ToLocation.LocationName + "</td>" + "<td>" + element.TrackAtLocation + "</td>" + 
-            "<td>" + element.AdvertisedTrainIdent + "</td>" + "<td id='search_button'> <button type='button'>Välj tåg</button> </td></tr>");
-          })})
+        };
+      getStations();
+
+
+
+        // // Read file
+        // function readTextFile(file, callback) {
+        // var rawFile = new XMLHttpRequest();
+        // rawFile.overrideMimeType("application/json");
+        // rawFile.open("GET", file, true);
+        // rawFile.onreadystatechange = function() {
+        //     if (rawFile.readyState === 4 && rawFile.status == "200") {
+        //         callback(rawFile.responseText);
+        //     }
+        // }
+        // rawFile.send(null);
+        // }
+        // //Path to file
+        // readTextFile("/frontend/src/view/cptrafic/trains.json", function(information){
+        //     var data = JSON.parse(information);
+        //     data.forEach(element => {
+        //       var advertisedtime = new Date(element.AdvertisedTimeAtLocation);
+        //       var hours = advertisedtime.getHours()
+        //       var minutes = advertisedtime.getMinutes()
+        //       if (minutes < 10) minutes = "0" + minutes
+        //       if (hours < 10) hours = "0" + hours
+        //     //Create HTML elements in table
+        //     jQuery("#timeTableDeparture tr:last").
+        //     after("<tr><td>" + hours + ":" + minutes + "<td>" + element.ToLocation.LocationName + "</td>" + "<td>" + element.TrackAtLocation + "</td>" + 
+        //     "<td>" + element.AdvertisedTrainIdent + "</td>" + "<td id='search_button'> <button type='button'>Välj tåg</button> </td></tr>");
+        //   })})
       </script>
