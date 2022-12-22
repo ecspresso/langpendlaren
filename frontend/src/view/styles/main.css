@@ -466,6 +466,6 @@ img.track {
 }
 
 
-#result {
+.limit {
 	height: 15em; overflow: auto; 
 }

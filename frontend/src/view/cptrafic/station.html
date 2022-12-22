@@ -24,7 +24,7 @@
                        <input id="station" type="text" placeholder="Ange station..." onkeyup="search()"/>
                    </div>
 
-                 <div id="result">
+                 <div id="result" class="limit">
                     <table id="timeTableDeparture">
                       <tr>
                         <th scope="col" style="width:200px;">Station</th>
@@ -59,6 +59,12 @@
                     //Create HTML elements in table
                     jQuery("#timeTableDeparture tr:last").                                                                      // Sök efter avgångar?
                     after("<tr><td>" + element.AdvertisedLocationName + "</td>" + "<td id='search_button'> <button type='button'> Välj denna station </button> </td></tr>");
+                    
+                    /* Log all stations from current JSON
+                    data.forEach(item => {
+                    console.log(item.AdvertisedLocationName);
+                    })
+                    */
                 })
                 });
 
