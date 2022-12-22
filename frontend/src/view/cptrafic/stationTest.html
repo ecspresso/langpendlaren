@@ -53,6 +53,10 @@
             rawFile.send(null);
             }
             //Path to file
+
+            const stations = await fetch("http://localhost/trafikverket/stations", {method: "GET"});
+            console.log(stations.json());
+
             readTextFile("http://localhost/trafikverket/stations", function(information){
                 var data = JSON.parse(information);
                 var data2 = data.RESPONSE.RESULT;
