@@ -1,4 +1,4 @@
-
+const ipc = window.require('electron').ipcRenderer;
 
 // Basic functions
 const setUpView = () => {
@@ -30,3 +30,7 @@ const changeTheView = () => {};
 const resetSetting = () => {};
 
 setUpView();
+
+function spotifyLogin() {
+    ipc.send('openChildWindow');
+}
