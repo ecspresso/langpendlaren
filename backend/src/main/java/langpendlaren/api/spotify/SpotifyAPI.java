@@ -53,9 +53,13 @@ public class SpotifyAPI {
         // Läs in inställningar från fil.
         Properties prop = new Properties();
         FileReader fileReader;
+
         try {
-              fileReader =  new FileReader("src/main/resources/spotify.properties");
-              prop.load(fileReader);
+            URL fileUrl = this.getClass().getClassLoader().getResource("spotify.properties");
+            File file = new File(Objects.requireNonNull(fileUrl).toURI());
+            fileReader =  new FileReader(file);
+            prop.load(fileReader);
+            fileReader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

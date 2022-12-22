@@ -181,9 +181,4 @@ $RECYCLE.BIN/
 /frontend/.idea/*
 /backend/target/*
 /backedn/langendlare.iml
-<<<<<<< Updated upstream
-backend/pom.xml
 backend/langpendlaren.iml
-=======
->>>>>>> Stashed changes
-backend/langpendlare.iml
