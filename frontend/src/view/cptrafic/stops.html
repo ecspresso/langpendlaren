@@ -7,6 +7,9 @@
        <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
        <link rel="stylesheet" href="../styles/main.css">
+       <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+       <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script> 
+       <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
    </head>
  
    <body>
@@ -19,11 +22,11 @@
                 <h3 class="pagetitle">Hållplatser</h3>
                 <table id="timeTableDeparture">
                   <tr>
-                    <th scope="col" style="width:40px;">Tid</th>
-                    <th scope="col" style="width:200px;">Till</th>
-                    <th scope="col" style="width:100px;"></th>
-                    <th scope="col"  style="width:100px;">Välj hållplats</th>
+                    <th scope="col" style="width:40px;">Ankomsttid</th>
+                    <th scope="col" style="width:200px;">Station</th>
+                    <th scope="col"  style="width:150px;">Välj station</th>
                   </tr>
+                  <!--Utskrifter från JSON-->
                 </table>
               </div>
             </div>
@@ -38,3 +41,34 @@
 </div>
  
 </html>
+
+
+    <script>
+      // Read file
+      function readTextFile(file, callback) {
+      var rawFile = new XMLHttpRequest();
+      rawFile.overrideMimeType("application/json");
+      rawFile.open("GET", file, true);
+      rawFile.onreadystatechange = function() {
+          if (rawFile.readyState === 4 && rawFile.status == "200") {
+              callback(rawFile.responseText);
+          }
+      }
+      rawFile.send(null);
+      }
+      //Path to file
+      readTextFile("/frontend/src/view/cptrafic/stop.json", function(information){
+          var data = JSON.parse(information);
+          data.forEach(element => {
+            var advertisedtime = new Date(element.AdvertisedTimeAtLocation);
+            var hours = advertisedtime.getHours()
+            var minutes = advertisedtime.getMinutes()
+            if (minutes < 10) minutes = "0" + minutes
+            if (hours < 10) hours = "0" + hours  
+            console.log(data)
+          //Create HTML elements in table
+          jQuery("#timeTableDeparture tr:last").
+          after("<tr><td>" + hours + ":" + minutes + "<td>" + element.LocationSignature + "</td>" 
+            + "<td id='search_button'> <button type='button'>Välj station</button> </td></tr>");
+        })})
+    </script>
