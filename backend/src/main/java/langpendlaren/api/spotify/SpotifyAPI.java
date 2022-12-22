@@ -48,8 +48,6 @@ public class SpotifyAPI {
     private final Authorize authorize;
     // Lock for synchronize work
     private final Object lock = new Object();
-    // Scope for defining what we need from the API
-    private final String scope = "playlist-read-private,user-follow-modify,playlist-read-collaborative,user-follow-read,user-read-currently-playing,playlist-modify-private, playlist-modify-public";
 
     public SpotifyAPI() throws URISyntaxException {
         // Läs in inställningar från fil.
