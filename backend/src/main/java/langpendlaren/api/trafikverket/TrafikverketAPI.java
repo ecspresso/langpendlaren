@@ -78,7 +78,7 @@ public class TrafikverketAPI extends Http {
                     <QUERY objecttype="TrainAnnouncement" orderby="AdvertisedTimeAtLocation" schemaversion="1.3">
                         <FILTER>
                             <AND>
-                                <EQ name="AdvertisedTrainIdent" value="1058"/> <!-- value = tågID -->
+                                <EQ name="AdvertisedTrainIdent" value="%s"/> <!-- value = tågID -->
                                 <EQ name="Advertised" value="true" />
                                 <EQ name="ActivityType" value="Avgang"/> <!-- Hämta endast avgångar -->
                                 <!-- value = måste vara dagens datum annars hämtas inget -->
