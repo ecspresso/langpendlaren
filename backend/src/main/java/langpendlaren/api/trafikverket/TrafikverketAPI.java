@@ -70,29 +70,24 @@ public class TrafikverketAPI extends Http {
         return post(xml);
     }
 
-    //Förslag på en annan fråga till trafikverket
+    //Hämtar alla destinationer för ett tåg
     public String getTrainStopStation(int trainId) {
         String xml = String.format("""
                 <REQUEST>
-                      <LOGIN authenticationkey="%s" />
-                      <QUERY objecttype="TrainAnnouncement" schemaversion="1.3">
-                            <FILTER>
-                                  <EQ name="AdvertisedTrainIdent" value="%s" />
-                                <OR>
-                                      <AND>
-                                            <GT name="AdvertisedTimeAtLocation" value="$dateadd(-00:15:00)" />
-                                            <LT name="AdvertisedTimeAtLocation" value="$dateadd(14:00:00)" />
-                                      </AND>
-                                      <AND>
-                                            <LT name="AdvertisedTimeAtLocation" value="$dateadd(00:30:00)" />
-                                            <GT name="EstimatedTimeAtLocation" value="$dateadd(00:00:00)" />
-                                      </AND>
-                                </OR>
-                            </FILTER>
-
-                            <INCLUDE>LocationSignature</INCLUDE>
-                            <INCLUDE>AdvertisedTimeAtLocation</INCLUDE>
-                      </QUERY>
+                    <LOGIN authenticationkey="%s" />
+                    <QUERY objecttype="TrainAnnouncement" orderby="AdvertisedTimeAtLocation" schemaversion="1.3">
+                        <FILTER>
+                            <AND>
+                                <EQ name="AdvertisedTrainIdent" value="1058"/> <!-- value = tågID -->
+                                <EQ name="Advertised" value="true" />
+                                <EQ name="ActivityType" value="Avgang"/> <!-- Hämta endast avgångar -->
+                                <!-- value = måste vara dagens datum annars hämtas inget -->
+                                <EQ name="ScheduledDepartureDateTime" value="2022-12-27" />
+                            </AND>
+                        </FILTER>
+                        <INCLUDE>LocationSignature</INCLUDE> <!-- stationID -->
+                        <INCLUDE>AdvertisedTimeAtLocation</INCLUDE>
+                    </QUERY>
                 </REQUEST>
                 """, apikey, trainId);
 
