@@ -21,8 +21,8 @@ public class TrafikverketEndPoints {
         //Förslag på en annan fråga för att hämta ut vilka stationer som ett tåg stannar på
         javalin.get("/trafikverket/trains/stops", context -> context.json(trafikverketAPI.getTrainStopStation(261)));
 
-        // ?
-        javalin.get("/trafikverket/stations", context -> context.json(trafikverketAPI.getTrainStops(1)));
+        //Hämtar alla stationer
+        javalin.get("/trafikverket/stations", context -> context.json(trafikverketAPI.getStationShortNames()));
     }
 
 
