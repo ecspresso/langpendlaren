@@ -38,7 +38,7 @@ public class TrafikverketAPI extends Http {
         String xml = String.format("""
                 <REQUEST>
                     <LOGIN authenticationkey="%s" />
-                    <QUERY objecttype="TrainAnnouncement"  
+                    <QUERY objecttype="TrainAnnouncement"
                         orderby="AdvertisedTimeAtLocation" schemaversion="1"> 
                         <FILTER> 
                         <AND> 
@@ -114,6 +114,22 @@ public class TrafikverketAPI extends Http {
         } catch(JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public String getStationNames() {
+        String xml = String.format("""     
+                <REQUEST>
+                    <LOGIN authenticationkey='%s'/>
+                    <QUERY objecttype='TrainStation' schemaversion='1'>
+                        <FILTER/>
+                        <INCLUDE>Prognosticated</INCLUDE>
+                        <INCLUDE>AdvertisedLocationName</INCLUDE>
+                        <INCLUDE>LocationSignature</INCLUDE>
+                    </QUERY>
+                </REQUEST>
+                """, apikey);
+
+        return post(xml);
     }
 
     private String post(String xml) {

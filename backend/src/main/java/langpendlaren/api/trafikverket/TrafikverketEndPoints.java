@@ -22,7 +22,7 @@ public class TrafikverketEndPoints {
         javalin.get("/trafikverket/trains/stops", context -> context.json(trafikverketAPI.getTrainStopStation(1058)));
 
         //Hämtar alla stationer
-        javalin.get("/trafikverket/stations", context -> context.json(trafikverketAPI.getStationShortNames()));
+        javalin.get("/trafikverket/stations", context -> context.json(trafikverketAPI.getStationNames()));
     }
 
 
