@@ -10,8 +10,8 @@
         <script src="https://kit.fontawesome.com/f6db73d1df.js" crossorigin="anonymous" ></script>
         <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
         <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-        <script src="../logic/main/functionality.js" type="text/javascript" defer></script>
-        <script src="../logic/trafic/trafikverket.js" type="text/javascript" defer></script>
+        <script src="../logic/main/functionality.js" type="module" defer></script>
+        <script src="../logic/trafic/trafikverket.js" type="module" defer></script>
         <!--<script src="../logic/spotify/spotify.js" type="text/javascript" defer></script>-->
     </head>
 
@@ -32,7 +32,7 @@
                 <input id="station" type="text" placeholder="Ange stad här..." />
                 <i id="clearBtn" class="fa-solid fa-xmark"></i>
               </div>
-              <input id="showBtn" type="button" value="Visa" onclick="javascript: Search()" />
+              <input id="showBtn" type="button" value="Visa"/>
               <span id="loader" style="margin-left: 10px">Laddar data ...</span>
             </div>
 

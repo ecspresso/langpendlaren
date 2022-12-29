@@ -1,3 +1,7 @@
+import {getAllStopsByTrainId} from "./events.js";
+
+document.getElementById("showBtn").addEventListener("click", () => Search());
+
 let Stations = [];
 
 $.support.cors = true; // Enable Cross domain requests
@@ -144,6 +148,8 @@ function selectTrain(trainIdent) {
     clearBox("main_content");
     //ipc.send("traficStops", trainIdent, depTime, owner);
 
+    const allStopsByTrainId = getAllStopsByTrainId(trainIdent);
+    console.log(allStopsByTrainId);
 
     let stopsHTML = `
         <main>
