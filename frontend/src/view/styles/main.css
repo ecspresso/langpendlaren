@@ -130,7 +130,7 @@ img.track {
 }
 
 
-#selectTrain{
+.selectTrain{
 	background: #605DF2;
 	color: white;
 	width: 100%;
@@ -140,7 +140,7 @@ img.track {
 	border-radius: 10px;
 }
 
-#selectTrain:hover{
+.selectTrain:hover{
 	background: #333;
 	cursor: pointer;
 }

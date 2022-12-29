@@ -13,17 +13,13 @@ public class TrafikverketEndPoints {
     }
 
     public void endPoints(){
-        javalin.get("/trafikverket/trains", context -> context.json(trafikverketAPI.getTrainStops(1)));
-
-        //Avgångar från en viss station, anges genom station signature
-        javalin.get("/trafikverket/departures", context -> context.json(trafikverketAPI.getDepartures("Cst")));
-
-        //Förslag på en annan fråga för att hämta ut vilka stationer som ett tåg stannar på
-        javalin.get("/trafikverket/trains/stops", context -> context.json(trafikverketAPI.getTrainStopStation(1058)));
-
-        //Hämtar alla stationer
+        // Hämtar alla stationer
         javalin.get("/trafikverket/stations", context -> context.json(trafikverketAPI.getStationNames()));
+
+        // Avgångar från en viss station, anges genom station signature
+        javalin.get("/trafikverket/departures/{sign}", context -> context.json(trafikverketAPI.getDepartures(context.pathParam("sign"))));
+
+        // Hämta ut vilka stationer som ett tåg stannar på
+        javalin.get("/trafikverket/trains/stops/{trainIdent}", context -> context.json(trafikverketAPI.getTrainStopStation(context.pathParam("trainIdent"))));
     }
-
-
 }

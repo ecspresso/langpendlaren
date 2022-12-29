@@ -37,41 +37,35 @@ public class TrafikverketAPI extends Http {
     public String getDepartures(String stationSignature) {
         String xml = String.format("""
                 <REQUEST>
-                    <LOGIN authenticationkey="%s" />
-                    <QUERY objecttype="TrainAnnouncement"
-                        orderby="AdvertisedTimeAtLocation" schemaversion="1"> 
-                        <FILTER> 
-                        <AND> 
-                            <OR> 
-                                <AND> 
-                                    <GT name="AdvertisedTimeAtLocation"  
-                                                value="$dateadd(-00:15:00)" /> 
-                                    <LT name="AdvertisedTimeAtLocation"  
-                                                value="$dateadd(14:00:00)" /> 
-                                </AND> 
-                                <GT name="EstimatedTimeAtLocation" value="$now" /> 
-                            </OR> 
-                            <EQ name="LocationSignature" value="%s" /> 
-                            <EQ name="ActivityType" value="Avgang" /> 
-                        </AND> 
-                        </FILTER>
-                        
+                    <LOGIN authenticationkey='%s' />
+                        <QUERY objecttype='TrainAnnouncement' orderby='AdvertisedTimeAtLocation' schemaversion='1'>
+                            <FILTER>
+                                <AND>
+                                    <OR>
+                                        <AND>
+                                            <GT name='AdvertisedTimeAtLocation' value='$dateadd(-00:15:00)' />
+                                            <LT name='AdvertisedTimeAtLocation' value='$dateadd(14:00:00)' />
+                                        </AND>
+                                        <GT name='EstimatedTimeAtLocation' value='$now' />
+                                    </OR>
+                                    <EQ name='LocationSignature' value='%s' />
+                                    <EQ name='ActivityType' value='Avgang' />
+                                </AND>
+                            </FILTER>
+                        <INCLUDE>InformationOwner</INCLUDE>
+                        <INCLUDE>AdvertisedTimeAtLocation</INCLUDE>
+                        <INCLUDE>TrackAtLocation</INCLUDE>
+                        <INCLUDE>FromLocation</INCLUDE>
+                        <INCLUDE>ToLocation</INCLUDE>
                         <INCLUDE>AdvertisedTrainIdent</INCLUDE>
-                        <INCLUDE>InformationOwner</INCLUDE> 
-                        <INCLUDE>AdvertisedTimeAtLocation</INCLUDE> 
-                        <INCLUDE>TrackAtLocation</INCLUDE> 
-                        <INCLUDE>FromLocation</INCLUDE> 
-                        <INCLUDE>ToLocation</INCLUDE> 
-                    </QUERY> 
+                    </QUERY>
                 </REQUEST>
-                
                 """, apikey, stationSignature);
-
         return post(xml);
     }
 
     //Hämtar alla destinationer för ett tåg
-    public String getTrainStopStation(int trainId) {
+    public String getTrainStopStation(String trainId) {
         String xml = String.format("""
                 <REQUEST>
                     <LOGIN authenticationkey="%s" />
