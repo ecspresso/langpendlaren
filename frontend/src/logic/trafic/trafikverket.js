@@ -141,8 +141,32 @@ function selectTrain(trainIdent) {
     let depTime = train.dataset["depTime"];
     let owner = train.dataset["owner"];
     // Rensa?
-    //clearBox("main_content");
-    ipc.send("traficStops", trainIdent, depTime, owner);
+    clearBox("main_content");
+    //ipc.send("traficStops", trainIdent, depTime, owner);
+
+
+    let stopsHTML = `
+        <main>
+            <div id="searchbar">
+            <h3 class="pagetitle">Sök efter station</h3>
+                <div id="search_station">
+                    <input id="station" type="text" placeholder="Ange station..." onkeyup="search()"/>
+                </div>
+
+                <div id="result" class="limit">
+                <table id="timeTableDeparture">
+                    <tr>
+                    <th scope="col" style="width:200px;">Station</th>
+                    <th scope="col"  style="width:200px;">Välj station</th>
+                    </tr>
+                </table>
+                </div>
+            </div>
+            
+        </main>
+    `;
+
+    $("#main_content").append(stopsHTML);
 }
 
 function clearBox(elementID) {
