@@ -37,7 +37,6 @@ public abstract class Http {
                 EntityUtils.consume(entity);
             }
         }
-
         return result.toString();
     }
 }
