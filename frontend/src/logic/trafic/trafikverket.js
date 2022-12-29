@@ -146,10 +146,6 @@ function clearBox(elementID) {
   document.getElementById(elementID).innerHTML = "";
 }
 
-// http://jsfiddle.net/je01otqn/36/
-//let departureTime = document.getElementById("departureTime").value;
-//let arrivalTime = document.getElementById("arrivalTime").value;
-
 function calcTimeDiffrence(departureTime, arrivalTime) {
   departureTime = departureTime.split(":");
   arrivalTime = arrivalTime.split(":");
@@ -163,13 +159,6 @@ function calcTimeDiffrence(departureTime, arrivalTime) {
     (hours < 9 ? "0" : "") + hours + ":" + (minutes < 9 ? "0" : "") + minutes;
   console.log(timeDiff);
 }
-//document.getElementById("timeDiffrence").value = calcTimeDiffrence(departureTime, arrivalTime);
-
-/* HTML
-<input id="departureTime" value="11:00">
-<input id="arrivalTime" value="22:40">
-<input id="timeDiffrence">
-*/
 
 // Export globaly from modul scope.
 window.getTrainById = getTrainById;
