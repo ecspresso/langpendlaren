@@ -1,5 +1,5 @@
 let Stations = [];
-function PreloadTrainStations() {
+function preLoadTrainStations() {
     // Request to load all stations
     $.ajax({
         type: "GET",
@@ -23,7 +23,7 @@ function PreloadTrainStations() {
             } catch (ex) {}
         }
     });
-} PreloadTrainStations();
+} preLoadTrainStations();
 
 function fillSearchWidget(data) {
     $("#station").val("");
