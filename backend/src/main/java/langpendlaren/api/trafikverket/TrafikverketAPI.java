@@ -10,6 +10,7 @@ import org.apache.http.entity.StringEntity;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
 
 public class TrafikverketAPI extends Http {
     public TrafikverketAPI() {
@@ -77,14 +78,14 @@ public class TrafikverketAPI extends Http {
                                 <EQ name="Advertised" value="true" />
                                 <EQ name="ActivityType" value="Avgang"/> <!-- Hämta endast avgångar -->
                                 <!-- value = måste vara dagens datum annars hämtas inget -->
-                                <EQ name="ScheduledDepartureDateTime" value="$now" />
+                                <EQ name="ScheduledDepartureDateTime" value="%s" />
                             </AND>
                         </FILTER>
                         <INCLUDE>LocationSignature</INCLUDE> <!-- stationID -->
                         <INCLUDE>AdvertisedTimeAtLocation</INCLUDE>
                     </QUERY>
                 </REQUEST>
-                """, apikey, trainId);
+                """, apikey, trainId, LocalDate.now());
 
         return post(xml);
     }
