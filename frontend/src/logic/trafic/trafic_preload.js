@@ -1,7 +1,4 @@
 let Stations = [];
-
-PreloadTrainStations();
-
 function PreloadTrainStations() {
     // Request to load all stations
     $.ajax({
@@ -26,7 +23,7 @@ function PreloadTrainStations() {
             } catch (ex) {}
         }
     });
-}
+} PreloadTrainStations();
 
 function fillSearchWidget(data) {
     $("#station").val("");
@@ -61,10 +58,10 @@ function fillSearchWidget(data) {
 
 function getStationNames(stations){
     return stations.map(station => Stations[station]);
-  }
+}
 
 function getStationByName(station){
     return Stations[station];
 }
 
-  export {getStationNames, getStationByName}
+export {getStationNames, getStationByName}

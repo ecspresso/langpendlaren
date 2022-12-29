@@ -1,10 +1,13 @@
 import { getHoursMinutsFromTime } from "../../util/util.js";
-import { getStationNames, getStationByName } from "./preload.js";
-import { getAllStopsByTrainId } from "./events.js";
-import "./preload.js";
+import { getStationNames, getStationByName } from "./trafic_preload.js";
+import { getAllStopsByTrainId } from "./trafic_events";
+import { getStopsTemplate, removeContent } from "./trafic_templates.js";
+import "./trafic_preload.js";
 
-
-function preDefind() {
+/**
+ * Define some properties...
+ */
+function preDefination() {
   $.support.cors = true; // Enable Cross domain requests
   try {
     $.ajaxSetup({
@@ -32,11 +35,11 @@ function preDefind() {
       $("#loader").hide();
     });
 }
-preDefind();
+preDefination();
 
-
-// Load stations
-
+/**
+ * Search the train announcement
+ */
 function Search() {
   let sign = $("#station").data("sign");
   // Clear html table
@@ -54,13 +57,16 @@ function Search() {
           '<tr class="list"><td colspan="4">Inga avgångar hittades</td></tr>'
         );
       try {
-        renderTrainAnnouncement(response.RESPONSE.RESULT[0].TrainAnnouncement);
+        displayTrainAnnouncement(response.RESPONSE.RESULT[0].TrainAnnouncement);
       } catch (ex) {}
     },
   });
 }
 
-function renderTrainAnnouncement(announcement) {
+/**
+ * Display train announcement.
+ */
+function displayTrainAnnouncement(announcement) {
   announcement.forEach((item) => {
     const { hours, minutes } = getHoursMinutsFromTime(
       item.AdvertisedTimeAtLocation
@@ -83,7 +89,7 @@ function renderTrainAnnouncement(announcement) {
                 data-dep-time=${depTime} 
                 data-train-id=${item.AdvertisedTrainIdent} 
                 type='button' 
-                onclick="getTrainById(${
+                onclick="displayStopStationsByTrainId(${
                   item.AdvertisedTrainIdent
                 })">Välj resa</button></td>
             </tr>"
@@ -91,12 +97,16 @@ function renderTrainAnnouncement(announcement) {
   });
 }
 
-function getTrainById(trainIdent) {
+/**
+ * Display stop stations by choosen train.
+ * @param {string} trainIdent 
+ */
+function displayStopStationsByTrainId(trainIdent) {
   let train = document.querySelector(`[data-train-id="${trainIdent}"]`);
   let depTime = train.dataset["depTime"];
   let trainId = train.dataset["data-train-id"];
   let owner = train.dataset["owner"];
-  clearBox("main_content");
+  removeContent("main_content");
 
   getAllStopsByTrainId(trainIdent)
     .then((result) => {
@@ -118,48 +128,9 @@ function getTrainById(trainIdent) {
       });
     })
     .catch((e) => console.assert(e));
-  let stopsHTML = `
-        <main>
-            <div id="searchbar">
-                <h3 class="pagetitle">Sök slut station</h3>
-                <div id="search_station">
-                    <input id="station" type="text" placeholder="Ange station..." onkeyup="search()"/>
-                </div>
-            
-                <h4>Eller välj en station från listan under</h4>
-                <div id="result" class="limit">
-                    <table id="timeTableDeparture">
-                        <tr>
-                            <th scope="col" style="width:200px;">Tid</th>
-                            <th scope="col"  style="width:200px;">Välj slut station</th>
-                        </tr>
-                    </table>
-                </div>
-            </div> 
-        </main>
-    `;
-
-  $("#main_content").append(stopsHTML);
+  $("#main_content").append(getStopsTemplate());
 }
 
-function clearBox(elementID) {
-  document.getElementById(elementID).innerHTML = "";
-}
-
-function calcTimeDiffrence(departureTime, arrivalTime) {
-  departureTime = departureTime.split(":");
-  arrivalTime = arrivalTime.split(":");
-  let startDate = new Date(0, 0, 0, departureTime[0], departureTime[1], 0);
-  let endDate = new Date(0, 0, 0, arrivalTime[0], arrivalTime[1], 0);
-  let diff = endDate.getTime() - startDate.getTime();
-  let hours = Math.floor(diff / 1000 / 60 / 60);
-  diff -= hours * 1000 * 60 * 60;
-  let minutes = Math.floor(diff / 1000 / 60);
-  let timeDiff =
-    (hours < 9 ? "0" : "") + hours + ":" + (minutes < 9 ? "0" : "") + minutes;
-  console.log(timeDiff);
-}
-
-// Export globaly from modul scope.
-window.getTrainById = getTrainById;
+// Export globaly.
+window.displayStopStationsByTrainId = displayStopStationsByTrainId;
 window.Search = Search();

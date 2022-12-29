@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "prettier": "node prettier"
   },
   "author": "",
   "license": "ISC",
@@ -12,6 +13,7 @@
     "electron": "^22.0.0"
   },
   "dependencies": {
-    "electron-fetch": "^1.9.1"
+    "electron-fetch": "^1.9.1",
+    "prettier": "^2.8.1"
   }
 }
