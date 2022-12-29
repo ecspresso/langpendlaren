@@ -35,6 +35,8 @@
 </html>
       <script src="../../logic/trafic/events.js" type="text/javascript"></script>
       <script>
+
+        //Hämtar stopp som användaren kan välja mellan via vårt eget API
         const getStops = async () => {
                 const data = await fetch(`http://localhost/trafikverket/trains/stops`, {method: "GET"}).then((res) => res.json()).catch((e) => console.assert(e));
                 const trainAnnouncements = data.RESPONSE.RESULT[0].TrainAnnouncement;
@@ -43,6 +45,7 @@
             };
             getStops();
             
+            //Funktion som ska hämta tågets tider och när det stannar vid respektive station
             function renderTrainAnnouncement(announcement) {
                 $(announcement).each(function (iterator, item) {
                     var advertisedtime = new Date(item.AdvertisedTimeAtLocation);

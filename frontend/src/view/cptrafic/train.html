@@ -42,6 +42,9 @@
 
 <script src="../../logic/trafic/events.js" type="text/javascript"></script>
   <script>
+
+    //Hämtar avgångar för alla tåg som avgår från den station man tidigare valt, skriver sedan ut information om tåget
+    //Användaren väljer en av tågen för att sedan få fram vilka stationer den stannar vid
     const getTrains = async () => {
         const data = await fetch(`http://localhost/trafikverket/departures`, {method: "GET"}).then((res) => res.json()).catch((e) => console.assert(e));
         const trainAnnouncements = data.RESPONSE.RESULT[0].TrainAnnouncement;

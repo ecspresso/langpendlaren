@@ -30,7 +30,6 @@
                     <th scope="col" style="width:200px;">Station</th>
                     <th scope="col"  style="width:200px;">Välj station</th>
                     </tr>
-                    <!--Utskrifter från JSON-->
                 </table>
                 </div>
             </div>
@@ -42,6 +41,7 @@
         <script src="../../logic/trafic/events.js" type="text/javascript"></script>
         
         <script>
+            //Hämtar data från vårt api genom FETCH och skriver sedan ut tabell med datan från requesten
             const getStations = async () => {
                 const searchKey = document.getElementById("station");
                 const data = await fetch(`http://localhost/trafikverket/stations`, {method: "GET"}).then((res) => res.json()).catch((e) => console.assert(e));
@@ -53,6 +53,7 @@
             };
             getStations();
 
+            //Söker genom att man anger vilken plats man ska resa utifrån destinationerna som hämtats från vårt API
             function search() {
             var input, filter, table, tr, td, i, txtValue;
             input = document.getElementById("station");
@@ -60,7 +61,7 @@
             table = document.getElementById("timeTableDeparture");
             tr = table.getElementsByTagName("tr");
 
-             // Loop through all table rows, and hide those who don't match the search query
+             //Söker genom genom det som finns i svaret och matchar med vad användaren skriver in
              for (i = 0; i < tr.length; i++) {
                  td = tr[i].getElementsByTagName("td")[0];
                  if (td) {
