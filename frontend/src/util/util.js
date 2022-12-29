@@ -1,3 +1,5 @@
+
+import "../logic/trafic/preload.js";
 function PreloadTrainStations() {
     // Request to load all stations
     var xmlRequest = "<REQUEST>" +
@@ -34,5 +36,14 @@ function PreloadTrainStations() {
     });
   }
 
+function getHoursMinutsFromTime(AdvertisedTimeAtLocation){
+  let advertisedTime = new Date(AdvertisedTimeAtLocation);
+  let hours = advertisedTime.getHours()
+  let minutes = advertisedTime.getMinutes()
+  if (minutes < 10) minutes = "0" + minutes
+  if (hours < 10) hours = "0" + hours
 
-  export {PreloadTrainStations}
+  return {hours, minutes}
+}
+
+export {PreloadTrainStations, getHoursMinutsFromTime}
