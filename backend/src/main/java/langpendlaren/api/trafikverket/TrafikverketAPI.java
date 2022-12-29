@@ -66,6 +66,7 @@ public class TrafikverketAPI extends Http {
 
     //Hämtar alla destinationer för ett tåg
     public String getTrainStopStation(String trainId) {
+
         String xml = String.format("""
                 <REQUEST>
                     <LOGIN authenticationkey="%s" />
@@ -76,7 +77,7 @@ public class TrafikverketAPI extends Http {
                                 <EQ name="Advertised" value="true" />
                                 <EQ name="ActivityType" value="Avgang"/> <!-- Hämta endast avgångar -->
                                 <!-- value = måste vara dagens datum annars hämtas inget -->
-                                <EQ name="ScheduledDepartureDateTime" value="2022-12-27" />
+                                <EQ name="ScheduledDepartureDateTime" value="$now" />
                             </AND>
                         </FILTER>
                         <INCLUDE>LocationSignature</INCLUDE> <!-- stationID -->

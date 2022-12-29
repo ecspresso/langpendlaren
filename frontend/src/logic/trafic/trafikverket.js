@@ -138,10 +138,11 @@ function selectTrain(trainIdent) {
     // Hämta tåget
     let train = document.querySelector(`[data-train-id="${trainIdent}"]`);
     // Hämta annan data
-    let owner = train.dataset["owner"];
     let depTime = train.dataset["depTime"];
+    let owner = train.dataset["owner"];
     // Rensa?
-    clearBox("main_content");
+    //clearBox("main_content");
+    ipc.send("traficStops", trainIdent, depTime, owner);
 }
 
 function clearBox(elementID) {

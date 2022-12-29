@@ -2,6 +2,8 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const fetch = require('electron-fetch').default
 let mainWindow;
 
+
+
 app.commandLine.appendSwitch('trace-warnings'); // Visa felmeddelanden.
 function createMainWindow() {
     mainWindow = new BrowserWindow({
@@ -15,14 +17,9 @@ function createMainWindow() {
     });
 
     mainWindow.loadFile('./src/view/main.html').then(() => {
-        mainWindow.webContents.on('will-redirect', function (event, newUrl) {
-            console.log(event);
-            afterSpotifyLogin(newUrl);
-        });
-    })
-
+        mainWindow.show();
+    });
     //mainWindow.maximize();
-    mainWindow.show();
 }
 
 function afterSpotifyLogin(newUrl) {
@@ -34,10 +31,17 @@ function afterSpotifyLogin(newUrl) {
         .catch(mainWindow.loadFile('./src/view/error.html'))
 }
 
+// Hantera inloggning mot Spotify.
+// Skickar inloggningsfråga till vår server som skickar oss vidare till Spotify, och sedan tillbaka igen.
 ipcMain.on("spotifyLogin", (event, arg) => {
     fetch('http://localhost/spotify/login').then(res => res.json()).then(json => {
         mainWindow.loadURL(json)
     })
+});
+
+ipcMain.on("traficStops", (event, trainIdent, depTime, owner) => {
+    mainWindow.loadFile('./src/view/cptrafic/stops.html');
+    console.log(trainIdent);
 });
 
 app.whenReady().then(() => {
