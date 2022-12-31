@@ -1,5 +1,5 @@
 
-import "../logic/trafic/preload.js";
+import "../logic/trafic/trafic_preload.js";
 function PreloadTrainStations() {
     // Request to load all stations
     var xmlRequest = "<REQUEST>" +

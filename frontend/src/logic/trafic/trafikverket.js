@@ -1,6 +1,6 @@
 import { getHoursMinutsFromTime } from "../../util/util.js";
 import { getStationNames, getStationByName } from "./trafic_preload.js";
-import { getAllStopsByTrainId } from "./trafic_events";
+import { getAllStopsByTrainId } from "./trafic_events.js";
 import { getStopsTemplate, removeContent } from "./trafic_templates.js";
 import "./trafic_preload.js";
 
@@ -102,6 +102,7 @@ function displayTrainAnnouncement(announcement) {
  * @param {string} trainIdent 
  */
 function displayStopStationsByTrainId(trainIdent) {
+  console.log(trainIdent);
   let train = document.querySelector(`[data-train-id="${trainIdent}"]`);
   let depTime = train.dataset["depTime"];
   let trainId = train.dataset["data-train-id"];
@@ -133,4 +134,4 @@ function displayStopStationsByTrainId(trainIdent) {
 
 // Export globaly.
 window.displayStopStationsByTrainId = displayStopStationsByTrainId;
-window.Search = Search();
+window.Search = Search;
