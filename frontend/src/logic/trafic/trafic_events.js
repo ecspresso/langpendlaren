@@ -6,10 +6,15 @@ async function getAllStopsByTrainId(trainIdent){
 }
 
 
-export {getAllStopsByTrainId};
+
+
+// Emile exprement with localStorage
+// let trainId = window.localStorage.getItem("trainId");
+// let stops = await getAllStopsByTrainId(trainId);
+// console.log(stops);
 
 
 
 
 
-
+export { getAllStopsByTrainId };

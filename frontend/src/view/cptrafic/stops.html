@@ -1,38 +1,38 @@
 <!DOCTYPE html>
 <html lang="sv">
-   <head>
-       <meta charset="utf-8">
-       <title>Långpendlaren</title>
-       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-       <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
-       <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-       <link rel="stylesheet" href="../styles/main.css">
-       <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-       <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script> 
-       <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-   </head>
- 
-   <body>
+    <head>
+        <meta charset="utf-8">
+        <title>Långpendlaren</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+        <link rel="stylesheet" href="../styles/main.css">
+        <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+        <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+    </head>
+    <body>
         <header>
             <h1>Långpendlaren</h1>
         </header>
 
         <main>
-        <div id="result">
-            <h3 class="pagetitle">Hållplatser</h3>
-            <table id="timeTableDeparture">
-              <tr>
-                <th scope="col" style="width:40px;">Ankomsttid</th>
-                <th scope="col" style="width:200px;">Station</th>
-                <th scope="col"  style="width:150px;">Välj station</th>
-              </tr>
-              <!--Utskrifter från JSON-->
-            </table>
-          </div>
-        </div>
+            <div id="result">
+                <h3 class="pagetitle">Hållplatser</h3>
+                <table id="timeTableDeparture">
+                    <tr>
+                        <th scope="col" style="width:40px;">Ankomsttid</th>
+                        <th scope="col" style="width:200px;">Station</th>
+                        <th scope="col"  style="width:150px;">Välj station</th>
+                    </tr>
+                    <!--Utskrifter från JSON-->
+                </table>
+            </div>
         </main>
-   </body>
+    </body>
+    <script src="../../logic/trafic/trafic_events.js" defer></script>
 </html>
+<!--
       <script>
 
         //Hämtar stopp som användaren kan välja mellan via vårt eget API
@@ -43,31 +43,31 @@
                 renderTrainAnnouncement(trainAnnouncements)
             };
             getStops();
-            
+
             //Funktion som ska hämta tågets tider och när det stannar vid respektive station
             function renderTrainAnnouncement(announcement) {
                 $(announcement).each(function (iterator, item) {
                     var advertisedtime = new Date(item.AdvertisedTimeAtLocation);
                     var hours = advertisedtime.getHours()
                     var minutes = advertisedtime.getMinutes()
-                    if (minutes < 10) 
+                    if (minutes < 10)
                         minutes = "0" + minutes
-                    
-                    if (hours < 10) 
+
+                    if (hours < 10)
                         hours = "0" + hours
-                    
+
                     // Departure time
                     var depTime = (hours + ":" + minutes)
                     var toList = new Array();
-                    
+
                     $(item.ToLocation).each(function (iterator, toItem) {
                         toList.push(String(toItem));
                     });
-                    
+
                     jQuery("#timeTableDeparture tr:last").
-                    after("<tr><td>" + hours + ":" + minutes + "<td>" + item.LocationSignature + "</td>" 
+                    after("<tr><td>" + hours + ":" + minutes + "<td>" + item.LocationSignature + "</td>"
                       + "<td> <button id='selectTrain' type='button' onclick='clearBox('main_content')'>Välj station</button> </td></tr>");
-                    
+
                     var selectTrain = document.getElementById("selectTrain");
                     selectTrain.addEventListener("click", function (e) {
                         console.log("Train ID: " + item.AdvertisedTrainIdent + " | " + "Departure time: " + depTime);
@@ -75,3 +75,4 @@
                 });
               }
       </script>
+-->
