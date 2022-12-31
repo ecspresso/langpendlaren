@@ -1,4 +1,5 @@
 const ipc = window.require('electron').ipcRenderer;
+export { ipc };
 
 // Basic functions
 const setUpView = () => {
@@ -33,8 +34,4 @@ setUpView();
 
 function spotifyLogin() {
     ipc.send('spotifyLogin');
-}
-
-function getTraficStops(trainIdent, depTime, owner) {
-    console.log(trainIdent, depTime, owner);
 }

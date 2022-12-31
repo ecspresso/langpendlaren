@@ -39,9 +39,8 @@ ipcMain.on("spotifyLogin", (event, arg) => {
     })
 });
 
-ipcMain.on("traficStops", (event, trainIdent, depTime, owner) => {
+ipcMain.on("traficStops", (event) => {
     mainWindow.loadFile('./src/view/cptrafic/stops.html');
-    console.log(trainIdent);
 });
 
 app.whenReady().then(() => {

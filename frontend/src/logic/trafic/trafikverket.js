@@ -1,8 +1,22 @@
 import { getHoursMinutsFromTime } from "../../util/util.js";
 import { getStationNames, getStationByName } from "./trafic_preload.js";
-import { getAllStopsByTrainId } from "./trafic_events";
+//import { getAllStopsByTrainId } from "./trafic_events.js";
 import { getStopsTemplate, removeContent } from "./trafic_templates.js";
 import "./trafic_preload.js";
+import { ipc } from "../main/functionality.js";
+
+
+init();
+preDefination();
+
+/**
+ * Lägg till funktioner på knappar efter att DOM trädet
+ * är klart.
+ */
+function init() {
+  let showBtn = document.getElementById("showBtn");
+  showBtn.addEventListener("click", Search);
+}
 
 /**
  * Define some properties...
@@ -35,7 +49,6 @@ function preDefination() {
       $("#loader").hide();
     });
 }
-preDefination();
 
 /**
  * Search the train announcement
@@ -84,7 +97,7 @@ function displayTrainAnnouncement(announcement) {
                 <td style='text-align: center'>${item.TrackAtLocation}</td>
                 <td>${item.AdvertisedTrainIdent}</td>
                 <td><button 
-                class="selectTrain" 
+                class="basic_button" 
                 data-owner=${owner} 
                 data-dep-time=${depTime} 
                 data-train-id=${item.AdvertisedTrainIdent} 
@@ -104,8 +117,16 @@ function displayTrainAnnouncement(announcement) {
 function displayStopStationsByTrainId(trainIdent) {
   let train = document.querySelector(`[data-train-id="${trainIdent}"]`);
   let depTime = train.dataset["depTime"];
-  let trainId = train.dataset["data-train-id"];
+  let trainId = train.dataset["trainId"];
   let owner = train.dataset["owner"];
+
+  // Sätt kakor som hämtas av nästa sida.
+  window.localStorage.setItem("depTime", depTime);
+  window.localStorage.setItem("trainId", trainId);
+  window.localStorage.setItem("owner", owner);
+
+  ipc.send("traficStops");
+  /*
   removeContent("main_content");
 
   getAllStopsByTrainId(trainIdent)
@@ -129,8 +150,47 @@ function displayStopStationsByTrainId(trainIdent) {
     })
     .catch((e) => console.assert(e));
   $("#main_content").append(getStopsTemplate());
+   */
+}
+
+function reset() {
+  removeContent()
+  let content = `
+    <div class="flex-container">
+      <div class="trains">
+      <h3>Sök avgång</h3>
+        <div id="searchbar">
+          <div id="station-wraper">
+            <input id="station" type="text" placeholder="Ange stad här..." />
+            <i id="clearBtn" class="fa-solid fa-xmark"></i>
+          </div>
+          <input id="showBtn" type="button" value="Visa"/>
+          <span id="loader" style="margin-left: 10px">Laddar data ...</span>
+        </div>
+
+        <div id="result">
+          <h3>Avgående tåg</h3>
+          <table id="timeTableDeparture">
+            <tr>
+              <th scope="col" style="width:40px;">Tid</th>
+              <th scope="col" style="width:200px;">Till</th>
+              <th scope="col" style="width:80px;"></th>
+              <th scope="col"  style="width:80px;">Spår</th>
+              <!--Train ID-->
+              <th scope="col"  style="width:80px;">ID</th>
+              <th scope="col"  style="width:80px;">Välj tåg</th>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  `
+
+  $("#main_content").append(content);
 }
 
 // Export globaly.
 window.displayStopStationsByTrainId = displayStopStationsByTrainId;
 window.Search = Search();
+
+
