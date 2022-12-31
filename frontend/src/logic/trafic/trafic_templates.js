@@ -1,11 +1,9 @@
-
-
 /**
  * Return a pre defined stops template
  * @returns {HTMLElement}
  */
-function getStopsTemplate(){
-    return `
+function getStopsTemplate() {
+  return `
     <main>
             <div id="searchbar">
                 <h3 class="pagetitle">Sök slut station</h3>
@@ -24,15 +22,15 @@ function getStopsTemplate(){
                 </div>
             </div> 
         </main>
-    `
+    `;
 }
 
 /**
- * 
- * @param {string} elementId 
+ *
+ * @param {string} elementId
  */
- function removeContent(elementId) {
-    document.getElementById(elementId).innerHTML = "";
-  }
+function removeContent(elementId) {
+  document.getElementById(elementId).innerHTML = "";
+}
 
-export {getStopsTemplate, removeContent}
+export { getStopsTemplate, removeContent };

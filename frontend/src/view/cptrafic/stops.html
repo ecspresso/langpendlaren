@@ -1,36 +1,47 @@
 <!DOCTYPE html>
 <html lang="sv">
-    <head>
-        <meta charset="utf-8">
-        <title>Långpendlaren</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-        <link rel="stylesheet" href="../styles/main.css">
-        <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
-        <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-        <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-    </head>
-    <body>
-        <header>
-            <h1>Långpendlaren</h1>
-        </header>
+  <head>
+    <meta charset="utf-8" />
+    <title>Långpendlaren</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"
+    />
+    <link rel="stylesheet" href="../styles/main.css" />
+    <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"
+    />
+  </head>
+  <body>
+    <header>
+      <h1>Långpendlaren</h1>
+    </header>
 
-        <main>
-            <div id="result">
-                <h3 class="pagetitle">Hållplatser</h3>
-                <table id="timeTableDeparture">
-                    <tr>
-                        <th scope="col" style="width:40px;">Ankomsttid</th>
-                        <th scope="col" style="width:200px;">Station</th>
-                        <th scope="col"  style="width:150px;">Välj station</th>
-                    </tr>
-                    <!--Utskrifter från JSON-->
-                </table>
-            </div>
-        </main>
-    </body>
-    <script src="../../logic/trafic/trafic_events.js" defer></script>
+    <main>
+      <div id="result">
+        <h3 class="pagetitle">Hållplatser</h3>
+        <table id="timeTableDeparture">
+          <tr>
+            <th scope="col" style="width: 40px">Ankomsttid</th>
+            <th scope="col" style="width: 200px">Station</th>
+            <th scope="col" style="width: 150px">Välj station</th>
+          </tr>
+          <!--Utskrifter från JSON-->
+        </table>
+      </div>
+    </main>
+  </body>
+  <script src="../../logic/trafic/trafic_events.js" defer></script>
 </html>
 <!--
       <script>

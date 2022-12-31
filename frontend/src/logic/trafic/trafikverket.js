@@ -98,7 +98,7 @@ function displayTrainAnnouncement(announcement) {
 
 /**
  * Display stop stations by choosen train.
- * @param {string} trainIdent 
+ * @param {string} trainIdent
  */
 function displayStopStationsByTrainId(trainIdent) {
   let train = document.querySelector(`[data-train-id="${trainIdent}"]`);
@@ -112,7 +112,7 @@ function displayStopStationsByTrainId(trainIdent) {
   // window.localStorage.setItem("owner", owner);
 
   // ipc.send("traficStops");
-  
+
   removeContent("main_content");
 
   getAllStopsByTrainId(trainIdent)
@@ -139,7 +139,7 @@ function displayStopStationsByTrainId(trainIdent) {
 }
 
 function reset() {
-  removeContent()
+  removeContent();
   let content = `
     <div class="flex-container">
       <div class="trains">
@@ -169,7 +169,7 @@ function reset() {
         </div>
       </div>
     </div>
-  `
+  `;
 
   $("#main_content").append(content);
 }

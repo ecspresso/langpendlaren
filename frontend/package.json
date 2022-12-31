@@ -10,7 +10,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^22.0.0"
+    "electron": "^22.0.0",
+    "pre-commit": "^1.2.2"
   },
   "dependencies": {
     "electron-fetch": "^1.9.1",

@@ -1,76 +1,98 @@
 <!DOCTYPE html>
 <html lang="sv">
-   <head>
-       <meta charset="utf-8">
-       <title>Långpendlaren</title>
-       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-       <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
-       <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-       <link rel="stylesheet" href="../styles/main.css">
-       <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
-       <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-       <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-   </head>
- 
-   <body>
-        <header>
-            <h1>Långpendlaren</h1>
-        </header>
+  <head>
+    <meta charset="utf-8" />
+    <title>Långpendlaren</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"
+    />
+    <link rel="stylesheet" href="../styles/main.css" />
+    <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"
+    />
+  </head>
 
-        <main>
-            <div id="searchbar">
-            <h3 class="pagetitle">Sök efter station</h3>
-                <div id="search_station">
-                    <input id="station" type="text" placeholder="Ange station..." onkeyup="search()"/>
-                </div>
+  <body>
+    <header>
+      <h1>Långpendlaren</h1>
+    </header>
 
-                <div id="result" class="limit">
-                <table id="timeTableDeparture">
-                    <tr>
-                    <th scope="col" style="width:200px;">Station</th>
-                    <th scope="col"  style="width:200px;">Välj station</th>
-                    </tr>
-                </table>
-                </div>
-            </div>
-            
-        </main>
-    </body>
+    <main>
+      <div id="searchbar">
+        <h3 class="pagetitle">Sök efter station</h3>
+        <div id="search_station">
+          <input
+            id="station"
+            type="text"
+            placeholder="Ange station..."
+            onkeyup="search()"
+          />
+        </div>
+
+        <div id="result" class="limit">
+          <table id="timeTableDeparture">
+            <tr>
+              <th scope="col" style="width: 200px">Station</th>
+              <th scope="col" style="width: 200px">Välj station</th>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </main>
+  </body>
 </html>
-        
-        <script>
-            //Hämtar data från vårt api genom FETCH och skriver sedan ut tabell med datan från requesten
-            const getStations = async () => {
-                const searchKey = document.getElementById("station");
-                const data = await fetch(`http://localhost/trafikverket/stations`, {method: "GET"}).then((res) => res.json()).catch((e) => console.assert(e));
-                const TrainStation = data.RESPONSE.RESULT[0].TrainStation;
-                for (const station of TrainStation) {
-                    jQuery("#timeTableDeparture tr:last").
-                    after("<tr><td>" + station.AdvertisedLocationName + "</td>" + "<td> <button id='selectTrain' type='button' onclick='clearBox('main_content')'>Välj station</button> </td></tr>");  
-                }
-            };
-            getStations();
 
-            //Söker genom att man anger vilken plats man ska resa utifrån destinationerna som hämtats från vårt API
-            function search() {
-            var input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById("station");
-            filter = input.value.toUpperCase();
-            table = document.getElementById("timeTableDeparture");
-            tr = table.getElementsByTagName("tr");
+<script>
+  //Hämtar data från vårt api genom FETCH och skriver sedan ut tabell med datan från requesten
+  const getStations = async () => {
+    const searchKey = document.getElementById("station");
+    const data = await fetch(`http://localhost/trafikverket/stations`, {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .catch((e) => console.assert(e));
+    const TrainStation = data.RESPONSE.RESULT[0].TrainStation;
+    for (const station of TrainStation) {
+      jQuery("#timeTableDeparture tr:last").after(
+        "<tr><td>" +
+          station.AdvertisedLocationName +
+          "</td>" +
+          "<td> <button id='selectTrain' type='button' onclick='clearBox('main_content')'>Välj station</button> </td></tr>"
+      );
+    }
+  };
+  getStations();
 
-             //Söker genom genom det som finns i svaret och matchar med vad användaren skriver in
-             for (i = 0; i < tr.length; i++) {
-                 td = tr[i].getElementsByTagName("td")[0];
-                 if (td) {
-                 txtValue = td.textContent || td.innerText;
-                 if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                     tr[i].style.display = "";
-                 } else {
-                     tr[i].style.display = "none";
-                 }
-                 }
-            }
-            }
-        
-        </script>
+  //Söker genom att man anger vilken plats man ska resa utifrån destinationerna som hämtats från vårt API
+  function search() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("station");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("timeTableDeparture");
+    tr = table.getElementsByTagName("tr");
+
+    //Söker genom genom det som finns i svaret och matchar med vad användaren skriver in
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[0];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+</script>

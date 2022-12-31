@@ -1,58 +1,68 @@
 <!DOCTYPE html>
 <html lang="sv">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Långpendlaren</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-        <link rel="stylesheet" href="./styles/main.css">
-        <script src="https://kit.fontawesome.com/f6db73d1df.js" crossorigin="anonymous" ></script>
-        <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
-        <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-        <script src="../logic/main/functionality.js" type="module" defer></script>
-        <script src="../logic/trafic/trafikverket.js" type="module" defer></script>
-        <!--<script src="../logic/spotify/spotify.js" type="text/javascript" defer></script>-->
-    </head>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Långpendlaren</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"
+    />
+    <link rel="stylesheet" href="./styles/main.css" />
+    <script
+      src="https://kit.fontawesome.com/f6db73d1df.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script src="../logic/main/functionality.js" type="module" defer></script>
+    <script src="../logic/trafic/trafikverket.js" type="module" defer></script>
+    <!--<script src="../logic/spotify/spotify.js" type="text/javascript" defer></script>-->
+  </head>
 
-    <body>
+  <body>
+    <header>
+      <button class="basic_button">reset</button>
+      <h1>Långpendlaren</h1>
+    </header>
 
-      <header>
-          <button class="basic_button">reset</button>
-        <h1>Långpendlaren</h1>
-      </header>
-
-      <section id="main_content">
-        <div class="flex-container">
-          <div class="trains">
+    <section id="main_content">
+      <div class="flex-container">
+        <div class="trains">
           <h3>Sök avgång</h3>
-            <div id="searchbar">
-              <div id="station-wraper">
-                <input id="station" type="text" placeholder="Ange stad här..." />
-                <i id="clearBtn" class="fa-solid fa-xmark"></i>
-              </div>
-              <input id="showBtn" type="button" value="Visa" onclick="search()"/>
-              <span id="loader" style="margin-left: 10px">Laddar data ...</span>
+          <div id="searchbar">
+            <div id="station-wraper">
+              <input id="station" type="text" placeholder="Ange stad här..." />
+              <i id="clearBtn" class="fa-solid fa-xmark"></i>
             </div>
+            <input id="showBtn" type="button" value="Visa" onclick="search()" />
+            <span id="loader" style="margin-left: 10px">Laddar data ...</span>
+          </div>
 
-            <div id="result">
-              <h3>Avgående tåg</h3>
-              <table id="timeTableDeparture">
-                <tr>
-                  <th scope="col" style="width:40px;">Tid</th>
-                  <th scope="col" style="width:200px;">Till</th>
-                  <th scope="col" style="width:80px;"></th>
-                  <th scope="col"  style="width:80px;">Spår</th>
-                  <!--Train ID-->
-                  <th scope="col"  style="width:80px;">ID</th>
-                  <th scope="col"  style="width:80px;">Välj tåg</th>
-                </tr>
-              </table>
-            </div>
+          <div id="result">
+            <h3>Avgående tåg</h3>
+            <table id="timeTableDeparture">
+              <tr>
+                <th scope="col" style="width: 40px">Tid</th>
+                <th scope="col" style="width: 200px">Till</th>
+                <th scope="col" style="width: 80px"></th>
+                <th scope="col" style="width: 80px">Spår</th>
+                <!--Train ID-->
+                <th scope="col" style="width: 80px">ID</th>
+                <th scope="col" style="width: 80px">Välj tåg</th>
+              </tr>
+            </table>
           </div>
         </div>
-      </section>
-      <!--
+      </div>
+    </section>
+    <!--
       <div class="spotify">
         <h3>Spotify sök</h3>
         <form action="">
@@ -86,5 +96,5 @@
     </div>
 
     -->
-</body>
+  </body>
 </html>
