@@ -140,46 +140,6 @@ public class SpotifyAPI {
     }
 
     /**
-     * Get All play lists of the current user
-     * @return String
-     */
-    public String getAllPlayList(String accessToken){
-        GetListOfUsersPlaylistsRequest gPlayList;
-        String userId = getUserId();
-
-        synchronized(lock) {
-            this.spotifyApiWrapper.setAccessToken(accessToken);
-            gPlayList = this.spotifyApiWrapper.getListOfUsersPlaylists(userId).build();
-        }
-
-        try {
-            final Paging<PlaylistSimplified> playlistSimplifiedPaging = gPlayList.execute();
-            return "Total: " + playlistSimplifiedPaging.getTotal();
-        } catch (IOException | SpotifyWebApiException | ParseException e) {
-            return "Error: " + e.getMessage();
-        }
-    }
-
-    /**
-     * Get a play list by id
-     */
-    public String getPlayListById(String accessToken, String id){
-        GetPlaylistRequest getPlayList;
-        synchronized(lock) {
-            this.spotifyApiWrapper.setAccessToken(accessToken);
-            getPlayList = this.spotifyApiWrapper.getPlaylist(id).build();
-        }
-        try {
-            final Playlist playlist = getPlayList.execute();
-            System.out.println("Name: " + playlist.getName());
-            return playlist.getName();
-        } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Error: " + e.getMessage());
-            return e.getMessage();
-        }
-    }
-
-    /**
      * Remove item (tracks) from play list
      * @param pId play list id
      * @param tIds truck ids
@@ -283,30 +243,6 @@ public class SpotifyAPI {
         }
     }
 
-
-    /**
-     * Search play list by name
-     * @param name search key
-     * @return a list of play list
-     */
-    public ArrayList<Map> searchPlaylist(String name) {
-        final SearchPlaylistsRequest searchPlaylistsRequest = this.spotifyApiWrapper.searchPlaylists(name)
-                .limit(10)
-                .offset(0)
-                .build();
-
-        try {
-            final Paging<PlaylistSimplified> playlistSimplifiedPaging = searchPlaylistsRequest.execute();
-
-            System.out.println("Total: " + playlistSimplifiedPaging.getTotal());
-            //return new ArrayList<String>(playlistSimplifiedPaging.toString()); //FIXME!
-            return new ArrayList<>();
-        } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Error: " + e.getMessage());
-            return null;
-        }
-    }
-
     /**
      * Search tracks by name
      * @param name search key
@@ -345,58 +281,6 @@ public class SpotifyAPI {
             return null;
         }
     }
-
-    /**
-     * Get top tracks by artist id
-     * @param id artist id
-     * @return list of tracks
-     */
-    public ArrayList<Map> getTopTruckByArtistId(String id) {
-        final GetArtistsTopTracksRequest getArtistsTopTracksRequest = this.spotifyApiWrapper.getArtistsTopTracks(id, CountryCode.SE)
-                .build();
-        try {
-            final Track[] tracks = getArtistsTopTracksRequest.execute();
-
-            System.out.println("Length: " + tracks.length);
-            ArrayList trackList = new ArrayList<Map>();
-            Map map = new HashMap();
-            for(Track track : tracks){
-                map.put("name", track.getName());
-            }
-            return trackList;
-        } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Error: " + e.getMessage());
-            return null; //FIXME! return valid message
-        }
-    }
-
-    /**
-     * Get all albums by artis id
-     * @param id artist id
-     * @return list of albums
-     */
-    public ArrayList<Map> getArtistAlbums(String id) {
-        final GetArtistsAlbumsRequest getArtistsAlbumsRequest = this.spotifyApiWrapper.getArtistsAlbums(id)
-                .album_type("album").limit(10).offset(0).market(CountryCode.SE)
-                .build();
-        try {
-            final Paging<AlbumSimplified> albumSimplifiedPaging = getArtistsAlbumsRequest.execute();
-
-            System.out.println("Total: " + albumSimplifiedPaging.getTotal());
-            AlbumSimplified[] albumSim = albumSimplifiedPaging.getItems();
-            ArrayList<Map> albumList = new ArrayList<>();
-            Map map = new HashMap();
-            for(AlbumSimplified albumSimplified : albumSim){
-                map.put("Name", albumSimplified.getName());
-            }
-            albumList.add(map);
-            return albumList;
-        } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Error: " + e.getMessage());
-            return null;
-        }
-    }
-
 
 }
 
