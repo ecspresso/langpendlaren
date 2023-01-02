@@ -149,8 +149,3 @@ public class TrafikverketAPI extends Http {
         }
     }
 }
-
-
-
-
-

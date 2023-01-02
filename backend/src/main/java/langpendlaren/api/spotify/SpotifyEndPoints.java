@@ -57,11 +57,6 @@ public class SpotifyEndPoints {
             String tId = context.pathParam("tid");
             context.result(spotifyAPI.addToPlayList(pId, tId));
         });
-        javalin.get("/spotify/playlist/{id}", context -> {
-            String id = context.pathParam("id");
-            context.json(spotifyAPI.getPlayListById(getAccessToken(context), id));
-        });
-        javalin.get("/spotify/playlist/all", context -> context.json(spotifyAPI.getAllPlayList(getAccessToken(context))));
         javalin.put("/spotify/playlist/deletetracks/{pid}/{tids}", context -> {
             String pId = context.pathParam("pid");
             String tIds = context.pathParam("tids");
@@ -79,10 +74,6 @@ public class SpotifyEndPoints {
         });
 
         // -- Search
-        javalin.get("/spotify/search/playlist/{name}", context -> {
-            String name = context.pathParam("name");
-            context.json(spotifyAPI.searchPlaylist(name));
-        });
         javalin.get("/spotify/search/track/{name}", context -> {
             String name = context.pathParam("name");
             context.json(spotifyAPI.searchTracks(name));
@@ -92,14 +83,6 @@ public class SpotifyEndPoints {
         javalin.get("/spotify/artist/profile/{id}", context -> {
             String id = context.pathParam("id");
             context.json(spotifyAPI.getArtist(id));
-        });
-        javalin.get("/spotify/artist/{id}/toptrack", context -> {
-            String id = context.pathParam("id");
-            context.json(spotifyAPI.getTopTruckByArtistId(id));
-        });
-        javalin.get("/spotify/artist/albums/{id}", context -> {
-            String id = context.pathParam("id");
-            context.json(spotifyAPI.getArtistAlbums(id));
         });
     }
 
