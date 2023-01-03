@@ -246,9 +246,10 @@ public class SpotifyAPI {
     /**
      * Search tracks by name
      * @param name search key
-     * @return a list of tracks
+     * @return a list of track
      */
     public ArrayList<Map> searchTracks(String name){
+        // Behöver vi verklingen denna metoden?
         final SearchTracksRequest searchPlaylistsRequest = this.spotifyApiWrapper.searchTracks(name)
                 .build();
 
@@ -269,6 +270,7 @@ public class SpotifyAPI {
      * @return artist
      */
     public String getArtist(String id) {
+        // Behöver vi verklingen denna metoden?
         final GetArtistRequest getArtistRequest = this.spotifyApiWrapper.getArtist(id)
                 .build();
         try {
