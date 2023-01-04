@@ -20,6 +20,12 @@ const setUpView = () => {
   });
 };
 
+//Återställer tillbaka till början genom att klicka på basic_button reset
+const resetButton = document.querySelector('.basic_button');
+resetButton.addEventListener('click', () => {
+  window.location.reload();
+});
+
 const clearSearchInput = (searchInput) => {
   searchInput.value = "";
   clearBtn.disabled;
