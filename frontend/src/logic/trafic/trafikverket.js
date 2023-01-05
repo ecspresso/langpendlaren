@@ -110,11 +110,11 @@ function search() {
 
 
 
-function getSetDepTime() {
+function getSetDepTime(departureTime) {
   localStorage.clear()
-  var getTime = document.getElementById("departureTime").innerHTML
-  localStorage.setItem("departureTime", getTime)
-  console.log(getTime)
+  //var getTime = document.getElementById("departureTime").innerHTML
+  localStorage.setItem("departureTime", departureTime)
+  console.log(departureTime)
 }
 
 
@@ -133,7 +133,7 @@ function displayTrainAnnouncement(announcement) {
     if (item.InformationOwner != null) owner = item.InformationOwner;
     
     jQuery("#timeTableDeparture tr:last").after(`<tr>
-                <td id='departureTime'>${depTime}</td>
+                <td>${depTime}</td>
                 <td>${toList.join(", ")}</td>
                 <td>${owner}</td>
                 <td style='text-align: center'>${item.TrackAtLocation}</td>
@@ -149,17 +149,17 @@ function displayTrainAnnouncement(announcement) {
                 })">Välj resa</button></td>
             </tr>"
         `);
-        getSetDepTime(); // Static for now should be onclick   
+        getSetDepTime(depTime); // Static for now should be onclick
   });
 }
 
 
 
 
-function getSetArrTime() {
-  var getTime = document.getElementById("arrivalTime").innerHTML
-  localStorage.setItem("arrivalTime", getTime)
-  console.log(getTime)
+function getSetArrTime(arrivalTime) {
+  //var getTime = document.getElementById("arrivalTime").innerHTML
+  localStorage.setItem("arrivalTime", arrivalTime)
+  console.log(arrivalTime)
 }
 
 
@@ -193,17 +193,16 @@ function displayStopStationsByTrainId(trainIdent) {
 
         jQuery("#timeTableDeparture tr:last").after(`<tr>
                     <td id='arrivalTime'>${arrTime}</td>
-                    <td> <button class='basic_button' type='button' onclick='clearBox('main_content')'>${stationName}</button></td>
+                    <td> <button class='basic_button' type='button' onclick="removeContent('main_content')">${stationName}</button></td>
                 </tr>"
             `);
       });
-      getSetArrTime(); // Static for now should be onclick
+      getSetArrTime(arrTime); // Static for now should be onclick
       calcTimeDiffrence();
     })
     .catch((e) => console.assert(e));
   $("#main_content").append(getStopsTemplate());
 }
-
 
 
 
@@ -240,7 +239,6 @@ function calcTimeDiffrence() {
 
 
 
-
 // Call the functions at the end
 preDefination();
 
@@ -248,3 +246,4 @@ preDefination();
 // Export globaly.
 window.displayStopStationsByTrainId = displayStopStationsByTrainId;
 window.search = search;
+window.removeContent = removeContent;

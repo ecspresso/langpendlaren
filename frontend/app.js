@@ -15,9 +15,9 @@ function createMainWindow() {
   });
 
   mainWindow.loadFile("./src/view/main.html").then(() => {
+    mainWindow.maximize();
     mainWindow.show();
   });
-  //mainWindow.maximize();
 }
 
 function afterSpotifyLogin(newUrl) {
