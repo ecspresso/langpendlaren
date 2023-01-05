@@ -190,10 +190,9 @@ function displayStopStationsByTrainId(trainIdent) {
         );
         let arrTime = hours + ":" + minutes;
         const stationName = getStationByName(item.LocationSignature);
-        let departureTime = localStorage.getItem("departureTime") // access departure time from localStorage
 
         jQuery("#timeTableDeparture tr:last").after(`<tr>
-                    <td id='arrivalTime'>${arrTime}${departureTime}</td>
+                    <td id='arrivalTime'>${arrTime}</td>
                     <td> <button class='basic_button' type='button' onclick='clearBox('main_content')'>${stationName}</button></td>
                 </tr>"
             `);
