@@ -1,7 +1,8 @@
 import { getHoursMinutsFromTime } from "../../util/util.js";
 import { getStationNames, getStationByName } from "./trafic_preload.js";
 import { getAllStopsByTrainId } from "./trafic_events.js";
-import { getStopsTemplate, removeContent } from "./trafic_templates.js";
+import { getStopsTemplate } from "./trafic_templates.js";
+import { removeContent } from "../main/functionality.js";
 import "./trafic_preload.js";
 
 
@@ -114,7 +115,6 @@ function getSetDepTime(departureTime) {
   localStorage.clear()
   //var getTime = document.getElementById("departureTime").innerHTML
   localStorage.setItem("departureTime", departureTime)
-  console.log(departureTime)
 }
 
 
@@ -205,12 +205,11 @@ function displayStopStationsByTrainId(trainIdent) {
 }
 
 
-
 // Change to variables for departure and arrival time
 function calcTimeDiffrence() {
   let departureTime = localStorage.getItem("departureTime") // access departure time from localStorage
   let arrivalTime = localStorage.getItem("arrivalTime") // access arrival time from localStorage
- 
+
   departureTime = departureTime.split(":");
   arrivalTime = arrivalTime.split(":");
   var startDate = new Date(0, 0, 0, departureTime[0], departureTime[1], 0);

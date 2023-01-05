@@ -25,15 +25,4 @@ function getStopsTemplate() {
     `;
 }
 
-
-
-
-/**
- *
- * @param {string} elementId
- */
-function removeContent(elementId) {
-  document.getElementById(elementId).innerHTML = "";
-}
-
-export { getStopsTemplate, removeContent };
+export { getStopsTemplate };

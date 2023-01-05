@@ -39,3 +39,9 @@ setUpView();
 function spotifyLogin() {
   ipc.send("spotifyLogin");
 }
+
+function removeContent(elementId) {
+  document.getElementById(elementId).innerHTML = "";
+}
+
+export { removeContent }
