@@ -7,6 +7,45 @@ import "./trafic_preload.js";
 
 
 
+function reset() {
+  removeContent();
+  let content = `
+    <div class="flex-container">
+      <div class="trains">
+      <h3>Sök avgång</h3>
+        <div id="searchbar">
+          <div id="station-wraper">
+            <input id="station" type="text" placeholder="Ange stad här..." />
+            <i id="clearBtn" class="fa-solid fa-xmark"></i>
+          </div>
+          <input id="showBtn" type="button" value="Visa"/>
+          <span id="loader" style="margin-left: 10px">Laddar data ...</span>
+        </div>
+
+        <div id="result">
+          <h3>Avgående tåg</h3>
+          <table id="timeTableDeparture">
+            <tr>
+              <th scope="col" style="width:40px;">Tid</th>
+              <th scope="col" style="width:200px;">Till</th>
+              <th scope="col" style="width:80px;"></th>
+              <th scope="col"  style="width:80px;">Spår</th>
+              <!--Train ID-->
+              <th scope="col"  style="width:80px;">ID</th>
+              <th scope="col"  style="width:80px;">Välj tåg</th>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  `;
+
+  $("#main_content").append(content);
+}
+
+
+
+
 /**
  * Define some properties...
  */
@@ -71,6 +110,14 @@ function search() {
 
 
 
+function getSetDepTime() {
+  localStorage.clear()
+  var getTime = document.getElementById("departureTime").innerHTML
+  localStorage.setItem("departureTime", getTime)
+  console.log(getTime)
+}
+
+
 /**
  * Display train announcement.
  */
@@ -86,7 +133,7 @@ function displayTrainAnnouncement(announcement) {
     if (item.InformationOwner != null) owner = item.InformationOwner;
     
     jQuery("#timeTableDeparture tr:last").after(`<tr>
-                <td>${depTime}</td>
+                <td id='departureTime'>${depTime}</td>
                 <td>${toList.join(", ")}</td>
                 <td>${owner}</td>
                 <td style='text-align: center'>${item.TrackAtLocation}</td>
@@ -96,16 +143,24 @@ function displayTrainAnnouncement(announcement) {
                 data-owner=${owner} 
                 data-dep-time=${depTime} 
                 data-train-id=${item.AdvertisedTrainIdent} 
-                type='button' 
+                type='button'
                 onclick="displayStopStationsByTrainId(${
                   item.AdvertisedTrainIdent
                 })">Välj resa</button></td>
             </tr>"
         `);
+        getSetDepTime(); // Static for now should be onclick   
   });
 }
 
 
+
+
+function getSetArrTime() {
+  var getTime = document.getElementById("arrivalTime").innerHTML
+  localStorage.setItem("arrivalTime", getTime)
+  console.log(getTime)
+}
 
 
 /**
@@ -135,13 +190,16 @@ function displayStopStationsByTrainId(trainIdent) {
         );
         let arrTime = hours + ":" + minutes;
         const stationName = getStationByName(item.LocationSignature);
+        let departureTime = localStorage.getItem("departureTime") // access departure time from localStorage
 
         jQuery("#timeTableDeparture tr:last").after(`<tr>
-                    <td>${arrTime}</td>
+                    <td id='arrivalTime'>${arrTime}${departureTime}</td>
                     <td> <button class='basic_button' type='button' onclick='clearBox('main_content')'>${stationName}</button></td>
                 </tr>"
             `);
       });
+      getSetArrTime(); // Static for now should be onclick
+      calcTimeDiffrence();
     })
     .catch((e) => console.assert(e));
   $("#main_content").append(getStopsTemplate());
@@ -151,9 +209,10 @@ function displayStopStationsByTrainId(trainIdent) {
 
 
 // Change to variables for departure and arrival time
-var departureTime = "10:30";
-var arrivalTime = "12:30";
-function calcTimeDiffrence(departureTime, arrivalTime) {
+function calcTimeDiffrence() {
+  let departureTime = localStorage.getItem("departureTime") // access departure time from localStorage
+  let arrivalTime = localStorage.getItem("arrivalTime") // access arrival time from localStorage
+ 
   departureTime = departureTime.split(":");
   arrivalTime = arrivalTime.split(":");
   var startDate = new Date(0, 0, 0, departureTime[0], departureTime[1], 0);
@@ -168,53 +227,19 @@ function calcTimeDiffrence(departureTime, arrivalTime) {
     ":" +
     (minutes < 9 ? "0" : "") +
     minutes;
-  var spotifyTime = hours * 3600 + minutes * 60;
+  var spotifyTime = Number(hours * 3600 + minutes * 60);
 
-  console.log(spotifyTime);
-  console.log(timeDiff);
+  if (spotifyTime < 0) {
+    console.log("Pågående tågfel, avbryter sökningen...");
+  } else {
+    console.log(spotifyTime);
+    console.log(timeDiff);
 
-  return spotifyTime;
+    return spotifyTime;
+  }
 }
-calcTimeDiffrence(departureTime, arrivalTime)
 
 
-
-
-function reset() {
-  removeContent();
-  let content = `
-    <div class="flex-container">
-      <div class="trains">
-      <h3>Sök avgång</h3>
-        <div id="searchbar">
-          <div id="station-wraper">
-            <input id="station" type="text" placeholder="Ange stad här..." />
-            <i id="clearBtn" class="fa-solid fa-xmark"></i>
-          </div>
-          <input id="showBtn" type="button" value="Visa"/>
-          <span id="loader" style="margin-left: 10px">Laddar data ...</span>
-        </div>
-
-        <div id="result">
-          <h3>Avgående tåg</h3>
-          <table id="timeTableDeparture">
-            <tr>
-              <th scope="col" style="width:40px;">Tid</th>
-              <th scope="col" style="width:200px;">Till</th>
-              <th scope="col" style="width:80px;"></th>
-              <th scope="col"  style="width:80px;">Spår</th>
-              <!--Train ID-->
-              <th scope="col"  style="width:80px;">ID</th>
-              <th scope="col"  style="width:80px;">Välj tåg</th>
-            </tr>
-          </table>
-        </div>
-      </div>
-    </div>
-  `;
-
-  $("#main_content").append(content);
-}
 
 
 // Call the functions at the end
