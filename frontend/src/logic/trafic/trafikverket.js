@@ -4,6 +4,9 @@ import { getAllStopsByTrainId } from "./trafic_events.js";
 import { getStopsTemplate, removeContent } from "./trafic_templates.js";
 import "./trafic_preload.js";
 
+
+
+
 /**
  * Define some properties...
  */
@@ -36,6 +39,9 @@ function preDefination() {
     });
 }
 
+
+
+
 /**
  * Search the train announcement
  */
@@ -62,6 +68,9 @@ function search() {
   });
 }
 
+
+
+
 /**
  * Display train announcement.
  */
@@ -75,7 +84,7 @@ function displayTrainAnnouncement(announcement) {
 
     let owner = "";
     if (item.InformationOwner != null) owner = item.InformationOwner;
-
+    
     jQuery("#timeTableDeparture tr:last").after(`<tr>
                 <td>${depTime}</td>
                 <td>${toList.join(", ")}</td>
@@ -96,13 +105,16 @@ function displayTrainAnnouncement(announcement) {
   });
 }
 
+
+
+
 /**
  * Display stop stations by choosen train.
  * @param {string} trainIdent
  */
 function displayStopStationsByTrainId(trainIdent) {
   let train = document.querySelector(`[data-train-id="${trainIdent}"]`);
-  let depTime = train.dataset["depTime"];
+  let arrTime = train.dataset["depTime"];
   let trainId = train.dataset["trainId"];
   let owner = train.dataset["owner"];
 
@@ -121,15 +133,12 @@ function displayStopStationsByTrainId(trainIdent) {
         const { hours, minutes } = getHoursMinutsFromTime(
           item.AdvertisedTimeAtLocation
         );
-        let depTime = hours + ":" + minutes;
+        let arrTime = hours + ":" + minutes;
         const stationName = getStationByName(item.LocationSignature);
 
         jQuery("#timeTableDeparture tr:last").after(`<tr>
-                    <td>${depTime}</td>
-                    <td><button 
-                    class="selectTrain"
-                    type='button' 
-                    onclick="")">${stationName}</button></td>
+                    <td>${arrTime}</td>
+                    <td> <button class='basic_button' type='button' onclick='clearBox('main_content')'>${stationName}</button></td>
                 </tr>"
             `);
       });
@@ -137,6 +146,39 @@ function displayStopStationsByTrainId(trainIdent) {
     .catch((e) => console.assert(e));
   $("#main_content").append(getStopsTemplate());
 }
+
+
+
+
+// Change to variables for departure and arrival time
+var departureTime = "10:30";
+var arrivalTime = "12:30";
+function calcTimeDiffrence(departureTime, arrivalTime) {
+  departureTime = departureTime.split(":");
+  arrivalTime = arrivalTime.split(":");
+  var startDate = new Date(0, 0, 0, departureTime[0], departureTime[1], 0);
+  var endDate = new Date(0, 0, 0, arrivalTime[0], arrivalTime[1], 0);
+  var diff = endDate.getTime() - startDate.getTime();
+  var hours = Math.floor(diff / 1000 / 60 / 60);
+  diff -= hours * 1000 * 60 * 60;
+  var minutes = Math.floor(diff / 1000 / 60);
+  var timeDiff =
+    (hours < 9 ? "0" : "") +
+    hours +
+    ":" +
+    (minutes < 9 ? "0" : "") +
+    minutes;
+  var spotifyTime = hours * 3600 + minutes * 60;
+
+  console.log(spotifyTime);
+  console.log(timeDiff);
+
+  return spotifyTime;
+}
+calcTimeDiffrence(departureTime, arrivalTime)
+
+
+
 
 function reset() {
   removeContent();
@@ -174,8 +216,10 @@ function reset() {
   $("#main_content").append(content);
 }
 
+
 // Call the functions at the end
 preDefination();
+
 
 // Export globaly.
 window.displayStopStationsByTrainId = displayStopStationsByTrainId;
