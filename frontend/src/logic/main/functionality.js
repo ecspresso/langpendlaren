@@ -21,7 +21,7 @@ const setUpView = () => {
 };
 
 //Återställer tillbaka till början genom att klicka på basic_button reset
-const resetButton = document.querySelector('.basic_button');
+const resetButton = document.getElementById("reset_button");
 resetButton.addEventListener('click', () => {
   window.location.reload();
 });
