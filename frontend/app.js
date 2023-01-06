@@ -3,6 +3,9 @@ const fetch = require("electron-fetch").default;
 let mainWindow;
 let authWindow;
 
+
+
+
 app.commandLine.appendSwitch("trace-warnings"); // Visa felmeddelanden.
 function createMainWindow() {
   mainWindow = new BrowserWindow({

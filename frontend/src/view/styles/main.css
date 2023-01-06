@@ -9,6 +9,10 @@ body {
   text-align: center;
 }
 
+#playlistHeader {
+  text-align: center;
+}
+
 .center_me {
   text-align: center;
   margin-bottom: 15px;
@@ -150,16 +154,23 @@ img.track {
 }
 
 #send_genre_button {
+  display: block;
   background: #605df2;
-  background-color: #308bfb;
   color: white;
-  margin-left: 37.5%;
   width: 20%;
   height: 40px;
+  margin: auto;
   border: none;
   transition: 0.2s;
   border-radius: 10px;
-  margin-bottom: 5px;
+  margin-top: 15px;
+}
+
+#genre {
+  display: block;
+  text-align: center;
+  font-size: 120%;
+  margin-bottom: 10px;
 }
 
 button:hover {
@@ -181,7 +192,14 @@ button:hover {
 #send_genre_button:hover {
   background: #333;
   cursor: pointer;
-  text-decoration: underline;
+}
+#green:hover{
+  background: #333;
+  cursor: pointer;
+}
+#red:hover{
+  background: #333;
+  cursor: pointer;
 }
 
 #song_suggestions {

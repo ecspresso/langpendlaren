@@ -6,8 +6,6 @@ import "./trafic_preload.js";
 import {ipc} from "../main/functionality.js";
 
 
-
-
 //Skapar variabler för tiderna
 let depTimeMilli;
 let arrTimeMilli;
@@ -21,8 +19,10 @@ function spotifyInit(time) {
     spotifyTime = Number((arrTimeMilli - depTimeMilli));
 
     if (spotifyTime < 0) {
-      alert("Var god välj en avgång som är senare än din avgångstid!");
-    } else {
+      alert("Vänligen välj en slutstation som kommer efter din valda påstigningsstation");
+    } else if (spotifyTime === 0) {
+      alert("Vänligen välj en resa med en minimal reslängd på en station")
+    } else  {
       localStorage.setItem("spotifyTime", spotifyTime)
       ipc.send("spotifyLogin");
     }
@@ -31,9 +31,6 @@ function spotifyInit(time) {
 
 
 
-/**
- * Define some properties...
- */
 function preDefination() {
   $.support.cors = true; // Enable Cross domain requests
   try {
