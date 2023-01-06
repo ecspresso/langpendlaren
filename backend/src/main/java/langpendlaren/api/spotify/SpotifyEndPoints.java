@@ -3,9 +3,14 @@ package langpendlaren.api.spotify;
 
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+import io.javalin.http.Cookie;
 import io.javalin.http.Handler;
+import io.javalin.http.HttpStatus;
+import org.apache.hc.core5.http.ParseException;
+import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 
+import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class SpotifyEndPoints {
@@ -27,15 +32,39 @@ public class SpotifyEndPoints {
      * All end points will be handled in this function
      */
     public void endPoints(){
-
-        // Authorization
+        /*
+         * Skickar Spotifys auth url.
+         */
         javalin.get("/spotify/login", context -> context.json(spotifyAPI.getLoginPage()));
 
+        /*
+        * "Skickar" access token och refresh token som kakor till användaren.
+        * Kräver kod från Spotify (fås från /spotify/login).
+         */
         javalin.get("/spotify/authenticated", context -> {
             String code = context.queryParam("code");
-            AuthorizationCodeCredentials tokens = spotifyAPI.auth(code);
-            context.cookie("accessToken", tokens.getAccessToken(), tokens.getExpiresIn());
-            context.cookie("refreshToken", tokens.getRefreshToken());
+            try {
+                AuthorizationCodeCredentials tokens = spotifyAPI.auth(code);
+                context.cookie("accessToken", tokens.getAccessToken(), tokens.getExpiresIn());
+                context.cookie("refreshToken", tokens.getRefreshToken());
+            } catch (IOException e) {
+                context.status(HttpStatus.INTERNAL_SERVER_ERROR);
+                context.json("{'error': 'IOException'}");
+            } catch (ParseException e) {
+                context.status(HttpStatus.INTERNAL_SERVER_ERROR);
+                context.json("{'error': 'ParseException'}");
+            } catch (SpotifyWebApiException e) {
+                context.status(HttpStatus.INTERNAL_SERVER_ERROR);
+                context.json("{'error': 'SpotifyWebApiException'}");
+            }
+        });
+
+        /*
+        * Hämta en lista av alla genrer seeds.
+         */
+        javalin.get("/spotify/genre/seeds", context -> {
+            String[] seeds = spotifyAPI.genreSeeds();
+            context.json(seeds);
         });
 
         // -- User
