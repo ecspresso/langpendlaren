@@ -1,3 +1,4 @@
+//Kommer ej användas? Ta bort?
 function getGener(){
     var month = [["1", "January", ""], [["3", "Mars", ""], ["4", "April", ""], ["5", "May", ""], ["2", "February", "1"]];
     const selectGener = document.getElementById("select_gener");

@@ -5,6 +5,15 @@ body {
   background: white;
 }
 
+#station_header {
+  text-align: center;
+}
+
+.center_me {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
 h3 {
   color: #333;
 }
@@ -127,9 +136,62 @@ img.track {
   border-radius: 10px;
 }
 
+#reset_button {
+  background: #605df2;
+  background-color: #2f2cf0;
+  color: white;
+  margin-left: 37.5%;
+  width: 25%;
+  height: 40px;
+  border: none;
+  transition: 0.2s;
+  border-radius: 10px;
+  margin-bottom: 5px;
+}
+
+#send_genre_button {
+  background: #605df2;
+  background-color: #308bfb;
+  color: white;
+  margin-left: 37.5%;
+  width: 20%;
+  height: 40px;
+  border: none;
+  transition: 0.2s;
+  border-radius: 10px;
+  margin-bottom: 5px;
+}
+
+button:hover {
+  background: #333;
+  cursor: pointer;
+}
+
 .basic_button:hover {
   background: #333;
   cursor: pointer;
+}
+
+#reset_button:hover {
+  background: #333;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+#send_genre_button:hover {
+  background: #333;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+#song_suggestions {
+  margin-bottom: 10px;
+}
+
+#flex_buttons {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 #station {
@@ -395,6 +457,9 @@ img.track {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
+  width: 25%;
+  margin-bottom: 5px;
+  border-radius: 10px;
 }
 
 #red {
@@ -406,6 +471,9 @@ img.track {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
+  width: 25%;
+  border-radius: 10px;
+
 }
 
 #song_suggestions {
@@ -444,9 +512,4 @@ img.track {
 
 #showBtn {
   margin-top: 2%;
-}
-
-.limit {
-  height: 15em;
-  overflow: auto;
 }

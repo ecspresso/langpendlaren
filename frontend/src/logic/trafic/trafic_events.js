@@ -1,3 +1,4 @@
+//Hämtar vilka stationer ett tåg stannar på
 async function getAllStopsByTrainId(trainIdent) {
   const data = await fetch(
     `http://localhost/trafikverket/trains/stops/${trainIdent}`,

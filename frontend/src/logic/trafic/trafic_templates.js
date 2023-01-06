@@ -2,16 +2,11 @@
  * Return a pre defined stops template
  * @returns {HTMLElement}
  */
+//Skriver ut HTML för vilka stationer ett tåg stannar vid
 function getStopsTemplate() {
   return `
-    <main>
-            <div id="searchbar">
-                <h3 class="pagetitle">Sök slutstation</h3>
-                <div id="search_station">
-                    <input id="station" type="text" placeholder="Ange station..." onkeyup="search()"/>
-                </div>
-            
-                <h4>Välj station från listan</h4>
+    <main>            
+                <h2 id="station_header">Välj station från listan</h4>
                 <div id="result" class="limit">
                     <table id="timeTableDeparture">
                         <tr>

@@ -6,11 +6,12 @@ import { removeContent } from "../main/functionality.js";
 import "./trafic_preload.js";
 import {ipc} from "../main/functionality.js";
 
-
+//Skapar variabler för tiderna
 let depTimeMilli;
 let arrTimeMilli;
 let spotifyTime;
 
+//Hämtar vald avgångstid och ankomstid och kontrollerar att tidskillnaden är ok och konverterar sedan skillnaden till millisekunder
 function spotifyInit(time) {
     const { hours, minutes } = getHoursMinutsFromTime(time);
     arrTimeMilli = (hours * 60 * 60 * 1000 + minutes * 60 * 1000);
@@ -62,6 +63,8 @@ function preDefination() {
 /**
  * Search the train announcement
  */
+
+//Söka efter station genom departures
 function search() {
   let sign = $("#station").data("sign");
   // Clear html table
@@ -88,6 +91,7 @@ function search() {
 /**
  * Display train announcement.
  */
+//Den visar alla tåg som avgång från den stationen användaren valt genom att lägger till en tabell med informationen
 function displayTrainAnnouncement(announcement) {
   announcement.forEach((item) => {
     const { hours, minutes } = getHoursMinutsFromTime( item.AdvertisedTimeAtLocation );
@@ -120,6 +124,8 @@ function displayTrainAnnouncement(announcement) {
  * Display stop stations by choosen train.
  * @param {string} trainIdent
  */
+
+//Funktion som visar stopp som ett tåg stannar vid som användaren sedan väljer mellan
 function displayStopStationsByTrainId(trainIdent) {
   let train = document.querySelector(`[data-train-id="${trainIdent}"]`);
   let hours = train.dataset["depHour"];
@@ -145,39 +151,9 @@ function displayStopStationsByTrainId(trainIdent) {
             `);
       });
 
-      calcTimeDiffrence();
     })
     .catch((e) => console.assert(e));
   $("#main_content").append(getStopsTemplate());
-}
-
-
-// Change to variables for departure and arrival time
-function calcTimeDiffrence() {
-  departureTime = departureTime.split(":");
-  arrivalTime = arrivalTime.split(":");
-  var startDate = new Date(0, 0, 0, departureTime[0], departureTime[1], 0);
-  var endDate = new Date(0, 0, 0, arrivalTime[0], arrivalTime[1], 0);
-  var diff = endDate.getTime() - startDate.getTime();
-  var hours = Math.floor(diff / 1000 / 60 / 60);
-  diff -= hours * 1000 * 60 * 60;
-  var minutes = Math.floor(diff / 1000 / 60);
-  var timeDiff =
-    (hours < 9 ? "0" : "") +
-    hours +
-    ":" +
-    (minutes < 9 ? "0" : "") +
-    minutes;
-  var spotifyTime = Number(hours * 3600 + minutes * 60);
-
-  if (spotifyTime < 0) {
-    console.log("Pågående tågfel, avbryter sökningen...");
-  } else {
-    console.log(spotifyTime);
-    console.log(timeDiff);
-
-    return spotifyTime;
-  }
 }
 
 

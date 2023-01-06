@@ -1,3 +1,4 @@
+//Läser in alla stationer som användaren kan välja mellan genom att lägga dessa i en lista
 let Stations = [];
 function preLoadTrainStations() {
   // Request to load all stations
@@ -29,6 +30,7 @@ function preLoadTrainStations() {
 }
 preLoadTrainStations();
 
+//Sökfunktion för att söka på stationer
 function fillSearchWidget(data) {
   $("#station").val("");
   $("#station").autocomplete({

@@ -3,7 +3,7 @@ const ipcRenderer = require("electron").ipcRenderer;
 
 export { ipc };
 
-// Basic functions
+// Basic functions, förbereder electron och olika knapparna
 const setUpView = () => {
   const clearBtn = document.getElementById("clearBtn");
   const searchInput = document.getElementById("station");
@@ -39,22 +39,45 @@ const resetSetting = () => {};
 
 setUpView();
 
+//Hanterar ruta för spotify
 function spotifyLogin() {
   ipc.send("spotifyLogin");
 }
 
+//Tar bort content som inte behövs längre när användaren går vidare
 function removeContent(elementId) {
   document.getElementById(elementId).innerHTML = "";
 }
 
+//Genererar sidan där användaren väljer genre
 ipcRenderer.on('spotifyReady', function(event, code) {
   removeContent("main_content");
 
-  let spotifyTime = localStorage.getItem("spotifyTime")
+
+  //Funktion för att göra tiden läsbar för användaren. Skrivs sedan ut i HTML koden
+  function convertMillisecondsToHoursAndMinutes(milliseconds) {
+    let seconds = milliseconds / 1000;
+    let minutes = seconds / 60;
+    let hours = Math.floor(minutes / 60);
+    minutes = Math.floor(minutes % 60);
+    if (hours < 10) {
+      hours = "0" + hours;
+    }
+    if (minutes < 10) {
+      minutes = "0" + minutes;
+    }
+    return hours + ":" + minutes;
+  }
+  
+  let spotifyTime = localStorage.getItem("spotifyTime");
+  let hoursAndMinutes = convertMillisecondsToHoursAndMinutes(spotifyTime);
+  
+  //Skriver ut HTML kod för att välja vilken genre man önskar
 
   let content =
-      `<h2>Generera spellista</h2>
-      <h2>Din reselängd - ${spotifyTime}</h2>
+      `<div class='center_me'>
+      <h2 class>Generera spellista</h2>
+      <h4>Din reselängd - ${hoursAndMinutes}H</h2>
       <form action="do_something">
         <label for="genre">Välj genre:</label>
         <select name="genres" id="genres">
@@ -65,8 +88,41 @@ ipcRenderer.on('spotifyReady', function(event, code) {
           <option value="jazz">Jazz</option>
         </select>
 
-        <input type="submit" value="Skicka" />
-      </form>`
+        <input type="submit" class="basic_button" id="send_genre_button" value="Skicka" />
+      </form> 
+      </div>
+      
+      <h2>Förslag på spellista - visas upp efter användaren skickat</h2>
+
+      <div id="song_suggestions">
+        <table id="timeTableDeparture">
+          <tr>
+            <th>Låt</th>
+            <th>Artist</th>
+          </tr>
+
+          <tr>
+            <td>Sommar och sol</td>
+            <td>Markoolio</td>
+          </tr>
+
+          <tr>
+            <td>Sommar och sol</td>
+            <td>Markoolio</td>
+          </tr>
+
+          <tr>
+            <td>Sommar och sol</td>
+            <td>Markoolio</td>
+          </tr>
+        </table>
+      </div>
+
+      <div id="flex_buttons">
+        <button type="button" id="green">Spara</button>
+        <button type="button" id="red">Generera ny lista</button>
+      </div>
+      `
 
   $("#main_content").append(content);
 });

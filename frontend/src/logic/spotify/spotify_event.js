@@ -1,3 +1,4 @@
+//Funktion som hämtar genrer från spotify
 async function getAvailableGener(){
     const data = await fetch(
         `http://localhost/spotify/genre/seeds`,
