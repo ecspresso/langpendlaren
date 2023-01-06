@@ -9,13 +9,19 @@ import {ipc} from "../main/functionality.js";
 
 let depTimeMilli;
 let arrTimeMilli;
-let length;
+let spotifyTime;
 
 function spotifyInit(time) {
     const { hours, minutes } = getHoursMinutsFromTime(time);
-    arrTimeMilli = hours * 60 * 60 * 1000 + minutes * 60 * 1000;
-    length = arrTimeMilli - depTimeMilli;
-    ipc.send("spotifyLogin");
+    arrTimeMilli = (hours * 60 * 60 * 1000 + minutes * 60 * 1000);
+    spotifyTime = Number((arrTimeMilli - depTimeMilli));
+
+    if (spotifyTime < 0) {
+      alert("Var god välj en avgång som är senare än din avgångstid!");
+    } else {
+      localStorage.setItem("spotifyTime", spotifyTime)
+      ipc.send("spotifyLogin");
+    }
 }
 
 /**
