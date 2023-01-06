@@ -80,12 +80,12 @@ function search() {
     url: "http://localhost/trafikverket/departures/" + sign,
     success: function (response) {
       if (response == null) return;
-      if (response.RESPONSE.RESULT[0].TrainAnnouncement == null)
+      if (response.train_announcement == null)
         jQuery("#timeTableDeparture tr:last").after(
           '<tr class="list"><td colspan="4">Inga avgångar hittades</td></tr>'
         );
       try {
-        displayTrainAnnouncement(response.RESPONSE.RESULT[0].TrainAnnouncement);
+        displayTrainAnnouncement(response.train_announcement);
       } catch (ex) {}
     },
   });
@@ -100,27 +100,27 @@ function search() {
 //Den visar alla tåg som avgång från den stationen användaren valt genom att lägger till en tabell med informationen
 function displayTrainAnnouncement(announcement) {
   announcement.forEach((item) => {
-    const { hours, minutes } = getHoursMinutsFromTime( item.AdvertisedTimeAtLocation );
+    const { hours, minutes } = getHoursMinutsFromTime( item.advertised_time_at_location );
     let depTime = hours + ":" + minutes;
-    let toList = getStationNames(item.ToLocation);
+    let toList = getStationNames(item.to_location);
 
     let owner = "";
-    if (item.InformationOwner != null) owner = item.InformationOwner;
+    if (item.information_owner != null) owner = item.information_owner;
 
     jQuery("#timeTableDeparture tr:last").after(`<tr>
                 <td>${depTime}</td>
                 <td>${toList.join(", ")}</td>
                 <td>${owner}</td>
-                <td style='text-align: center'>${item.TrackAtLocation}</td>
-                <td>${item.AdvertisedTrainIdent}</td>
+                <td style='text-align: center'>${item.track_at_location}</td>
+                <td>${item.advertised_train_id}</td>
                 <td><button 
                 class="basic_button" 
                 data-owner=${owner} 
                 data-dep-hour=${hours} 
                 data-dep-minute=${minutes} 
-                data-train-id=${item.AdvertisedTrainIdent} 
+                data-train-id=${item.advertised_train_id} 
                 type='button'
-                onclick="displayStopStationsByTrainId(${item.AdvertisedTrainIdent})">Välj resa</button></td>
+                onclick="displayStopStationsByTrainId(${item.advertised_train_id})">Välj resa</button></td>
             </tr>"
         `);
   });

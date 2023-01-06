@@ -1,15 +1,11 @@
 package langpendlaren.api.trafikverket;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import langpendlaren.api.http.Http;
-import langpendlaren.api.trafikverket.json.StationShortNamesJson;
 import org.apache.http.HttpHost;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 
 public class TrafikverketAPI extends Http {
@@ -19,7 +15,7 @@ public class TrafikverketAPI extends Http {
     }
     private final String apikey;
 
-    public String getTrainStops(int trainId) {
+    public String getTrainStops(int trainId) throws IOException {
         String xml = String.format("""
                 <REQUEST>
                     <LOGIN authenticationkey="%s" />
@@ -35,7 +31,7 @@ public class TrafikverketAPI extends Http {
     }
 
     //Anger avgångar från en viss station genom station signature (exempelvis: Cst)
-    public String getDepartures(String stationSignature) {
+    public String getDepartures(String stationSignature) throws IOException {
         String xml = String.format("""
                 <REQUEST>
                     <LOGIN authenticationkey='%s' />
@@ -66,7 +62,7 @@ public class TrafikverketAPI extends Http {
     }
 
     //Hämtar alla destinationer för ett tåg
-    public String getTrainStopStation(String trainId) {
+    public String getTrainStopStation(String trainId) throws IOException {
 
         String xml = String.format("""
                 <REQUEST>
@@ -90,29 +86,7 @@ public class TrafikverketAPI extends Http {
         return post(xml);
     }
 
-    public StationShortNamesJson getStationShortNames() {
-        String xml = String.format("""     
-                <REQUEST>
-                      <LOGIN authenticationkey="%s" />
-                      <QUERY objecttype="TrainStation" schemaversion="1">
-                            <FILTER>
-                                  <EQ name="Advertised" value="true" />
-                            </FILTER>
-                            <INCLUDE>AdvertisedLocationName</INCLUDE>
-                            <INCLUDE>LocationSignature</INCLUDE>
-                      </QUERY>
-                </REQUEST>
-                """, apikey);
-
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return mapper.readValue(post(xml), StationShortNamesJson.class);
-        } catch(JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public String getStationNames() {
+    public String getStationNames() throws IOException {
         String xml = String.format("""     
                 <REQUEST>
                     <LOGIN authenticationkey='%s'/>
@@ -128,25 +102,12 @@ public class TrafikverketAPI extends Http {
         return post(xml);
     }
 
-    private String post(String xml) {
+    private String post(String xml) throws IOException {
         HttpPost httpPost = new HttpPost("https://api.trafikinfo.trafikverket.se/v2/data.json");
         httpPost.addHeader("contentType", "text/xml");
         httpPost.addHeader("dataType", "json");
-
-
-        StringEntity entity = null;
-        try {
-            entity = new StringEntity(xml);
-        } catch(UnsupportedEncodingException e) {
-            return null;
-        }
-
+        StringEntity entity = new StringEntity(xml);
         httpPost.setEntity(entity);
-
-        try {
-            return super.post(httpPost);
-        } catch(IOException e) {
-            return null;
-        }
+        return super.post(httpPost);
     }
 }

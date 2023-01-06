@@ -10,17 +10,17 @@ function preLoadTrainStations() {
       if (response == null) return;
       try {
         let stationlist = [];
-        $(response.RESPONSE.RESULT[0].TrainStation).each(function (
+        $(response.stations).each(function (
           iterator,
           item
         ) {
           // Save a key/value list of stations
-          Stations[item.LocationSignature] = item.AdvertisedLocationName;
+          Stations[item.short_name] = item.name;
           // Create an array to fill the search field autocomplete.
-          if (item.Prognosticated === true)
+          if (item.prognosticated === true)
             stationlist.push({
-              label: item.AdvertisedLocationName,
-              value: item.LocationSignature,
+              label: item.name,
+              value: item.short_name,
             });
         });
         fillSearchWidget(stationlist);
