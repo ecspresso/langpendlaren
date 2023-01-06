@@ -34,4 +34,13 @@ function millisecondsToHoursAndMinutes(milliseconds){
   return hours + ":" + minutes;
 }
 
-export { getHoursMinutsFromTime, millisecondsToHoursAndMinutes };
+
+/**
+ * Tar bort content som inte behövs längre när användaren går vidare
+ * @param {string} elementId 
+ */
+function clearHTMLElementByElementId(elementId){
+  document.getElementById(elementId).innerHTML = "";
+}
+
+export { getHoursMinutsFromTime, millisecondsToHoursAndMinutes, clearHTMLElementByElementId };
