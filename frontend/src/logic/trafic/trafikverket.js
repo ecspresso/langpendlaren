@@ -231,7 +231,10 @@ function calcTimeDiffrence() {
     minutes;
   var spotifyTime = Number(hours * 3600 + minutes * 60);
 
+  
   localStorage.setItem("travelTime", timeDiff)
+  localStorage.setItem("spotifyTime", spotifyTime)
+
 
   if (spotifyTime < 0) {
     console.log("Pågående tågfel, avbryter sökningen...");
@@ -239,7 +242,6 @@ function calcTimeDiffrence() {
     console.log(`Spotify tid: ${spotifyTime}`)
     console.log(`Tidsskillnad:  ${timeDiff}`)
 
-    return spotifyTime;
   }
 }
 
