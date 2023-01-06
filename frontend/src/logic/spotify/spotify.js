@@ -1,13 +1,16 @@
-//Kommer ej användas? Ta bort?
-function getGener(){
-    var month = [["1", "January", ""], [["3", "Mars", ""], ["4", "April", ""], ["5", "May", ""], ["2", "February", "1"]];
-    const selectGener = document.getElementById("select_gener");
-    for (var i=0; i < month.length;++i){
+import { getAvailableGenre } from "../spotify/spotify_events";
+
+/**
+ * 
+ */
+function displayAllGenre(){
+    const selectGener = document.getElementById("send_genre_button");
+    for (var i=0; i < genre.length;++i){
         var option = document.createElement("OPTION"),
-            txt = document.createTextNode(month[i][1]);
+            txt = document.createTextNode(genre[i][1]);
         option.appendChild(txt);
-        option.setAttribute("value",month[i][0]);
-        if(month[i][2]!=''){
+        option.setAttribute("value",genre[i][0]);
+        if(genre[i][2]!=''){
             // February need to be selected
             select.insertBefore(option,select.lastchild);
         } else {
@@ -16,3 +19,13 @@ function getGener(){
         }
     }
 }
+
+
+ // När användaren har klickat på knappen hämta från API:et låtar som är lika långa som resan från den valda genren
+ function getPlaylistFromGenre() {
+    getAvailableGenre().then(result => {
+        console.log(result);
+    }).catch(e => console.log(e));
+  };
+
+  document.getElementById("send_genre_button").addEventListener("click", getPlaylistFromGenre)
