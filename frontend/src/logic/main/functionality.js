@@ -78,7 +78,6 @@ ipcRenderer.on('spotifyReady', function(event, code) {
       `<div class='center_me'>
       <h2 class>Generera spellista</h2>
       <h4>Din reselängd - ${hoursAndMinutes}H</h2>
-      <form action="do_something">
         <label for="genre">Välj genre:</label>
         <select name="genres" id="genres">
           <option value="pop">Pop</option>
@@ -88,8 +87,7 @@ ipcRenderer.on('spotifyReady', function(event, code) {
           <option value="jazz">Jazz</option>
         </select>
 
-        <input type="submit" class="basic_button" id="send_genre_button" value="Skicka" />
-      </form> 
+        <input type="submit" class="basic_button" id="send_genre_button" value="Skicka"/>
       </div>
       
       <h2>Förslag på spellista - visas upp efter användaren skickat</h2>
@@ -125,6 +123,29 @@ ipcRenderer.on('spotifyReady', function(event, code) {
       `
 
   $("#main_content").append(content);
+
+
+  // När användaren har klickat på knappen hämta från API:et låtar som är lika långa som resan från den valda genren
+  function getPlaylistFromGenre() {
+    console.log("getPlaylistFromGenre fungerar!") 
+
+  }
+  document.getElementById("send_genre_button").addEventListener("click", getPlaylistFromGenre)
+
+
+  // När användaren har klickat på knappen läggs nya låtar till i spellistan på användarens konto
+  function savePlaylist() {
+    console.log("SavePlaylist fungerar!") 
+  }
+  document.getElementById("green").addEventListener("click", savePlaylist)
+
+
+  // När användaren har klickat på knappen gör en ny API-hämtning med nya låtar (ett could krav enligt)
+  function newPlaylist() {
+    console.log("newPlaylist fungerar!")     
+  }
+  document.getElementById("red").addEventListener("click", newPlaylist)
+
 });
 
 export { removeContent }
