@@ -43,6 +43,7 @@ public class SpotifyEndPoints {
          */
         javalin.get("/spotify/authenticated", context -> {
             String code = context.queryParam("code");
+
             try {
                 AuthorizationCodeCredentials tokens = spotifyAPI.auth(code);
                 context.cookie("accessToken", tokens.getAccessToken(), tokens.getExpiresIn());
