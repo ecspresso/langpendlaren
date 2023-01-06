@@ -6,10 +6,14 @@ import { removeContent } from "../main/functionality.js";
 import "./trafic_preload.js";
 import {ipc} from "../main/functionality.js";
 
+
+
+
 //Skapar variabler för tiderna
 let depTimeMilli;
 let arrTimeMilli;
 let spotifyTime;
+
 
 //Hämtar vald avgångstid och ankomstid och kontrollerar att tidskillnaden är ok och konverterar sedan skillnaden till millisekunder
 function spotifyInit(time) {
@@ -24,6 +28,9 @@ function spotifyInit(time) {
       ipc.send("spotifyLogin");
     }
 }
+
+
+
 
 /**
  * Define some properties...
@@ -88,6 +95,9 @@ function search() {
   });
 }
 
+
+
+
 /**
  * Display train announcement.
  */
@@ -119,6 +129,9 @@ function displayTrainAnnouncement(announcement) {
         `);
   });
 }
+
+
+
 
 /**
  * Display stop stations by choosen train.
@@ -155,6 +168,7 @@ function displayStopStationsByTrainId(trainIdent) {
     .catch((e) => console.assert(e));
   $("#main_content").append(getStopsTemplate());
 }
+
 
 
 
