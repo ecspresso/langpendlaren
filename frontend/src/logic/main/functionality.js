@@ -76,10 +76,11 @@ ipcRenderer.on('spotifyReady', function(event, code) {
 
   let content =
       `<div class='center_me'>
-      <h2 class>Generera spellista</h2>
-      <h4>Din reselängd - ${hoursAndMinutes}H</h2>
-        <label for="genre">Välj genre:</label>
-        <select name="genres" id="genres">
+      <h1>Generera spellista</h1>
+      <h3>Din reselängd - ${hoursAndMinutes}H</h3>
+        <label for="genre" id='genre'>Välj Genre</label>
+        <select name="genres" id="getGenre">
+          <option value="" disabled selected>Välj</option>
           <option value="pop">Pop</option>
           <option value="rock">Rock</option>
           <option value="julmusik">Julmusik</option>
@@ -90,7 +91,7 @@ ipcRenderer.on('spotifyReady', function(event, code) {
         <input type="submit" class="basic_button" id="send_genre_button" value="Skicka"/>
       </div>
       
-      <h2>Förslag på spellista - visas upp efter användaren skickat</h2>
+      <h3 id='playlistHeader'>Förslag på spellista - visas upp efter användaren skickat</h3>
 
       <div id="song_suggestions">
         <table id="timeTableDeparture">
@@ -124,28 +125,33 @@ ipcRenderer.on('spotifyReady', function(event, code) {
 
   $("#main_content").append(content);
 
+  // Event listeners to functions
+  document.getElementById("send_genre_button").addEventListener("click", getPlaylistFromGenre)
+  document.getElementById("green").addEventListener("click", savePlaylist)
+  document.getElementById("red").addEventListener("click", newPlaylist)
+
 
   // När användaren har klickat på knappen hämta från API:et låtar som är lika långa som resan från den valda genren
   function getPlaylistFromGenre() {
-    console.log("getPlaylistFromGenre fungerar!") 
-
-  }
-  document.getElementById("send_genre_button").addEventListener("click", getPlaylistFromGenre)
-
+    console.log("getPlaylistFromGenre fungerar!")
+    var selectedGenre = document.getElementById("getGenre");
+    if (selectedGenre != undefined && selectedGenre.value != ""){
+      console.log(selectedGenre.value)
+    } else {
+      console.log("Vänligen välj en genre")
+  }}
+  
 
   // När användaren har klickat på knappen läggs nya låtar till i spellistan på användarens konto
   function savePlaylist() {
     console.log("SavePlaylist fungerar!") 
   }
-  document.getElementById("green").addEventListener("click", savePlaylist)
 
 
   // När användaren har klickat på knappen gör en ny API-hämtning med nya låtar (ett could krav enligt)
   function newPlaylist() {
     console.log("newPlaylist fungerar!")     
   }
-  document.getElementById("red").addEventListener("click", newPlaylist)
-
 });
 
 export { removeContent }
