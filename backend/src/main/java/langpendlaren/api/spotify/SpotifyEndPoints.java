@@ -63,8 +63,7 @@ public class SpotifyEndPoints {
         * Hämta en lista av alla genrer seeds.
          */
         javalin.get("/spotify/genre/seeds", context -> {
-            String[] seeds = spotifyAPI.genreSeeds();
-            context.json(seeds);
+            context.json(spotifyAPI.genreSeeds());
         });
 
         // -- User
