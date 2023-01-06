@@ -152,7 +152,7 @@ function displayTrainAnnouncement(announcement) {
                 })">Välj resa</button></td>
             </tr>"
         `);
-        getSetDepTime(depTime); // Static for now should be onclick
+         // Static for now should be onclick
   });
 }
 
@@ -175,7 +175,8 @@ function displayStopStationsByTrainId(trainIdent) {
   let arrTime = train.dataset["depTime"];
   let trainId = train.dataset["trainId"];
   let owner = train.dataset["owner"];
-
+  console.log(arrTime, trainId, owner);
+  // getSetDepTime(depTime);
   // Sätt kakor som hämtas av nästa sida.
   // window.localStorage.setItem("depTime", depTime);
   // window.localStorage.setItem("trainId", trainId);
