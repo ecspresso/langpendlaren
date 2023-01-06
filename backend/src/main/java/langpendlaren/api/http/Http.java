@@ -27,14 +27,25 @@ public abstract class Http {
                 HttpEntity entity = response.getEntity();
 
                 int status = response.getStatusLine().getStatusCode();
+                switch (status){
+                    case 200: {
+                        BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
+                        String line;
+                        while ((line = br.readLine()) != null) {
+                            result.append(line);
+                        }
+                        EntityUtils.consume(entity);
+                        break;
+                    }
+                    case 201:{ result.append("Status: " + status + ", Resursen blev skapad."); break; }
+                    case 400:{ result.append("Status: " + status + ", Bad request - Förfrågan kunde nte skikcas eller så saknades nödvändiga förfrågan."); break; }
+                    case 401:{ result.append("Status: " + status + ", Unotharized - Ingen tillåtelse att göra förfrågan."); break; }
+                    case 404:{ result.append("Status: " + status + ", Not found - resursen finns inte."); break; }
+                    case 500:{ result.append("Status: " + status + ", Internt serverfel."); break; }
+                }
+
                 System.out.println(httpPost.getEntity().toString() + status);
 
-                BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
-                String line;
-                while ((line = br.readLine()) != null) {
-                    result.append(line);
-                }
-                EntityUtils.consume(entity);
             }
         }
         return result.toString();

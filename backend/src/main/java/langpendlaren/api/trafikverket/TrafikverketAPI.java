@@ -133,6 +133,7 @@ public class TrafikverketAPI extends Http {
         httpPost.addHeader("contentType", "text/xml");
         httpPost.addHeader("dataType", "json");
 
+
         StringEntity entity = null;
         try {
             entity = new StringEntity(xml);
