@@ -229,9 +229,9 @@ function calcTimeDiffrence() {
     ":" +
     (minutes < 9 ? "0" : "") +
     minutes;
-  var spotifyTime = Number(hours * 3600 + minutes * 60);
+  var spotifyTime = Number(hours * 3600000 + minutes * 60000);
 
-  
+
   localStorage.setItem("travelTime", timeDiff)
   localStorage.setItem("spotifyTime", spotifyTime)
 
