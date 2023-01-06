@@ -27,34 +27,34 @@ function createMainWindow() {
 // Hantera inloggning mot Spotify.
 // Skickar inloggningsfråga till vår server som skickar oss vidare till Spotify, och sedan tillbaka igen.
 ipcMain.on("spotifyLogin", () => {
-  console.log("spotify login")
   fetch("http://localhost/spotify/login")
-    .then((res) => res.json())
-    .then((authUrl) => {
-      //https://stackoverflow.com/questions/37546656/handling-oauth2-redirect-from-electron-or-other-desktop-platforms
-      authWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        show: false,
-        'node-integration': false,
-        'web-security': false
-      });
-
-      authWindow.webContents.on('will-redirect', function (event, newUrl) {
-          authWindow.loadURL(newUrl).then(() => {
-            authWindow.close();
-            mainWindow.webContents.send("spotifyReady",  new URL(newUrl).searchParams.get("code"));
-          })
-          // More complex code to handle tokens goes here
-      });
-
-      authWindow.on('closed', function() {
-          authWindow = null;
-      });
-
-      authWindow.loadURL(authUrl);
-      authWindow.show();
+  .then((res) => res.json())
+  .then((authUrl) => {
+    //https://stackoverflow.com/questions/37546656/handling-oauth2-redirect-from-electron-or-other-desktop-platforms
+    authWindow = new BrowserWindow({
+      width: 800,
+      height: 600,
+      show: false,
+      'node-integration': false,
+      'web-security': false
     });
+
+    authWindow.webContents.on('will-navigate', function (event, newUrl) {
+      authWindow.loadURL(newUrl).then(() => {
+        // Kontrollera att den URL vi ska till inte är Spotifys domän.
+        if(!new URL(newUrl).host.match("spotify\.com$")) {
+          let code = new URL(newUrl).searchParams.get("code");
+          mainWindow.webContents.send("spotifyReady", code);
+          authWindow.close();
+        }
+      });
+    });
+
+    authWindow.on('closed', function() { authWindow = null; });
+
+    authWindow.loadURL(authUrl);
+    authWindow.show();
+  });
 });
 
 ipcMain.on("traficStops", (event) => {
