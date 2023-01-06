@@ -52,8 +52,11 @@ ipcRenderer.on('spotifyReady', function(event, code) {
   console.log("Spotify redo! " + code);
   removeContent("main_content");
 
+  let travelTime = localStorage.getItem("travelTime") // access travel time from localStorage
+
   let content =
       `<h2>Generera spellista</h2>
+      <h2>Din reselängd - ${travelTime}</h2>
       <form action="do_something">
         <label for="genre">Välj genre:</label>
         <select name="genres" id="genres">

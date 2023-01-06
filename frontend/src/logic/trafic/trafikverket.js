@@ -115,9 +115,9 @@ function search() {
 
 
 function getSetDepTime(departureTime) {
-  localStorage.clear()
   //var getTime = document.getElementById("departureTime").innerHTML
   localStorage.setItem("departureTime", departureTime)
+  console.log(`Detta är avgångstid ${departureTime}`)
 }
 
 
@@ -162,7 +162,7 @@ function displayTrainAnnouncement(announcement) {
 function getSetArrTime(arrivalTime) {
   //var getTime = document.getElementById("arrivalTime").innerHTML
   localStorage.setItem("arrivalTime", arrivalTime)
-  console.log(arrivalTime)
+  console.log(`Detta är ankomsttid ${arrivalTime}`)
 }
 
 
@@ -200,7 +200,8 @@ function displayStopStationsByTrainId(trainIdent) {
                 </tr>"
             `);
       });
-      getSetArrTime(arrTime); // Static for now should be onclick
+      let html = document.getElementById("arrivalTime").innerHTML;
+      getSetArrTime(html); // Static for now should be onclick
       calcTimeDiffrence();
     })
     .catch((e) => console.assert(e));
@@ -212,6 +213,7 @@ function displayStopStationsByTrainId(trainIdent) {
 function calcTimeDiffrence() {
   let departureTime = localStorage.getItem("departureTime") // access departure time from localStorage
   let arrivalTime = localStorage.getItem("arrivalTime") // access arrival time from localStorage
+  console.log(departureTime, arrivalTime) 
 
   departureTime = departureTime.split(":");
   arrivalTime = arrivalTime.split(":");
@@ -229,11 +231,13 @@ function calcTimeDiffrence() {
     minutes;
   var spotifyTime = Number(hours * 3600 + minutes * 60);
 
+  localStorage.setItem("travelTime", timeDiff)
+
   if (spotifyTime < 0) {
     console.log("Pågående tågfel, avbryter sökningen...");
   } else {
-    console.log(spotifyTime);
-    console.log(timeDiff);
+    console.log(`Spotify tid: ${spotifyTime}`)
+    console.log(`Tidsskillnad:  ${timeDiff}`)
 
     return spotifyTime;
   }
