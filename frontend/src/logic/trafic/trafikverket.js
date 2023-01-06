@@ -7,48 +7,16 @@ import "./trafic_preload.js";
 import {ipc} from "../main/functionality.js";
 
 
-function spotifyInit() {
+let depTimeMilli;
+let arrTimeMilli;
+let length;
+
+function spotifyInit(time) {
+    const { hours, minutes } = getHoursMinutsFromTime(time);
+    arrTimeMilli = hours * 60 * 60 * 1000 + minutes * 60 * 1000;
+    length = arrTimeMilli - depTimeMilli;
     ipc.send("spotifyLogin");
 }
-
-function reset() {
-  removeContent();
-  let content = `
-    <div class="flex-container">
-      <div class="trains">
-      <h3>Sök avgång</h3>
-        <div id="searchbar">
-          <div id="station-wraper">
-            <input id="station" type="text" placeholder="Ange stad här..." />
-            <i id="clearBtn" class="fa-solid fa-xmark"></i>
-          </div>
-          <input id="showBtn" type="button" value="Visa"/>
-          <span id="loader" style="margin-left: 10px">Laddar data ...</span>
-        </div>
-
-        <div id="result">
-          <h3>Avgående tåg</h3>
-          <table id="timeTableDeparture">
-            <tr>
-              <th scope="col" style="width:40px;">Tid</th>
-              <th scope="col" style="width:200px;">Till</th>
-              <th scope="col" style="width:80px;"></th>
-              <th scope="col"  style="width:80px;">Spår</th>
-              <!--Train ID-->
-              <th scope="col"  style="width:80px;">ID</th>
-              <th scope="col"  style="width:80px;">Välj tåg</th>
-            </tr>
-          </table>
-        </div>
-      </div>
-    </div>
-  `;
-
-  $("#main_content").append(content);
-}
-
-
-
 
 /**
  * Define some properties...
@@ -111,30 +79,18 @@ function search() {
   });
 }
 
-
-
-
-function getSetDepTime(departureTime) {
-  //var getTime = document.getElementById("departureTime").innerHTML
-  localStorage.setItem("departureTime", departureTime)
-  console.log(`Detta är avgångstid ${departureTime}`)
-}
-
-
 /**
  * Display train announcement.
  */
 function displayTrainAnnouncement(announcement) {
   announcement.forEach((item) => {
-    const { hours, minutes } = getHoursMinutsFromTime(
-      item.AdvertisedTimeAtLocation
-    );
+    const { hours, minutes } = getHoursMinutsFromTime( item.AdvertisedTimeAtLocation );
     let depTime = hours + ":" + minutes;
     let toList = getStationNames(item.ToLocation);
 
     let owner = "";
     if (item.InformationOwner != null) owner = item.InformationOwner;
-    
+
     jQuery("#timeTableDeparture tr:last").after(`<tr>
                 <td>${depTime}</td>
                 <td>${toList.join(", ")}</td>
@@ -144,27 +100,15 @@ function displayTrainAnnouncement(announcement) {
                 <td><button 
                 class="basic_button" 
                 data-owner=${owner} 
-                data-dep-time=${depTime} 
+                data-dep-hour=${hours} 
+                data-dep-minute=${minutes} 
                 data-train-id=${item.AdvertisedTrainIdent} 
                 type='button'
-                onclick="displayStopStationsByTrainId(${
-                  item.AdvertisedTrainIdent
-                })">Välj resa</button></td>
+                onclick="displayStopStationsByTrainId(${item.AdvertisedTrainIdent})">Välj resa</button></td>
             </tr>"
         `);
-         // Static for now should be onclick
   });
 }
-
-
-
-
-function getSetArrTime(arrivalTime) {
-  //var getTime = document.getElementById("arrivalTime").innerHTML
-  localStorage.setItem("arrivalTime", arrivalTime)
-  console.log(`Detta är ankomsttid ${arrivalTime}`)
-}
-
 
 /**
  * Display stop stations by choosen train.
@@ -172,37 +116,29 @@ function getSetArrTime(arrivalTime) {
  */
 function displayStopStationsByTrainId(trainIdent) {
   let train = document.querySelector(`[data-train-id="${trainIdent}"]`);
-  let arrTime = train.dataset["depTime"];
+  let hours = train.dataset["depHour"];
+  let minutes = train.dataset["depMinute"];
   let trainId = train.dataset["trainId"];
   let owner = train.dataset["owner"];
-  console.log(arrTime, trainId, owner);
-  // getSetDepTime(depTime);
-  // Sätt kakor som hämtas av nästa sida.
-  // window.localStorage.setItem("depTime", depTime);
-  // window.localStorage.setItem("trainId", trainId);
-  // window.localStorage.setItem("owner", owner);
-
-  // ipc.send("traficStops");
+  depTimeMilli = hours * 60 * 60 * 1000 + minutes * 60 * 1000;
 
   removeContent("main_content");
 
   getAllStopsByTrainId(trainIdent)
     .then((result) => {
       result.forEach((item) => {
-        const { hours, minutes } = getHoursMinutsFromTime(
-          item.AdvertisedTimeAtLocation
-        );
+        const { hours, minutes } = getHoursMinutsFromTime( item.AdvertisedTimeAtLocation );
+
         let arrTime = hours + ":" + minutes;
         const stationName = getStationByName(item.LocationSignature);
 
         jQuery("#timeTableDeparture tr:last").after(`<tr>
                     <td id='arrivalTime'>${arrTime}</td>
-                    <td> <button class='basic_button' type='button' onclick="spotifyInit()">${stationName}</button></td>
+                    <td> <button class='basic_button' type='button' onclick="spotifyInit('${item.AdvertisedTimeAtLocation}')">${stationName}</button></td>
                 </tr>"
             `);
       });
-      let html = document.getElementById("arrivalTime").innerHTML;
-      getSetArrTime(html); // Static for now should be onclick
+
       calcTimeDiffrence();
     })
     .catch((e) => console.assert(e));
@@ -212,10 +148,6 @@ function displayStopStationsByTrainId(trainIdent) {
 
 // Change to variables for departure and arrival time
 function calcTimeDiffrence() {
-  let departureTime = localStorage.getItem("departureTime") // access departure time from localStorage
-  let arrivalTime = localStorage.getItem("arrivalTime") // access arrival time from localStorage
-  console.log(departureTime, arrivalTime) 
-
   departureTime = departureTime.split(":");
   arrivalTime = arrivalTime.split(":");
   var startDate = new Date(0, 0, 0, departureTime[0], departureTime[1], 0);
@@ -230,19 +162,15 @@ function calcTimeDiffrence() {
     ":" +
     (minutes < 9 ? "0" : "") +
     minutes;
-  var spotifyTime = Number(hours * 3600000 + minutes * 60000);
-
-
-  localStorage.setItem("travelTime", timeDiff)
-  localStorage.setItem("spotifyTime", spotifyTime)
-
+  var spotifyTime = Number(hours * 3600 + minutes * 60);
 
   if (spotifyTime < 0) {
     console.log("Pågående tågfel, avbryter sökningen...");
   } else {
-    console.log(`Spotify tid: ${spotifyTime}`)
-    console.log(`Tidsskillnad:  ${timeDiff}`)
+    console.log(spotifyTime);
+    console.log(timeDiff);
 
+    return spotifyTime;
   }
 }
 
