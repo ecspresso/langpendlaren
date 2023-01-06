@@ -26,8 +26,10 @@ public class Authorize {
     }
 
     public AuthorizationCodeCredentials getAccessToken(String code) throws IOException, ParseException, SpotifyWebApiException {
-        AuthorizationCodeRequest authorizationCodeRequest = spotifyApiWrapper.authorizationCode(code).build(); // Invalid redirect URI
-        return authorizationCodeRequest.execute();
+            AuthorizationCodeRequest authorizationCodeRequest = spotifyApiWrapper.authorizationCode(code).build(); // Invalid redirect URI
+
+            return authorizationCodeRequest.execute();
+
     }
 
     public AuthorizationCodeCredentials refreshToken() throws IOException, ParseException, SpotifyWebApiException {
