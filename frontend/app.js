@@ -50,6 +50,14 @@ ipcMain.on("spotifyLogin", () => {
       });
     });
 
+    authWindow.webContents.on('will-redirect', function (event, newUrl) {
+      authWindow.loadURL(newUrl).then(() => {
+        let code = new URL(newUrl).searchParams.get("code");
+        mainWindow.webContents.send("spotifyReady", code);
+        authWindow.close();
+      });
+    });
+
     authWindow.on('closed', function() { authWindow = null; });
 
     authWindow.loadURL(authUrl);
