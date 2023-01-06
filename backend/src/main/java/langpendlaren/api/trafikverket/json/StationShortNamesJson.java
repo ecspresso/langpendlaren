@@ -1,15 +1,13 @@
 package langpendlaren.api.trafikverket.json;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.HashMap;
 import java.util.List;
 
-public class StationShortNames {
+public class StationShortNamesJson {
     @JsonProperty("RESPONSE")
     private Response response;
-
-    private final HashMap<String, String> map = new HashMap<>();
 
     public Response getResponse() {
         return response;
@@ -17,15 +15,6 @@ public class StationShortNames {
 
     public void setResponse(Response response) {
         this.response = response;
-
-        List<Station> stations = this.response.trainStation.get(0).stations;
-        for(Station station : stations) {
-            map.put(station.advertisedLocationName, station.locationSignature);
-        }
-    }
-
-    public String getLocationSignature(String AdvertisedLocationName) {
-        return map.get(AdvertisedLocationName);
     }
 
     public static class Response {
@@ -54,6 +43,7 @@ public class StationShortNames {
         }
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     private static class Station {
         @JsonProperty("AdvertisedLocationName")
         private String advertisedLocationName;
