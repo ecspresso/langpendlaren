@@ -4,9 +4,12 @@ import { getAllStopsByTrainId } from "./trafic_events.js";
 import { getStopsTemplate } from "./trafic_templates.js";
 import { removeContent } from "../main/functionality.js";
 import "./trafic_preload.js";
+import {ipc} from "../main/functionality.js";
 
 
-
+function spotifyInit() {
+    ipc.send("spotifyLogin");
+}
 
 function reset() {
   removeContent();
@@ -193,7 +196,7 @@ function displayStopStationsByTrainId(trainIdent) {
 
         jQuery("#timeTableDeparture tr:last").after(`<tr>
                     <td id='arrivalTime'>${arrTime}</td>
-                    <td> <button class='basic_button' type='button' onclick="removeContent('main_content')">${stationName}</button></td>
+                    <td> <button class='basic_button' type='button' onclick="spotifyInit()">${stationName}</button></td>
                 </tr>"
             `);
       });
@@ -246,3 +249,4 @@ preDefination();
 window.displayStopStationsByTrainId = displayStopStationsByTrainId;
 window.search = search;
 window.removeContent = removeContent;
+window.spotifyInit = spotifyInit;

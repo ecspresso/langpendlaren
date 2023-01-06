@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const fetch = require("electron-fetch").default;
 let mainWindow;
+let authWindow;
 
 app.commandLine.appendSwitch("trace-warnings"); // Visa felmeddelanden.
 function createMainWindow() {
@@ -15,32 +16,52 @@ function createMainWindow() {
   });
 
   mainWindow.loadFile("./src/view/main.html").then(() => {
-    mainWindow.maximize();
+    //mainWindow.maximize();
     mainWindow.show();
   });
 }
 
-function afterSpotifyLogin(newUrl) {
-  fetch(newUrl)
-    .then(() => {
-      alert("ANROPA http://localhost/spotify/authenticated?code=...");
-      mainWindow.loadFile("./src/view/cpspotify/playlist.html");
-    })
-    .catch(mainWindow.loadFile("./src/view/error.html"));
-}
-
 // Hantera inloggning mot Spotify.
 // Skickar inloggningsfråga till vår server som skickar oss vidare till Spotify, och sedan tillbaka igen.
-ipcMain.on("spotifyLogin", (event, arg) => {
+ipcMain.on("spotifyLogin", () => {
+
   fetch("http://localhost/spotify/login")
     .then((res) => res.json())
-    .then((json) => {
-      mainWindow.loadURL(json);
+    .then((authUrl) => {
+      //https://stackoverflow.com/questions/37546656/handling-oauth2-redirect-from-electron-or-other-desktop-platforms
+      authWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        show: false,
+        'node-integration': false,
+        'web-security': false
+      });
+
+      authWindow.webContents.on('will-redirect', function (event, newUrl) {
+          authWindow.loadURL(newUrl).then(() => {
+            authWindow.close();
+            mainWindow.webContents.send("spotifyReady",  new URL(newUrl).searchParams.get("code"));
+          })
+          // More complex code to handle tokens goes here
+      });
+
+      authWindow.on('closed', function() {
+          authWindow = null;
+      });
+
+      authWindow.loadURL(authUrl);
+      authWindow.show();
     });
 });
 
 ipcMain.on("traficStops", (event) => {
   mainWindow.loadFile("./src/view/cptrafic/stops.html");
+});
+
+ipcMain.on("reset", () => {
+    if(authWindow != null) {
+        authWindow.close()
+    }
 });
 
 app.whenReady().then(() => {

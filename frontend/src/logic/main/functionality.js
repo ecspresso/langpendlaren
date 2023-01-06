@@ -1,4 +1,6 @@
 const ipc = window.require("electron").ipcRenderer;
+const ipcRenderer = require("electron").ipcRenderer;
+
 export { ipc };
 
 // Basic functions
@@ -24,6 +26,7 @@ const setUpView = () => {
 const resetButton = document.getElementById("reset_button");
 resetButton.addEventListener('click', () => {
   window.location.reload();
+  ipc.send("reset");
 });
 
 const clearSearchInput = (searchInput) => {
@@ -43,5 +46,28 @@ function spotifyLogin() {
 function removeContent(elementId) {
   document.getElementById(elementId).innerHTML = "";
 }
+
+ipcRenderer.on('spotifyReady', function(event, code) {
+  alert("Denna kod ska till egen fil?");
+  console.log("Spotify redo! " + code);
+  removeContent("main_content");
+
+  let content =
+      `<h2>Generera spellista</h2>
+      <form action="do_something">
+        <label for="genre">Välj genre:</label>
+        <select name="genres" id="genres">
+          <option value="pop">Pop</option>
+          <option value="rock">Rock</option>
+          <option value="julmusik">Julmusik</option>
+          <option value="hiphop">Hip hop</option>
+          <option value="jazz">Jazz</option>
+        </select>
+
+        <input type="submit" value="Skicka" />
+      </form>`
+
+  $("#main_content").append(content);
+});
 
 export { removeContent }
