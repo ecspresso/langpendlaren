@@ -24,7 +24,7 @@ function createMainWindow() {
 // Hantera inloggning mot Spotify.
 // Skickar inloggningsfråga till vår server som skickar oss vidare till Spotify, och sedan tillbaka igen.
 ipcMain.on("spotifyLogin", () => {
-
+  console.log("spotify login")
   fetch("http://localhost/spotify/login")
     .then((res) => res.json())
     .then((authUrl) => {

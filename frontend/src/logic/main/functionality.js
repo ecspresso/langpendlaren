@@ -1,151 +1,58 @@
 const ipc = window.require("electron").ipcRenderer;
 const ipcRenderer = require("electron").ipcRenderer;
+import {millisecondsToHoursAndMinutes, clearHTMLElementByElementId} from "../../util/util.js";
+import { getAvailableGenre, getUserProfile } from "../spotify/spotify_events.js";
+import {savePlayList, newPlaylist} from "../spotify/spotify_functionality.js"
+import { getGenreTemplate } from "../spotify/spotify_templates.js";
 
-export { ipc };
-
-// Basic functions, förbereder electron och olika knapparna
-const setUpView = () => {
-  const clearBtn = document.getElementById("clearBtn");
-  const searchInput = document.getElementById("station");
-  const timeTable = document.getElementById("timeTableDeparture");
-
-  searchInput.onmouseout = () => {
-    const value = searchInput.value;
-    if (value === "") {
-      clearBtn.setAttribute("disabled", "");
-    }
-    clearBtn.disabled = false;
-  };
-
-  clearBtn.addEventListener("click", () => {
-    clearSearchInput(searchInput);
-  });
-};
-
-//Återställer tillbaka till början genom att klicka på basic_button reset
-const resetButton = document.getElementById("reset_button");
-resetButton.addEventListener('click', () => {
-  window.location.reload();
-  ipc.send("reset");
+/**
+ * Körs när appen renderat färdigt.
+ */
+ $( document ).ready(() => {
+  handleTraficClickEvents();
 });
 
-const clearSearchInput = (searchInput) => {
-  searchInput.value = "";
-  clearBtn.disabled;
-  timeTable.innerH;
-};
-const changeTheView = () => {};
-const resetSetting = () => {};
-
-setUpView();
-
-//Hanterar ruta för spotify
-function spotifyLogin() {
-  ipc.send("spotifyLogin");
-}
-
-//Tar bort content som inte behövs längre när användaren går vidare
-function removeContent(elementId) {
-  document.getElementById(elementId).innerHTML = "";
-}
-
-//Genererar sidan där användaren väljer genre
-ipcRenderer.on('spotifyReady', function(event, code) {
-  removeContent("main_content");
-
-
-  //Funktion för att göra tiden läsbar för användaren. Skrivs sedan ut i HTML koden
-  function convertMillisecondsToHoursAndMinutes(milliseconds) {
-    let seconds = milliseconds / 1000;
-    let minutes = seconds / 60;
-    let hours = Math.floor(minutes / 60);
-    minutes = Math.floor(minutes % 60);
-    if (hours < 10) {
-      hours = "0" + hours;
-    }
-    if (minutes < 10) {
-      minutes = "0" + minutes;
-    }
-    return hours + ":" + minutes;
-  }
+/**
+ * Körs när spotify sida renderat färdigt.
+ */
+ipcRenderer.on("spotifyReady", function (event, code) {
+  // Rensa upp innehåll by id
+  clearHTMLElementByElementId("main_content");
   
-  let spotifyTime = localStorage.getItem("spotifyTime");
-  let hoursAndMinutes = convertMillisecondsToHoursAndMinutes(spotifyTime);
-  
-  //Skriver ut HTML kod för att välja vilken genre man önskar
+  const travelTime = millisecondsToHoursAndMinutes(localStorage.getItem("spotifyTime"));
+  const template = getGenreTemplate(travelTime);
+  const userProfile = getUserProfile();
+  //const genre = getAvailableGenre();
+  // Lägg till ny innehåll
+  $("#main_content").append(template);
+  handleSpotifyClickEvents();
+});
 
-  let content =
-      `<div class='center_me'>
-      <h2 class>Generera spellista</h2>
-      <h4>Din reselängd - ${hoursAndMinutes}H</h2>
-        <label for="genre">Välj genre:</label>
-        <select name="genres" id="genres">
-          <option value="pop">Pop</option>
-          <option value="rock">Rock</option>
-          <option value="julmusik">Julmusik</option>
-          <option value="hiphop">Hip hop</option>
-          <option value="jazz">Jazz</option>
-        </select>
-
-        <input type="submit" class="basic_button" id="send_genre_button" value="Skicka"/>
-      </div>
-      
-      <h2>Förslag på spellista - visas upp efter användaren skickat</h2>
-
-      <div id="song_suggestions">
-        <table id="timeTableDeparture">
-          <tr>
-            <th>Låt</th>
-            <th>Artist</th>
-          </tr>
-
-          <tr>
-            <td>Sommar och sol</td>
-            <td>Markoolio</td>
-          </tr>
-
-          <tr>
-            <td>Sommar och sol</td>
-            <td>Markoolio</td>
-          </tr>
-
-          <tr>
-            <td>Sommar och sol</td>
-            <td>Markoolio</td>
-          </tr>
-        </table>
-      </div>
-
-      <div id="flex_buttons">
-        <button type="button" id="green">Spara</button>
-        <button type="button" id="red">Generera ny lista</button>
-      </div>
-      `
-
-  $("#main_content").append(content);
-
-
-  // När användaren har klickat på knappen hämta från API:et låtar som är lika långa som resan från den valda genren
-  function getPlaylistFromGenre() {
-    console.log("getPlaylistFromGenre fungerar!") 
-
-  }
-  document.getElementById("send_genre_button").addEventListener("click", getPlaylistFromGenre)
-
-
+/**
+ * Hanterar spotify Clikc events.
+ */
+ function handleSpotifyClickEvents(){
   // När användaren har klickat på knappen läggs nya låtar till i spellistan på användarens konto
-  function savePlaylist() {
-    console.log("SavePlaylist fungerar!") 
-  }
-  document.getElementById("green").addEventListener("click", savePlaylist)
-
-
+  document.getElementById("savePlayList").addEventListener("click", savePlayList());
   // När användaren har klickat på knappen gör en ny API-hämtning med nya låtar (ett could krav enligt)
-  function newPlaylist() {
-    console.log("newPlaylist fungerar!")     
-  }
-  document.getElementById("red").addEventListener("click", newPlaylist)
+  document.getElementById("generatePlaylist").addEventListener("click", newPlaylist());
+}
 
-});
+/**
+* Hanterar spotify Clikc events.
+*/
+function handleTraficClickEvents(){
+  // Rensa upp sökfältet.
+  document.getElementById("clearBtn").addEventListener("click", () => {
+    document.getElementById("station").value = "";
+  }); 
+  //Återställer tillbaka till början genom att klicka på basic_button reset
+  document.getElementById("reset_button").addEventListener("click", () => {
+    window.location.reload();
+    ipc.send("reset");
+  });
+}
 
-export { removeContent }
+
+// Exports
+export { ipc };

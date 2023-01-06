@@ -1,8 +1,7 @@
-import { getHoursMinutsFromTime } from "../../util/util.js";
+import { getHoursMinutsFromTime, clearHTMLElementByElementId } from "../../util/util.js";
 import { getStationNames, getStationByName } from "./trafic_preload.js";
 import { getAllStopsByTrainId } from "./trafic_events.js";
 import { getStopsTemplate } from "./trafic_templates.js";
-import { removeContent } from "../main/functionality.js";
 import "./trafic_preload.js";
 import {ipc} from "../main/functionality.js";
 
@@ -147,7 +146,7 @@ function displayStopStationsByTrainId(trainIdent) {
   let owner = train.dataset["owner"];
   depTimeMilli = hours * 60 * 60 * 1000 + minutes * 60 * 1000;
 
-  removeContent("main_content");
+  clearHTMLElementByElementId("main_content");
 
   getAllStopsByTrainId(trainIdent)
     .then((result) => {
@@ -179,5 +178,4 @@ preDefination();
 // Export globaly.
 window.displayStopStationsByTrainId = displayStopStationsByTrainId;
 window.search = search;
-window.removeContent = removeContent;
 window.spotifyInit = spotifyInit;

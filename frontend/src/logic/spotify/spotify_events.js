@@ -10,4 +10,15 @@ async function getAvailableGenre(){
       return data;
 }
 
-export { getAvailableGenre };
+async function getUserProfile(){
+    const data = await fetch(
+        `http://localhost/spotify/user/profile`,
+        { method: "GET" }
+      )
+        .then((res) => res.json())
+        .catch((e) => console.assert(e));
+        console.log("userId: ", data);
+      return data;
+}
+
+export { getAvailableGenre, getUserProfile };
