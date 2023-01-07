@@ -3,10 +3,12 @@ package langpendlaren.api.trafikverket.json.departures;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
- * 
+ *
  */
 public class DeparturesJson {
     @JsonProperty("RESPONSE")
@@ -50,7 +52,7 @@ public class DeparturesJson {
     @JsonIgnoreProperties(ignoreUnknown = true)
     static class Announcement {
         @JsonProperty("AdvertisedTimeAtLocation")
-        private String advertisedTimeAtLocation; //: "2023-01-06T22:47:00.000+01:00",
+        private LocalDateTime advertisedTimeAtLocation; //: "2023-01-06T22:47:00.000+01:00",
         @JsonProperty("AdvertisedTrainIdent")
         private int advertisedTrainIdent; //: "3587",
         @JsonProperty("FromLocation")
@@ -62,11 +64,15 @@ public class DeparturesJson {
         @JsonProperty("TrackAtLocation")
         private String trackAtLocation; //": "3"
 
-        public String getAdvertisedTimeAtLocation() {
+        public LocalDateTime getAdvertisedTimeAtLocation() {
             return advertisedTimeAtLocation;
         }
 
         public void setAdvertisedTimeAtLocation(String advertisedTimeAtLocation) {
+            this.advertisedTimeAtLocation = LocalDateTime.parse(advertisedTimeAtLocation, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        }
+
+        public void setAdvertisedTimeAtLocation(LocalDateTime advertisedTimeAtLocation) {
             this.advertisedTimeAtLocation = advertisedTimeAtLocation;
         }
 

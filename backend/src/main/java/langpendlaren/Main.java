@@ -2,10 +2,8 @@ package langpendlaren;
 
 import langpendlaren.webserver.WebServer;
 
-import java.io.IOException;
-
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         WebServer webServer = new WebServer();
         webServer.run();
     }

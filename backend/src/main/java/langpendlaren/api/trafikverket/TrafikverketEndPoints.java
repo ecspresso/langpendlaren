@@ -3,18 +3,19 @@ package langpendlaren.api.trafikverket;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
-import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import langpendlaren.api.http.ErrorMessage;
 import langpendlaren.api.trafikverket.json.departures.Departures;
 import langpendlaren.api.trafikverket.json.departures.DeparturesJson;
 import langpendlaren.api.trafikverket.json.stationshortnames.StationShortNames;
 import langpendlaren.api.trafikverket.json.stationshortnames.StationShortNamesJson;
+import langpendlaren.api.trafikverket.json.trains.stops.Stops;
+import langpendlaren.api.trafikverket.json.trains.stops.StopsJson;
 
 import java.io.IOException;
 
 public class TrafikverketEndPoints {
-    private Javalin javalin;
+    private final Javalin javalin;
     private final TrafikverketAPI trafikverketAPI;
     private final ObjectMapper mapper = new ObjectMapper();
 
@@ -34,12 +35,14 @@ public class TrafikverketEndPoints {
                 shortNames.addStations(shortNamesJson);
                 context.json(shortNames);
             } catch(JsonProcessingException e) {
+                e.printStackTrace();
                 ErrorMessage errorMessage = new ErrorMessage();
                 errorMessage.setReason("JsonProcessingException");
                 errorMessage.setStacktrace(e.getMessage());
                 context.status(HttpStatus.INTERNAL_SERVER_ERROR);
                 context.json(errorMessage);
             } catch(IOException e) {
+                e.printStackTrace();
                 ErrorMessage errorMessage = new ErrorMessage();
                 errorMessage.setReason("IOException");
                 errorMessage.setStacktrace(e.getMessage());
@@ -57,12 +60,14 @@ public class TrafikverketEndPoints {
                 departures.addAnnouncements(departuresJson);
                 context.json(departures);
             } catch(JsonProcessingException e) {
+                e.printStackTrace();
                 ErrorMessage errorMessage = new ErrorMessage();
                 errorMessage.setReason("JsonProcessingException");
                 errorMessage.setStacktrace(e.getMessage());
                 context.status(HttpStatus.INTERNAL_SERVER_ERROR);
                 context.json(errorMessage);
             } catch(IOException e) {
+                e.printStackTrace();
                 ErrorMessage errorMessage = new ErrorMessage();
                 errorMessage.setReason("IOException");
                 errorMessage.setStacktrace(e.getMessage());
@@ -72,6 +77,28 @@ public class TrafikverketEndPoints {
         });
 
         // Hämta ut vilka stationer som ett tåg stannar på
-        javalin.get("/trafikverket/trains/stops/{trainIdent}", context -> context.json(trafikverketAPI.getTrainStopStation(context.pathParam("trainIdent"))));
+        javalin.get("/trafikverket/trains/stops/{trainIdent}", context -> {
+            try {
+                String json = trafikverketAPI.getTrainStopStation(context.pathParam("trainIdent"));
+                StopsJson stopsJson = mapper.readValue(json, StopsJson.class);
+                Stops stops = new Stops();
+                stops.addAnnouncements(stopsJson);
+                context.json(stops);
+            } catch(JsonProcessingException e) {
+                e.printStackTrace();
+                ErrorMessage errorMessage = new ErrorMessage();
+                errorMessage.setReason("JsonProcessingException");
+                errorMessage.setStacktrace(e.getMessage());
+                context.status(HttpStatus.INTERNAL_SERVER_ERROR);
+                context.json(errorMessage);
+            } catch(IOException e) {
+                e.printStackTrace();
+                ErrorMessage errorMessage = new ErrorMessage();
+                errorMessage.setReason("IOException");
+                errorMessage.setStacktrace(e.getMessage());
+                context.status(HttpStatus.INTERNAL_SERVER_ERROR);
+                context.json(errorMessage);
+            }
+        });
     }
 }

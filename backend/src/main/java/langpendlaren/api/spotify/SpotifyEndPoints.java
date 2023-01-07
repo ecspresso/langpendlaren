@@ -6,11 +6,14 @@ import io.javalin.http.Context;
 import io.javalin.http.Cookie;
 import io.javalin.http.Handler;
 import io.javalin.http.HttpStatus;
+import langpendlaren.api.json.loginpage.LoginPage;
+import langpendlaren.api.json.tokens.Tokens;
 import org.apache.hc.core5.http.ParseException;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 
 public class SpotifyEndPoints {
@@ -35,7 +38,12 @@ public class SpotifyEndPoints {
         /*
          * Skickar Spotifys auth url.
          */
-        javalin.get("/spotify/login", context -> context.json(spotifyAPI.getLoginPage()));
+        javalin.get("/spotify/login", context -> {
+            URI uri = spotifyAPI.getLoginPage();
+            LoginPage json = new LoginPage();
+            json.setUri(uri);
+            context.json(json);
+        });
 
         /*
         * "Skickar" access token och refresh token som kakor till användaren.
@@ -46,8 +54,8 @@ public class SpotifyEndPoints {
 
             try {
                 AuthorizationCodeCredentials tokens = spotifyAPI.auth(code);
-                context.cookie("accessToken", tokens.getAccessToken(), tokens.getExpiresIn());
-                context.cookie("refreshToken", tokens.getRefreshToken());
+                Tokens tokensJson = new Tokens(tokens.getAccessToken(), tokens.getExpiresIn(), tokens.getRefreshToken());
+                context.json(tokensJson);
             } catch (IOException e) {
                 context.status(HttpStatus.INTERNAL_SERVER_ERROR);
                 context.json("{'error': 'IOException'}");
@@ -68,7 +76,10 @@ public class SpotifyEndPoints {
         });
 
         // -- User
-        javalin.get("/spotify/user/profile", context -> context.json(spotifyAPI.getUserId())); //FIXME! a possible way can be to return all profile
+        javalin.get("/spotify/user/profile/{accessToken}", context -> {
+            String accessToken = context.pathParam("accessToken");
+            context.json(spotifyAPI.getUserId(accessToken));
+        }); //FIXME! a possible way can be to return all profile
 
         // -- Playlist
         javalin.post("/spotify/playlist/create/{name}/{des}", context -> {
