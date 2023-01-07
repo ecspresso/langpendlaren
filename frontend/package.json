@@ -1,5 +1,6 @@
 {
   "name": "frontend",
+  "productName": "frontend",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -11,7 +12,8 @@
   "license": "ISC",
   "devDependencies": {
     "electron": "^22.0.0",
-    "pre-commit": "^1.2.2"
+    "pre-commit": "^1.2.2",
+    "electron-packager": "^8.1.0"
   },
   "dependencies": {
     "electron-fetch": "^1.9.1",
