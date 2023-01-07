@@ -29,7 +29,7 @@ function createMainWindow() {
 ipcMain.on("spotifyLogin", () => {
   fetch("http://localhost/spotify/login")
   .then((res) => res.json())
-  .then((authUrl) => {
+  .then((data) => {
     //https://stackoverflow.com/questions/37546656/handling-oauth2-redirect-from-electron-or-other-desktop-platforms
     authWindow = new BrowserWindow({
       width: 800,
@@ -49,7 +49,7 @@ ipcMain.on("spotifyLogin", () => {
 
 
     authWindow.on('closed', function() { authWindow = null; });
-    authWindow.loadURL(authUrl);
+    authWindow.loadURL(data.spotify_auth_uri);
     authWindow.show();
   });
 });

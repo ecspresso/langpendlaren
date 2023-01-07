@@ -6,12 +6,14 @@ import io.javalin.http.Context;
 import io.javalin.http.Cookie;
 import io.javalin.http.Handler;
 import io.javalin.http.HttpStatus;
+import langpendlaren.api.json.loginpage.LoginPage;
 import langpendlaren.api.json.tokens.Tokens;
 import org.apache.hc.core5.http.ParseException;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 
 public class SpotifyEndPoints {
@@ -36,7 +38,12 @@ public class SpotifyEndPoints {
         /*
          * Skickar Spotifys auth url.
          */
-        javalin.get("/spotify/login", context -> context.json(spotifyAPI.getLoginPage()));
+        javalin.get("/spotify/login", context -> {
+            URI uri = spotifyAPI.getLoginPage();
+            LoginPage json = new LoginPage();
+            json.setUri(uri);
+            context.json(json);
+        });
 
         /*
         * "Skickar" access token och refresh token som kakor till användaren.
