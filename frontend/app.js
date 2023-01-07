@@ -39,6 +39,9 @@ ipcMain.on("spotifyLogin", () => {
       'web-security': false
     });
 
+    authWindow.loadURL(authUrl);
+    authWindow.show();
+    
     authWindow.webContents.on('will-navigate', function (event, newUrl) {
       authWindow.loadURL(newUrl).then(() => {
         // Kontrollera att den URL vi ska till inte är Spotifys domän.
@@ -60,8 +63,7 @@ ipcMain.on("spotifyLogin", () => {
 
     authWindow.on('closed', function() { authWindow = null; });
 
-    authWindow.loadURL(authUrl);
-    authWindow.show();
+  
   });
 });
 

@@ -22,6 +22,7 @@ ipcRenderer.on("spotifyReady", function (event, code) {
   const travelTime = millisecondsToHoursAndMinutes(localStorage.getItem("spotifyTime"));
   const template = getGenreTemplate(travelTime);
   const userProfile = getUserProfile();
+  
   //const genre = getAvailableGenre();
   // Lägg till ny innehåll
   $("#main_content").append(template);

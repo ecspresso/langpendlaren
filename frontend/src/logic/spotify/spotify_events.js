@@ -16,8 +16,8 @@ async function getUserProfile(){
         { method: "GET" }
       )
         .then((res) => res.json())
+        .then(userId => console.log(userId))
         .catch((e) => console.assert(e));
-        console.log("userId: ", data);
       return data;
 }
 

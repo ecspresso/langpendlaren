@@ -102,6 +102,7 @@ public class SpotifyAPI {
 
         GetCurrentUsersProfileRequest userProfile = spotifyApiWrapper.getCurrentUsersProfile().build();
         try {
+            System.out.println("accessToken: "+ spotifyApiWrapper.getAccessToken());
             userId = userProfile.execute().getId();
         } catch(IOException | SpotifyWebApiException | ParseException e) {
             e.printStackTrace();
