@@ -6,8 +6,7 @@ async function getAllStopsByTrainId(trainIdent) {
   )
     .then((res) => res.json())
     .catch((e) => console.assert(e));
-  const trainAnnouncements = data.RESPONSE.RESULT[0].TrainAnnouncement;
-  return trainAnnouncements;
+  return data.stationStops;
 }
 
 // Emile exprement with localStorage

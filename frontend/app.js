@@ -19,7 +19,7 @@ function createMainWindow() {
   });
 
   mainWindow.loadFile("./src/view/main.html").then(() => {
-    //mainWindow.maximize();
+    mainWindow.maximize();
     mainWindow.show();
   });
 }
@@ -34,36 +34,36 @@ ipcMain.on("spotifyLogin", () => {
     authWindow = new BrowserWindow({
       width: 800,
       height: 600,
-      show: false,
-      'node-integration': false,
-      'web-security': false
+      show: false
     });
 
-    authWindow.webContents.on('will-navigate', function (event, newUrl) {
-      authWindow.loadURL(newUrl).then(() => {
-        // Kontrollera att den URL vi ska till inte är Spotifys domän.
-        if(!new URL(newUrl).host.match("spotify\.com$")) {
-          let code = new URL(newUrl).searchParams.get("code");
-          mainWindow.webContents.send("spotifyReady", code);
-          authWindow.close();
-        }
-      });
+    authWindow.webContents.on("will-navigate", function (event, url) {
+      event.preventDefault();
+      handleSpotifyAuth(authWindow, url);
     });
 
-    authWindow.webContents.on('will-redirect', function (event, newUrl) {
-      authWindow.loadURL(newUrl).then(() => {
-        let code = new URL(newUrl).searchParams.get("code");
-        mainWindow.webContents.send("spotifyReady", code);
-        authWindow.close();
-      });
+    authWindow.webContents.on("will-redirect", function (event, url) {
+      event.preventDefault();
+      handleSpotifyAuth(authWindow, url);
     });
+
 
     authWindow.on('closed', function() { authWindow = null; });
-
     authWindow.loadURL(authUrl);
     authWindow.show();
   });
 });
+
+function handleSpotifyAuth(authWindow, url) {
+  let realUrl = new URL(url);
+  if(realUrl.host.match("spotify\.com$")) {
+    authWindow.loadURL(url);
+  } else {
+    let code = realUrl.searchParams.get("code");
+    mainWindow.webContents.send("spotifyReady", code);
+    authWindow.close();
+  }
+}
 
 ipcMain.on("traficStops", (event) => {
   mainWindow.loadFile("./src/view/cptrafic/stops.html");

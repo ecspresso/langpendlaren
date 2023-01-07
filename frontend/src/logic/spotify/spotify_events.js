@@ -21,4 +21,15 @@ async function getUserProfile(){
       return data;
 }
 
-export { getAvailableGenre, getUserProfile };
+async function getTokens(code){
+    const data = await fetch(
+        `http://localhost/spotify/authenticated?code=${code}`,
+        { method: "GET" }
+      )
+        .then((res) => res.json())
+        .catch((e) => console.assert(e));
+        console.log(data);
+      return data;
+}
+
+export { getAvailableGenre, getUserProfile, getTokens };

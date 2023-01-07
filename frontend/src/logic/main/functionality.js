@@ -1,7 +1,7 @@
 const ipc = window.require("electron").ipcRenderer;
 const ipcRenderer = require("electron").ipcRenderer;
 import {millisecondsToHoursAndMinutes, clearHTMLElementByElementId} from "../../util/util.js";
-import { getAvailableGenre, getUserProfile } from "../spotify/spotify_events.js";
+import { getAvailableGenre, getUserProfile, getTokens } from "../spotify/spotify_events.js";
 import {savePlayList, newPlaylist} from "../spotify/spotify_functionality.js"
 import { getGenreTemplate } from "../spotify/spotify_templates.js";
 
@@ -18,10 +18,12 @@ import { getGenreTemplate } from "../spotify/spotify_templates.js";
 ipcRenderer.on("spotifyReady", function (event, code) {
   // Rensa upp innehåll by id
   clearHTMLElementByElementId("main_content");
-  
+
+  getTokens(code);
+
   const travelTime = millisecondsToHoursAndMinutes(localStorage.getItem("spotifyTime"));
   const template = getGenreTemplate(travelTime);
-  const userProfile = getUserProfile();
+  const userProfile = getUserProfile(tokens.access_token.value);
   //const genre = getAvailableGenre();
   // Lägg till ny innehåll
   $("#main_content").append(template);

@@ -97,9 +97,10 @@ public class SpotifyAPI {
      * Users id //FIXME! return profile.
      * @return user id
      */
-    public String getUserId() {
+    public String getUserId(String accessToken) {
         String userId;
 
+        spotifyApiWrapper.setAccessToken(accessToken);
         GetCurrentUsersProfileRequest userProfile = spotifyApiWrapper.getCurrentUsersProfile().build();
         try {
             userId = userProfile.execute().getId();
@@ -117,7 +118,7 @@ public class SpotifyAPI {
      */
     public String createPlayList(String accessToken, String name, String dec){
         CreatePlaylistRequest createPlayList;
-        String userId = getUserId();
+        String userId = getUserId(accessToken);
         synchronized(lock) {
             this.spotifyApiWrapper.setAccessToken(accessToken);
             createPlayList = this.spotifyApiWrapper.createPlaylist(userId, name).public_(false).description(dec).build();

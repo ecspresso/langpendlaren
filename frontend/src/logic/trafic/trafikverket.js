@@ -14,7 +14,9 @@ let spotifyTime;
 
 //Hämtar vald avgångstid och ankomstid och kontrollerar att tidskillnaden är ok och konverterar sedan skillnaden till millisekunder
 function spotifyInit(time) {
-    const { hours, minutes } = getHoursMinutsFromTime(time);
+    time = time.split(',');
+    const hours = time[3];
+    const minutes = time[4];
     arrTimeMilli = (hours * 60 * 60 * 1000 + minutes * 60 * 1000);
     spotifyTime = Number((arrTimeMilli - depTimeMilli));
 
@@ -100,7 +102,9 @@ function search() {
 //Den visar alla tåg som avgång från den stationen användaren valt genom att lägger till en tabell med informationen
 function displayTrainAnnouncement(announcement) {
   announcement.forEach((item) => {
-    const { hours, minutes } = getHoursMinutsFromTime( item.advertised_time_at_location );
+    //const { hours, minutes } = getHoursMinutsFromTime( item.advertised_time_at_location );
+    const hours = item.advertised_time_at_location[3];
+    const minutes = item.advertised_time_at_location[4];
     let depTime = hours + ":" + minutes;
     let toList = getStationNames(item.to_location);
 
@@ -148,14 +152,16 @@ function displayStopStationsByTrainId(trainIdent) {
   getAllStopsByTrainId(trainIdent)
     .then((result) => {
       result.forEach((item) => {
-        const { hours, minutes } = getHoursMinutsFromTime( item.AdvertisedTimeAtLocation );
+        //const { hours, minutes } = getHoursMinutsFromTime( item.advertised_time_at_location );
+        const hours = item.advertised_time_at_location[3];
+        const minutes = item.advertised_time_at_location[4];
 
         let arrTime = hours + ":" + minutes;
-        const stationName = getStationByName(item.LocationSignature);
+        const stationName = getStationByName(item.location_signature);
 
         jQuery("#timeTableDeparture tr:last").after(`<tr>
                     <td id='arrivalTime'>${arrTime}</td>
-                    <td> <button class='basic_button' type='button' onclick="spotifyInit('${item.AdvertisedTimeAtLocation}')">${stationName}</button></td>
+                    <td> <button class='basic_button' type='button' onclick="spotifyInit('${item.advertised_time_at_location}')">${stationName}</button></td>
                 </tr>"
             `);
       });

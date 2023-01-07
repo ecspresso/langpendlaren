@@ -1,8 +1,9 @@
 package langpendlaren.api.trafikverket.json.departures;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import langpendlaren.api.trafikverket.json.stationshortnames.StationShortNamesJson;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class Departures {
 
     static class Announcement {
         @JsonProperty("advertised_time_at_location")
-        private String advertisedTimeAtLocation; //: "2023-01-06T22:47:00.000+01:00",
+        private LocalDateTime advertisedTimeAtLocation; //: "2023-01-06T22:47:00.000+01:00",
         @JsonProperty("advertised_train_id")
         private int advertisedTrainIdent; //: "3587",
         @JsonProperty("from_location")
@@ -51,7 +52,16 @@ public class Departures {
          */
         public Announcement() {}
 
-        public Announcement(String advertisedTimeAtLocation, int advertisedTrainIdent, List<String> fromLocation, String informationOwner, List<String> toLocation, String trackAtLocation) {
+        /**
+         * Shorthand constructor to use instead of setters.
+         * @param advertisedTimeAtLocation The value of AdvertisedTimeAtLocation.
+         * @param advertisedTrainIdent The value of AdvertisedTrainIdent.
+         * @param fromLocation The value of FromLocation.
+         * @param informationOwner The value of InformationOwner.
+         * @param toLocation The value of ToLocation.
+         * @param trackAtLocation The value of TrackAtLocation.
+         */
+        public Announcement(LocalDateTime advertisedTimeAtLocation, int advertisedTrainIdent, List<String> fromLocation, String informationOwner, List<String> toLocation, String trackAtLocation) {
             this.advertisedTimeAtLocation = advertisedTimeAtLocation;
             this.advertisedTrainIdent = advertisedTrainIdent;
             this.fromLocation = fromLocation;
@@ -60,11 +70,15 @@ public class Departures {
             this.trackAtLocation = trackAtLocation;
         }
 
-        public String getAdvertisedTimeAtLocation() {
+        public LocalDateTime getAdvertisedTimeAtLocation() {
             return advertisedTimeAtLocation;
         }
 
         public void setAdvertisedTimeAtLocation(String advertisedTimeAtLocation) {
+            this.advertisedTimeAtLocation = LocalDateTime.parse(advertisedTimeAtLocation, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        }
+
+        public void setAdvertisedTimeAtLocation(LocalDateTime advertisedTimeAtLocation) {
             this.advertisedTimeAtLocation = advertisedTimeAtLocation;
         }
 
