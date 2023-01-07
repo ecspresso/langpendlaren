@@ -15,15 +15,17 @@ import { getGenreTemplate } from "../spotify/spotify_templates.js";
 /**
  * Körs när spotify sida renderat färdigt.
  */
-ipcRenderer.on("spotifyReady", function (event, code) {
+ipcRenderer.on("spotifyReady", async function (event, code) {
   // Rensa upp innehåll by id
   clearHTMLElementByElementId("main_content");
 
-  getTokens(code);
-
+  const tokens = [];
+  await getTokens(code).then(token => tokens.push(token.accessToken.value));
   const travelTime = millisecondsToHoursAndMinutes(localStorage.getItem("spotifyTime"));
   const template = getGenreTemplate(travelTime);
-  const userProfile = getUserProfile(tokens.access_token.value);
+
+  const userProfile = getUserProfile(tokens[0]);
+  
   //const genre = getAvailableGenre();
   // Lägg till ny innehåll
   $("#main_content").append(template);

@@ -6,17 +6,15 @@ async function getAvailableGenre(){
       )
         .then((res) => res.json())
         .catch((e) => console.assert(e));
-        console.log(data);
       return data;
 }
 
-async function getUserProfile(){
+async function getUserProfile(accessToken){
     const data = await fetch(
-        `http://localhost/spotify/user/profile`,
+        `http://localhost/spotify/user/profile/${accessToken}`,
         { method: "GET" }
       )
         .then((res) => res.json())
-        .then(userId => console.log(userId))
         .catch((e) => console.assert(e));
       return data;
 }
@@ -28,7 +26,6 @@ async function getTokens(code){
       )
         .then((res) => res.json())
         .catch((e) => console.assert(e));
-        console.log(data);
       return data;
 }
 
