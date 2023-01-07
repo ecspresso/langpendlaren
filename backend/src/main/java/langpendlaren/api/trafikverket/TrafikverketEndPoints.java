@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import io.javalin.http.HttpStatus;
-import langpendlaren.api.http.ErrorMessage;
+import langpendlaren.api.http.json.Error;
 import langpendlaren.api.trafikverket.json.departures.Departures;
 import langpendlaren.api.trafikverket.json.departures.DeparturesJson;
 import langpendlaren.api.trafikverket.json.stationshortnames.StationShortNames;
@@ -36,18 +36,16 @@ public class TrafikverketEndPoints {
                 context.json(shortNames);
             } catch(JsonProcessingException e) {
                 e.printStackTrace();
-                ErrorMessage errorMessage = new ErrorMessage();
-                errorMessage.setReason("JsonProcessingException");
-                errorMessage.setStacktrace(e.getMessage());
+                Error error = new Error();
+                error.setErrorMessage("JsonProcessingException", e.getMessage());
                 context.status(HttpStatus.INTERNAL_SERVER_ERROR);
-                context.json(errorMessage);
+                context.json(error);
             } catch(IOException e) {
                 e.printStackTrace();
-                ErrorMessage errorMessage = new ErrorMessage();
-                errorMessage.setReason("IOException");
-                errorMessage.setStacktrace(e.getMessage());
+                Error error = new Error();
+                error.setErrorMessage("IOException", e.getMessage());
                 context.status(HttpStatus.INTERNAL_SERVER_ERROR);
-                context.json(errorMessage);
+                context.json(error);
             }
         });
 
@@ -61,18 +59,16 @@ public class TrafikverketEndPoints {
                 context.json(departures);
             } catch(JsonProcessingException e) {
                 e.printStackTrace();
-                ErrorMessage errorMessage = new ErrorMessage();
-                errorMessage.setReason("JsonProcessingException");
-                errorMessage.setStacktrace(e.getMessage());
+                Error error = new Error();
+                error.setErrorMessage("JsonProcessingException", e.getMessage());
                 context.status(HttpStatus.INTERNAL_SERVER_ERROR);
-                context.json(errorMessage);
+                context.json(error);
             } catch(IOException e) {
                 e.printStackTrace();
-                ErrorMessage errorMessage = new ErrorMessage();
-                errorMessage.setReason("IOException");
-                errorMessage.setStacktrace(e.getMessage());
+                Error error = new Error();
+                error.setErrorMessage("IOException", e.getMessage());
                 context.status(HttpStatus.INTERNAL_SERVER_ERROR);
-                context.json(errorMessage);
+                context.json(error);
             }
         });
 
@@ -86,18 +82,16 @@ public class TrafikverketEndPoints {
                 context.json(stops);
             } catch(JsonProcessingException e) {
                 e.printStackTrace();
-                ErrorMessage errorMessage = new ErrorMessage();
-                errorMessage.setReason("JsonProcessingException");
-                errorMessage.setStacktrace(e.getMessage());
+                Error error = new Error();
+                error.setErrorMessage("JsonProcessingException", e.getMessage());
                 context.status(HttpStatus.INTERNAL_SERVER_ERROR);
-                context.json(errorMessage);
+                context.json(error);
             } catch(IOException e) {
                 e.printStackTrace();
-                ErrorMessage errorMessage = new ErrorMessage();
-                errorMessage.setReason("IOException");
-                errorMessage.setStacktrace(e.getMessage());
+                Error error = new Error();
+                error.setErrorMessage("IOException", e.getMessage());
                 context.status(HttpStatus.INTERNAL_SERVER_ERROR);
-                context.json(errorMessage);
+                context.json(error);
             }
         });
     }
