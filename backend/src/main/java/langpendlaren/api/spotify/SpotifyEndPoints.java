@@ -65,12 +65,14 @@ public class SpotifyEndPoints {
         /*
         * Hämta en lista av alla genrer seeds.
          */
-        javalin.get("/spotify/genre/seeds", context -> {
+        javalin.get("/spotify/genre/seeds/{accessToken}", context -> {
+            String accessToken = context.pathParam("accessToken");
+            System.out.println("Genre accessToken: " + accessToken);
             try {
-                String[] seeds = spotifyAPI.genreSeeds();
-                Seeds json = new Seeds();
-                json.setSeeds(seeds);
-                context.json(json);
+                String[] seeds = spotifyAPI.genreSeeds(accessToken);
+                //Seeds json = new Seeds();
+                //json.setSeeds(seeds);
+                context.json(seeds);
             } catch(UnauthorizedException e) {
                 ErrorHandler.sendErrorMessage(context, e, "You must login first.", HttpStatus.UNAUTHORIZED);
             }
@@ -80,7 +82,7 @@ public class SpotifyEndPoints {
         javalin.get("/spotify/user/profile/{accessToken}", context -> {
             String accessToken = context.pathParam("accessToken");
             context.json(spotifyAPI.getUserId(accessToken));
-        }); //FIXME! a possible way can be to return all profile
+        });
 
         // -- Playlist
         javalin.post("/spotify/playlist/create/{name}/{des}", context -> {

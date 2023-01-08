@@ -35,15 +35,16 @@ import java.util.Properties;
 
 public class SpotifyAPI {
     // Spotify wrapper
-    private final SpotifyApi spotifyApiWrapper;
+    private SpotifyApi spotifyApiWrapper;
     // Authorize class
     private final Authorize authorize;
     // Lock for synchronize work
     private final Object lock = new Object();
+    private Properties prop;
 
     public SpotifyAPI() throws URISyntaxException {
         // Läs in inställningar från fil.
-        Properties prop = new Properties();
+        prop = new Properties();
         FileReader fileReader;
 
         try {
@@ -54,9 +55,21 @@ public class SpotifyAPI {
             fileReader.close();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
 
+        connectApi(prop);
+        // Klass för att hantera Spotify inloggning.
+        authorize = new Authorize(spotifyApiWrapper);
+    }
 
+    /**
+     * Kopplar till apien
+     * @param prop lokala info
+     * @throws URISyntaxException
+     */
+    private void connectApi(Properties prop) throws URISyntaxException {
         // Hemliga saker för vår app.
         String clientId = prop.getProperty("clientId");
         String clientSecret = prop.getProperty("clientSecret");
@@ -65,11 +78,10 @@ public class SpotifyAPI {
         URI redirectURI = new URI(redirect);
         // Wrapper för Spotifys API
         this.spotifyApiWrapper = new SpotifyApi.Builder().setClientId(clientId).setClientSecret(clientSecret).setRedirectUri(redirectURI).build();
-        // Klass för att hantera Spotify inloggning.
-        authorize = new Authorize(spotifyApiWrapper);
     }
 
-    public String[] genreSeeds() throws IOException, ParseException, SpotifyWebApiException {
+    public String[] genreSeeds(String accessToken) throws IOException, ParseException, SpotifyWebApiException, URISyntaxException {
+        spotifyApiWrapper = new SpotifyApi.Builder().setAccessToken(accessToken).build();
         return spotifyApiWrapper.getAvailableGenreSeeds().build().execute();
     }
 
