@@ -183,7 +183,8 @@ public class SpotifyAPI {
      * Delete a play list by id
      * @param id playlist id
      */
-    public void deletePlayList(String id) {
+    public void deletePlayList(String accessToken, String id) {
+        spotifyApiWrapper.setAccessToken(accessToken);
         // No code provided for deleting a playlist.
     }
 
@@ -193,7 +194,9 @@ public class SpotifyAPI {
      * @param tId track id
      * @return confirmation
      */
-    public String addToPlayList(String pId, String tId) {
+    public String addToPlayList(String accessToken, String pId, String tId) {
+        spotifyApiWrapper.setAccessToken(accessToken);
+
         final String[] uris = new String[]{"spotify:track:01iyCAUm8EvOFqVWYJ3dVX", "spotify:episode:4GI3dxEafwap1sFiTGPKd1"};
         final AddItemsToPlaylistRequest addItemsToPlaylistRequest = this.spotifyApiWrapper
                 .addItemsToPlaylist(pId, uris)
@@ -217,7 +220,9 @@ public class SpotifyAPI {
      * @param ids album ids
      * @return list of albums
      */
-    public ArrayList<Map> getAlbums(String ids) {
+    public ArrayList<Map> getAlbums(String accessToken, String ids) {
+        spotifyApiWrapper.setAccessToken(accessToken);
+
         final GetSeveralAlbumsRequest getSeveralAlbumsRequest = this.spotifyApiWrapper.getSeveralAlbums(ids)
                 .build();
         try {
@@ -244,7 +249,8 @@ public class SpotifyAPI {
      * @param id albums id
      * @return an album
      */
-    public String getAlbumById(String id) {
+    public String getAlbumById(String accessToken, String id) {
+        spotifyApiWrapper.setAccessToken(accessToken);
         final GetAlbumRequest getAlbumRequest = this.spotifyApiWrapper.getAlbum(id).build();
         try {
             final Album album = getAlbumRequest.execute();
@@ -261,7 +267,8 @@ public class SpotifyAPI {
      * @param name search key
      * @return a list of track
      */
-    public ArrayList<Map> searchTracks(String name){
+    public ArrayList<Map> searchTracks(String accessToken, String name){
+        spotifyApiWrapper.setAccessToken(accessToken);
         // Behöver vi verklingen denna metoden?
         final SearchTracksRequest searchPlaylistsRequest = this.spotifyApiWrapper.searchTracks(name)
                 .build();
@@ -282,7 +289,9 @@ public class SpotifyAPI {
      * @param id artist id
      * @return artist
      */
-    public String getArtist(String id) {
+    public String getArtist(String accessToken, String id) {
+        spotifyApiWrapper.setAccessToken(accessToken);
+
         // Behöver vi verklingen denna metoden?
         final GetArtistRequest getArtistRequest = this.spotifyApiWrapper.getArtist(id)
                 .build();
@@ -297,7 +306,9 @@ public class SpotifyAPI {
         }
     }
 
-    public PlaylistSimplified[] searchPlayList(String type) throws IOException, ParseException, SpotifyWebApiException {
+    public PlaylistSimplified[] searchPlayList(String accessToken, String type) throws IOException, ParseException, SpotifyWebApiException {
+        spotifyApiWrapper.setAccessToken(accessToken);
+
         SearchPlaylistsRequest searchPlaylistsRequest = this.spotifyApiWrapper.searchPlaylists(type)
           .market(CountryCode.SE)
           .limit(10)

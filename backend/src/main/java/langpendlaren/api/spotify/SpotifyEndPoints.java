@@ -2,6 +2,7 @@ package langpendlaren.api.spotify;
 
 
 import io.javalin.Javalin;
+import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import langpendlaren.api.http.ErrorHandler;
 import langpendlaren.api.spotify.json.loginpage.LoginPage;
@@ -86,8 +87,12 @@ public class SpotifyEndPoints {
         /*
         * Hämta en lista av alla genrer seeds.
          */
-        javalin.get("/spotify/genre/seeds/{accessToken}", context -> {
-            String accessToken = context.pathParam("accessToken");
+        javalin.get("/spotify/genre/seeds", context -> {
+            String accessToken;
+            if((accessToken = getAccessToken(context)) == null) {
+                return;
+            }
+
             try {
                 String[] seeds = spotifyAPI.genreSeeds(accessToken);
                 Seeds json = new Seeds();
@@ -96,17 +101,27 @@ public class SpotifyEndPoints {
             } catch(UnauthorizedException e) {
                 ErrorHandler.sendErrorMessage(context, e, "You must login first.", HttpStatus.UNAUTHORIZED);
             }
+
         });
 
         // -- User
         //TODO Ändra access token till query param
-        javalin.get("/spotify/user/profile/{accessToken}", context -> {
-            String accessToken = context.pathParam("accessToken");
+        javalin.get("/spotify/user/profile", context -> {
+            String accessToken;
+            if((accessToken = getAccessToken(context)) == null) {
+                return;
+            }
+
             context.json(spotifyAPI.getUserId(accessToken));
         });
 
         // -- Playlist
         javalin.post("/spotify/playlist/create", context -> {
+            String accessToken;
+            if((accessToken = getAccessToken(context)) == null) {
+                return;
+            }
+
             langpendlaren.api.spotify.json.playlist.Body body;
 
             try {
@@ -118,62 +133,107 @@ public class SpotifyEndPoints {
 
             String name = body.getName();
             String description = body.getDescription();
-            String accessToken = context.queryParam("access_token");
-
-            if(accessToken == null || accessToken.isBlank()) {
-                ErrorHandler.sendErrorMessage(context, new BadRequestException(), "Access token is missing", HttpStatus.BAD_REQUEST);
-            } else {
-                context.result(spotifyAPI.createPlayList(accessToken, name, description));
-            }
+            context.result(spotifyAPI.createPlayList(accessToken, name, description)); //TODO returnera id?
         });
 
         javalin.delete("/spotify/playlist/delete/{id}", context -> {
+            String accessToken;
+            if((accessToken = getAccessToken(context)) == null) {
+                return;
+            }
+
             String id = context.pathParam("id");
-            spotifyAPI.deletePlayList(id);
+            spotifyAPI.deletePlayList(accessToken, id);
         });
 
         javalin.put("/spotify/playlist/add/{pid}/{tid}", context -> {
+            String accessToken;
+            if((accessToken = getAccessToken(context)) == null) {
+                return;
+            }
+
             String pId = context.pathParam("pid");
             String tId = context.pathParam("tid");
-            context.result(spotifyAPI.addToPlayList(pId, tId));
+            context.result(spotifyAPI.addToPlayList(accessToken, pId, tId));
         });
 
         javalin.delete("/spotify/playlist/deletetracks/{pid}/{tids}", context -> {
+            String accessToken;
+            if((accessToken = getAccessToken(context)) == null) {
+                return;
+            }
+
             String pId = context.pathParam("pid");
             String tIds = context.pathParam("tids");
 
 
             //FIXME broken
-            context.result(spotifyAPI.removeItemFromPlayList("", pId, tIds));
+            context.result(spotifyAPI.removeItemFromPlayList(accessToken, pId, tIds));
         });
 
         // -- Albums
         javalin.get("/spotify/album/{id}", context -> {
+            String accessToken;
+            if((accessToken = getAccessToken(context)) == null) {
+                return;
+            }
+
             String id = context.pathParam("id");
-            context.json(spotifyAPI.getAlbumById(id));
+            context.json(spotifyAPI.getAlbumById(accessToken, id));
         });
 
         javalin.get("/spotify/album/{ids}", context ->{
+            String accessToken;
+            if((accessToken = getAccessToken(context)) == null) {
+                return;
+            }
+
             String ids = context.pathParam("ids");
-            context.json(spotifyAPI.getAlbums(ids));
+            context.json(spotifyAPI.getAlbums(accessToken, ids));
         });
 
         // -- Search
         javalin.get("/spotify/search/track/{name}", context -> {
+            String accessToken;
+            if((accessToken = getAccessToken(context)) == null) {
+                return;
+            }
+
             String name = context.pathParam("name");
-            context.json(spotifyAPI.searchTracks(name));
+            context.json(spotifyAPI.searchTracks(accessToken, name));
         });
 
         // -- Search playlist
         javalin.get("/spotify/search/playlist/{type}", context -> {
+            String accessToken;
+            if((accessToken = getAccessToken(context)) == null) {
+                return;
+            }
+
             String type = context.pathParam("type");
-            context.json(spotifyAPI.searchPlayList(type));
+            context.json(spotifyAPI.searchPlayList(accessToken, type));
         });
 
         // -- Artists
         javalin.get("/spotify/artist/profile/{id}", context -> {
+            String accessToken;
+            if((accessToken = getAccessToken(context)) == null) {
+                return;
+            }
+
             String id = context.pathParam("id");
-            context.json(spotifyAPI.getArtist(id));
+            context.json(spotifyAPI.getArtist(accessToken, id));
         });
+    }
+
+    private String getAccessToken(Context context) {
+        String accessToken = context.queryParam("access_token");
+
+        if(accessToken == null || accessToken.isBlank()) {
+            ErrorHandler.sendErrorMessage(context, new BadRequestException(), "Access token is missing", HttpStatus.BAD_REQUEST);
+            return null;
+        } else {
+            return accessToken;
+        }
     }
 }
