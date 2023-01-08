@@ -15,6 +15,7 @@ function newPlaylist() {
     await getPlayListByGenre(genre).then(plist => {
         displayPlayListSuggestion(plist)
     })
+    getRandomPlayList(genre)
 };
 
 
