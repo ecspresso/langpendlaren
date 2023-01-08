@@ -34,7 +34,7 @@ public class TrafikverketEndPoints {
                 shortNames.addStations(shortNamesJson);
                 context.json(shortNames);
             } catch(IOException e) {
-                ErrorHandler.sendErrorMessage(context, e, HttpStatus.INTERNAL_SERVER_ERROR);
+                ErrorHandler.sendErrorMessage(context, e);
             }
         });
 
@@ -47,7 +47,7 @@ public class TrafikverketEndPoints {
                 departures.addAnnouncements(departuresJson);
                 context.json(departures);
             } catch(IOException e) {
-                ErrorHandler.sendErrorMessage(context, e, HttpStatus.INTERNAL_SERVER_ERROR);
+                ErrorHandler.sendErrorMessage(context, e);
             }
         });
 
@@ -60,7 +60,7 @@ public class TrafikverketEndPoints {
                 stops.addAnnouncements(stopsJson);
                 context.json(stops);
             } catch(IOException e) {
-                ErrorHandler.sendErrorMessage(context, e, HttpStatus.INTERNAL_SERVER_ERROR);
+                ErrorHandler.sendErrorMessage(context, e);
             }
         });
     }

@@ -5,7 +5,6 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import langpendlaren.api.http.ErrorHandler;
-import langpendlaren.api.http.json.error.Error;
 import langpendlaren.api.spotify.json.loginpage.LoginPage;
 import langpendlaren.api.spotify.json.seeds.Seeds;
 import langpendlaren.api.spotify.json.tokens.Tokens;
@@ -59,7 +58,7 @@ public class SpotifyEndPoints {
                 Tokens tokensJson = new Tokens(tokens.getAccessToken(), tokens.getExpiresIn(), tokens.getRefreshToken());
                 context.json(tokensJson);
             } catch (IOException | ParseException | SpotifyWebApiException e) {
-                ErrorHandler.sendErrorMessage(context, e, HttpStatus.INTERNAL_SERVER_ERROR);
+                ErrorHandler.sendErrorMessage(context, e);
             }
         });
 
@@ -73,7 +72,7 @@ public class SpotifyEndPoints {
                 json.setSeeds(seeds);
                 context.json(json);
             } catch(UnauthorizedException e) {
-                ErrorHandler.sendErrorMessage(context, e, HttpStatus.UNAUTHORIZED);
+                ErrorHandler.sendErrorMessage(context, e, "You must login first.", HttpStatus.UNAUTHORIZED);
             }
         });
 
