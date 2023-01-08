@@ -56,7 +56,7 @@ function handleSpotifyAuth(authWindow, event, url) {
   let realUrl = new URL(url);
   let code = realUrl.searchParams.get("code")
 
-  if(code != null) {
+  if(realUrl.host === "localhost") {
     event.preventDefault();
     mainWindow.webContents.send("spotifyReady", code);
     authWindow.close();
