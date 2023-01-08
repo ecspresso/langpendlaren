@@ -233,12 +233,6 @@ public class SpotifyEndPoints {
             System.out.println("Access: "+ accessToken + " type: "+ type);
             Track[] track = spotifyAPI.searchTracks(accessToken, type);
             ArrayList list = new ArrayList<>();
-            if(track.length > 10){
-                for(int i = 0; i < 10; i++){
-                    list.add(track[i].getAlbum());
-                }
-            }
-            System.out.println("one Track: " +track[0].getAlbum().getName());
             context.json(list);
         });
     }

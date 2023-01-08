@@ -33,11 +33,12 @@ function getGenreTemplate(travelTime){
             <div style="padding: 1rem; border-top:1px solid gray;">
                 <div id="song_suggestions">
                     <h3>Song list suggestions</h3>
-                    <table id="timeTableDeparture">
+                    <table id="tracksTable">
                         <tr>
+                            <th>No</th>
+                            <th>Profile</th>
                             <th>Name</th>
-                            <th></th>
-                            <th></th>
+                            <th>Play</th>
                         </tr>
                     </table>
                 </div>

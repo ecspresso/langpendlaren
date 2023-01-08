@@ -72,4 +72,16 @@ async function getTracksByGenre(genre, accessToken){
   return data;
 }
 
+async function addToPlayList(accessToken, trackIds, pId){
+  const data = await fetch(
+    `http://localhost/spotify/playlist/add/${trackIds}/${pId}?access_token=${accessToken}`
+    ,
+    { method: "PUT",}
+  )
+  .then(res => res.json())
+  .catch(e => console.assert(e))
+  console.log(data);
+  return data;
+}
+
 export { getAvailableGenre, getUserProfile, getTokens, getPlayListByGenre, createPlayListByName, getTracksByGenre };

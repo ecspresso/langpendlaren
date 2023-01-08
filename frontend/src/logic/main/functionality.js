@@ -57,7 +57,7 @@ function handleSpotifyClickEvents(){
     if(name !== "" || desc !== ""){
       console.log("start creating..")
       createPlayListByName(localStorage.getItem("access_token"), name.value, desc.value).then(result => {
-        console.log(result);
+        localStorage.setItem("p_id", result.id);
         document.getElementById("playListCreatorWraper").innerHTML = `<div>
           <h4 style="color: green;">Successful created!</h4>
           <p>PlayListName: ${result.name} </p>
@@ -71,7 +71,7 @@ function handleSpotifyClickEvents(){
   document.getElementById("send_genre_button").addEventListener("click", () => {
     var select = document.getElementById("genres");
     var genre = select.options[select.selectedIndex].text;
-    displayTracks(genre, getTravelTimeInFormat() , localStorage.getItem("access_token"));
+    displayTracks(genre, getTravelTimeInFormat() , localStorage.getItem("access_token"), localStorage.getItem("p_id"));
   });
 
   // När användaren har klickat på knappen läggs nya låtar till i spellistan på användarens konto
