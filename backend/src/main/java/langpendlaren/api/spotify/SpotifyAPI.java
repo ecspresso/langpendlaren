@@ -264,7 +264,6 @@ public class SpotifyAPI {
                 .build();
 
         try {
-            System.out.println("Pulling...");
             final Paging<Track> trackPaging = searchTracksRequest.execute();
 
             System.out.println("Total: " + trackPaging.getTotal());
