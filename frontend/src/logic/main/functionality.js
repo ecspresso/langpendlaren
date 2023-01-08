@@ -1,10 +1,13 @@
 const ipc = window.require("electron").ipcRenderer;
 const ipcRenderer = require("electron").ipcRenderer;
 import {millisecondsToHoursAndMinutes, clearHTMLElementByElementId} from "../../util/util.js";
-import { getAvailableGenre, getUserProfile, getTokens } from "../spotify/spotify_events.js";
+import { getAvailableGenre, getUserProfile, getTokens, createPlayListByName } from "../spotify/spotify_events.js";
 import {savePlayList, getRandomPlayList, displayPlayListByGenre} from "../spotify/spotify_functionality.js"
 import { getGenreTemplate, displayAllGenre } from "../spotify/spotify_templates.js";
-let listOfGenre;
+const testAccessToken = "BQBkY8nO5OijaeA_p2D19W6diLjqdwY_IRnLOV6V1r30Aw-EaZvDdWaJ_P-9zGXaCO2OtG002QW8UPuKr4tw5gMOb13xU0pVwtUAcAPef9qjm6N_wsI8GZL-xbTIwBnpCVdkgBjZAgESPwNMmQmCTgsffwOc574xhHxLAoOXFGG9DEA7y5xarnFePokih9p2ilD46z4wBUHJgHhtwoCb5RbPqiq2rw0TaotgKgPsOaHjllGOBrvmD7GD4mZTECM";
+//const testRefreshToken = "BQB-r-B3VIVwuQK4-im22_qOgH5MdL4NtJzMWegRbWl46zlnQd254lnuK3vQNeVWeYJ5DOdAQilVaxPboZLwh85SLmUuwpiWQXzZ85o7I3tufps1fWbl08lWdhJ7ueVrigbjVCHF-CF3DDI9eHX01K0Rlt_oJ1yfDAbdrgTUuWhFeIC7u38VpeS0W7lA5ifb5Rld1r2evUauwZXxOfBciUvk3oO2XpU4hLQ3LnamlO0Yg9Z07vzn2bDWMWB3nwg";
+
+
 /**
  * Körs när appen renderat färdigt.
  */
@@ -24,25 +27,22 @@ ipcRenderer.on("spotifyReady", async function (event, code) {
       localStorage.setItem("access_token_expire", token.access_token.expires_in);
       localStorage.setItem("refresh_token", token.refresh_token.value);
   });
+
   const travelTime = millisecondsToHoursAndMinutes(localStorage.getItem("spotifyTime"));
-  const testAccessToken = "BQA0c4ov_D6NubWC3oAluWU5HcZuZbIPTv6249IDQD-KP7OTGf4VzZf8z0wLVJnEqF7irzqklE-r-Pa203VRWIXcERtxc9o0SZzMBZbLl6cO5q4Z5yV3loHFBhinU7ZhrlpsPiSR4-fcm_HHioEJAeefFXPrwBwYQTrR2tPv_nBZw6F4Ti7aeI7-yP8S4ncZ5yYXiZJUWfwdWUiGAbYhIJ1E87XIuE-8oVsixR5CP0d3g9x1MuC63HmsJ4cWTnE";
-  //const testRefreshToken = "BQB-r-B3VIVwuQK4-im22_qOgH5MdL4NtJzMWegRbWl46zlnQd254lnuK3vQNeVWeYJ5DOdAQilVaxPboZLwh85SLmUuwpiWQXzZ85o7I3tufps1fWbl08lWdhJ7ueVrigbjVCHF-CF3DDI9eHX01K0Rlt_oJ1yfDAbdrgTUuWhFeIC7u38VpeS0W7lA5ifb5Rld1r2evUauwZXxOfBciUvk3oO2XpU4hLQ3LnamlO0Yg9Z07vzn2bDWMWB3nwg";
 
-
-  //const userProfile = getUserProfile(testAccessToken).then(res => res.json());
-  const options = [];
-  
   const template = getGenreTemplate(travelTime);
   
   
   // Lägg till ny innehåll
   $("#main_content").append(template);
+
+  const accessToken = localStorage.getItem("access_token");
+  
   // Filla upp med alla genre
-  // await getAvailableGenre(testAccessToken).then(genre => {
-  await getAvailableGenre(localStorage.getItem("access_token")).then(genre => {
+  await getAvailableGenre(testAccessToken).then(genre => {
     displayAllGenre(genre.seeds);
-    listOfGenre = genre.seeds;
   });
+
   // Hanterar klick event
   handleSpotifyClickEvents();
 });
@@ -51,6 +51,17 @@ ipcRenderer.on("spotifyReady", async function (event, code) {
  * Hanterar spotify Clikc events.
  */
  function handleSpotifyClickEvents(){
+  // Create play list
+  document.getElementById("createPlayList").addEventListener("click", () => {
+    const name = document.getElementById("pname");
+    const desc = document.getElementById("pdescription");
+    console.log(name, )
+    if(name !== "" || desc !== ""){
+      createPlayListByName(testAccessToken, name.value, desc.value);
+      document.getElementById("playListCreatorWraper").innerHTML = `<div> <p>Playlist is created successful, <br> name: ${name}, description: ${desc} </p></div>`;
+    }
+  });
+
   // När användaren har klickat på knappen väljas genre och hämtas nya låtar beror på genren.
   document.getElementById("send_genre_button").addEventListener("click", () => {
     var select = document.getElementById("genres");

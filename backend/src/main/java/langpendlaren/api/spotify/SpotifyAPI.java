@@ -7,7 +7,6 @@ import org.apache.hc.core5.http.ParseException;
 import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
-import se.michaelthelin.spotify.model_objects.special.SearchResult;
 import se.michaelthelin.spotify.model_objects.special.SnapshotResult;
 import se.michaelthelin.spotify.model_objects.specification.*;
 import se.michaelthelin.spotify.requests.data.albums.GetAlbumRequest;
@@ -16,7 +15,6 @@ import se.michaelthelin.spotify.requests.data.artists.GetArtistRequest;
 import se.michaelthelin.spotify.requests.data.playlists.AddItemsToPlaylistRequest;
 import se.michaelthelin.spotify.requests.data.playlists.CreatePlaylistRequest;
 import se.michaelthelin.spotify.requests.data.playlists.RemoveItemsFromPlaylistRequest;
-import se.michaelthelin.spotify.requests.data.search.SearchItemRequest;
 import se.michaelthelin.spotify.requests.data.search.simplified.SearchPlaylistsRequest;
 import se.michaelthelin.spotify.requests.data.search.simplified.SearchTracksRequest;
 import se.michaelthelin.spotify.requests.data.users_profile.GetCurrentUsersProfileRequest;
@@ -41,6 +39,7 @@ public class SpotifyAPI {
     // Lock for synchronize work
     private final Object lock = new Object();
     private Properties prop;
+    private Map<String, String> playListToId = new HashMap();
 
     public SpotifyAPI() throws URISyntaxException {
         // Läs in inställningar från fil.
@@ -143,8 +142,9 @@ public class SpotifyAPI {
 
         try {
             Playlist playlist = createPlayList.execute();
-            System.out.println("Name: " + playlist.getName());
-            return playlist.getName();
+            System.out.println("Name: " + playlist.getName() + " id: " + playlist.getId());
+            playListToId.put(playlist.getName(), playlist.getId());
+            return playlist.getId();
         } catch (IOException | SpotifyWebApiException | ParseException e) {
             e.printStackTrace();
             return null;

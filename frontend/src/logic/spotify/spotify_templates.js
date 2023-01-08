@@ -5,14 +5,14 @@ function getGenreTemplate(travelTime){
             <h2 class>Generera spellista</h2>
             <p>Din reselängd är </p><h4>${travelTime}H</h4>
 
-            <form>
-            <label for="name">Name:</label><br>
-            <input type="text" id="name" name="name"><br>
-            <label for="description">Description:</label><br>
-            <textarea id="description" name="description"></textarea><br><br>
-            <input type="submit" value="Create Playlist">
-            </form>
-
+            <div id="playListCreatorWraper">
+                <label for="name">Name:</label><br>
+                <input type="text" id="pname" name="name"><br>
+                <label for="description">Description:</label><br>
+                <textarea id="pdescription" name="description"></textarea><br><br>
+                <button id="createPlayList" class="basic_button">Create play list</button>
+            </div>
+            
             <p>Find play list by genre.</p>
             <label for="genre">Välj genre:</label>
             
@@ -61,13 +61,21 @@ function displayAllGenre(genre){
 
 
 function displayPlayListSuggestion(playlist){
+    const p_suggestion = document.getElementById("p_suggestion");
     for(let i = 0; i < playlist.length; ++i){
-        const n = playlist[i].name;
-        const name = document.createElement("p");
-        name.innerHTML = n;
-        //const img = document.createElement("img").src = playlist[i].images[0].url;
-        document.getElementById("p_suggestion").appendChild(n);
+        const template = `
+            <div style="display:flex; width="300px; height:200px;">
+                <div>
+                    <img style="width: 100%;" src="${playlist[i].images[0].url}">
+                </div>
+                <div>
+                    <h4>${playlist[i].name}</h4>
+                </div>                
+            </div>
+        `
+        p_suggestion.appendChild(template);
     }
+    console.log(p_suggestion);
 }
 
     export {getGenreTemplate, displayAllGenre, displayPlayListSuggestion};

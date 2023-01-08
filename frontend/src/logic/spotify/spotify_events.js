@@ -41,7 +41,8 @@ async function getPlayListByGenre(genre, accessToken){
   return data;
 }
 
-async function createOnePLaylist(accessToken, name, description){
+async function createPlayListByName(accessToken, name, description){
+  console.log("check info: ", accessToken, name, description);
   const data = await fetch(
     `http://localhost/spotify/playlist/create/?access_token=${accessToken}/${name}/${description}`
     ,
@@ -49,7 +50,7 @@ async function createOnePLaylist(accessToken, name, description){
   )
     .then((res) => res.json())
     .catch((e) => console.assert(e));
-  return data;
+  return data;  
 }
 
-export { getAvailableGenre, getUserProfile, getTokens, getPlayListByGenre };
+export { getAvailableGenre, getUserProfile, getTokens, getPlayListByGenre, createPlayListByName };

@@ -95,6 +95,7 @@ public class SpotifyEndPoints {
 
             try {
                 String[] seeds = spotifyAPI.genreSeeds(accessToken);
+                System.out.println(seeds);
                 Seeds json = new Seeds();
                 json.setSeeds(seeds);
                 context.json(json);
