@@ -56,7 +56,7 @@ ipcMain.on("spotifyLogin", () => {
 
 function handleSpotifyAuth(authWindow, url) {
   let realUrl = new URL(url);
-  if(realUrl.host.match("spotify\.com$")) {
+  if(realUrl.host.match("spotify\.com|apple\.com|facebook\.com|google\.com")) {
     authWindow.loadURL(url);
   } else {
     let code = realUrl.searchParams.get("code");

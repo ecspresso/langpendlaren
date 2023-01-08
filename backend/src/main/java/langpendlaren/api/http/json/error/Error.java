@@ -16,8 +16,8 @@ public class Error {
 
     public void setErrorMessage(String reason, String stacktrace) {
         ErrorMessage errorMessage = new ErrorMessage();
-        errorMessage.setReason(reason);
-        errorMessage.setStacktrace(stacktrace);
+        errorMessage.setError(reason);
+        errorMessage.setMessage(stacktrace);
         this.errorMessage = errorMessage;
     }
 
@@ -27,42 +27,42 @@ public class Error {
         /**
          * The reason the error happened.
          */
-        private String reason;
+        private String error;
         /**
          * The stacktrace message.
          */
-        private String stacktrace;
+        private String message;
 
         /**
          * Getter method for marshalling.
          * @return The reason for the error.
          */
-        public String getReason() {
-            return reason;
+        public String getError() {
+            return error;
         }
 
         /**
          * Setter method for marshalling.
-         * @param reason The reason for the error.
+         * @param error The reason for the error.
          */
-        public void setReason(String reason) {
-            this.reason = reason;
+        public void setError(String error) {
+            this.error = error;
         }
 
         /**
          * Getter method for marshalling.
          * @return The stacktrace message.
          */
-        public String getStacktrace() {
-            return stacktrace;
+        public String getMessage() {
+            return message;
         }
 
         /**
          * Setter method for marshalling.
-         * @param stacktrace The stacktrace message.
+         * @param message The stacktrace message.
          */
-        public void setStacktrace(String stacktrace) {
-        this.stacktrace = stacktrace;
+        public void setMessage(String message) {
+        this.message = message;
     }
     }
 }

@@ -10,6 +10,7 @@ import langpendlaren.api.spotify.json.seeds.Seeds;
 import langpendlaren.api.spotify.json.tokens.Tokens;
 import org.apache.hc.core5.http.ParseException;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
+import se.michaelthelin.spotify.exceptions.detailed.BadRequestException;
 import se.michaelthelin.spotify.exceptions.detailed.UnauthorizedException;
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 
@@ -46,6 +47,28 @@ public class SpotifyEndPoints {
             context.json(json);
         });
 
+        /**
+         * Förnya access token.
+         */
+        javalin.get("/spotify/login/refresh", context -> {
+            String refreshToken = context.queryParam("refresh_token");
+            if(refreshToken == null || refreshToken.isBlank()) {
+                ErrorHandler.sendErrorMessage(context, new BadRequestException(), "Refresh token is missing.", HttpStatus.BAD_REQUEST);
+            }
+
+            try {
+                AuthorizationCodeCredentials tokenCredentials = spotifyAPI.refreshAccessToken(refreshToken);
+                Tokens tokens = new Tokens(tokenCredentials);
+                context.json(tokens);
+            } catch(IOException | SpotifyWebApiException | ParseException e) {
+                ErrorHandler.sendErrorMessage(context, e);
+            }
+            // URI uri = spotifyAPI.getLoginPage();
+            // LoginPage json = new LoginPage();
+            // json.setUri(uri);
+            // context.json(json);
+        });
+
         /*
         * "Skickar" access token och refresh token som kakor till användaren.
         * Kräver kod från Spotify (fås från /spotify/login).
@@ -54,8 +77,8 @@ public class SpotifyEndPoints {
             String code = context.queryParam("code");
 
             try {
-                AuthorizationCodeCredentials tokens = spotifyAPI.auth(code);
-                Tokens tokensJson = new Tokens(tokens.getAccessToken(), tokens.getExpiresIn(), tokens.getRefreshToken());
+                AuthorizationCodeCredentials tokenCredentials = spotifyAPI.auth(code);
+                Tokens tokensJson = new Tokens(tokenCredentials);
                 context.json(tokensJson);
             } catch (IOException | ParseException | SpotifyWebApiException e) {
                 ErrorHandler.sendErrorMessage(context, e);

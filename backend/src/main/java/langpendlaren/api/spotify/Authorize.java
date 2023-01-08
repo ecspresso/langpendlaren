@@ -31,7 +31,8 @@ public class Authorize {
 
     }
 
-    public AuthorizationCodeCredentials refreshToken() throws IOException, ParseException, SpotifyWebApiException {
+    public AuthorizationCodeCredentials refreshToken(String refreshToken) throws IOException, ParseException, SpotifyWebApiException {
+        spotifyApiWrapper.setRefreshToken(refreshToken);
         AuthorizationCodeRefreshRequest authorizationCodeRefreshRequest = spotifyApiWrapper.authorizationCodeRefresh().build();
         return authorizationCodeRefreshRequest.execute();
     }

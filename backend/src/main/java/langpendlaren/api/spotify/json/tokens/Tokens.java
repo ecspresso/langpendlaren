@@ -1,6 +1,7 @@
 package langpendlaren.api.spotify.json.tokens;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 
 public class Tokens {
     private AccessToken accessToken;
@@ -8,9 +9,9 @@ public class Tokens {
 
     public Tokens() {}
 
-    public Tokens(String accessToken, int expiresIn, String refreshToken) {
-        this.accessToken = new AccessToken(accessToken, expiresIn);
-        this.refreshToken = new RefreshToken(refreshToken);
+    public Tokens(AuthorizationCodeCredentials credentials) {
+        this.accessToken = new AccessToken(credentials.getAccessToken(), credentials.getExpiresIn());
+        this.refreshToken = new RefreshToken(credentials.getRefreshToken());
     }
 
     public AccessToken getAccessToken() {
