@@ -1,4 +1,4 @@
-function getGenreTemplate(travelTime){
+function getGenreTemplate(travelTime, options){
     return `
         <div class='center_me'>
             <h2 class>Generera spellista</h2>
@@ -8,6 +8,7 @@ function getGenreTemplate(travelTime){
             <label for="genre">Välj genre:</label>
             
             <select name="genres" id="genres">
+            <option>Ingen val</option>
             </select>
             <button type="submit" class="basic_button" id="send_genre_button" value="Skicka">Find</button>
         </div>
@@ -30,6 +31,17 @@ function getGenreTemplate(travelTime){
         `;
     }
 
+    function displayAllGenre(genre){
+        var select = document.getElementById("genres");
+        for (let i = 0; i < genre.length; ++i){
+            var option = document.createElement("option");
+            option.textContent = genre[i];
+            option.value = genre[i];
+            console.log(option, select);
+            select.appendChild(option);
+    }
+}
 
-    export {getGenreTemplate};
+
+    export {getGenreTemplate, displayAllGenre};
     
