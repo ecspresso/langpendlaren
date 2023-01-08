@@ -12,6 +12,7 @@ import se.michaelthelin.spotify.model_objects.specification.*;
 import se.michaelthelin.spotify.requests.data.albums.GetAlbumRequest;
 import se.michaelthelin.spotify.requests.data.albums.GetSeveralAlbumsRequest;
 import se.michaelthelin.spotify.requests.data.artists.GetArtistRequest;
+import se.michaelthelin.spotify.requests.data.follow.UnfollowPlaylistRequest;
 import se.michaelthelin.spotify.requests.data.playlists.AddItemsToPlaylistRequest;
 import se.michaelthelin.spotify.requests.data.playlists.CreatePlaylistRequest;
 import se.michaelthelin.spotify.requests.data.playlists.RemoveItemsFromPlaylistRequest;
@@ -183,9 +184,10 @@ public class SpotifyAPI {
      * Delete a play list by id
      * @param id playlist id
      */
-    public void deletePlayList(String accessToken, String id) {
+    public String deletePlayList(String accessToken, String id) throws IOException, ParseException, SpotifyWebApiException {
         spotifyApiWrapper.setAccessToken(accessToken);
-        // No code provided for deleting a playlist.
+        UnfollowPlaylistRequest request = spotifyApiWrapper.unfollowPlaylist(id).build();
+        return request.execute();
     }
 
     /**
