@@ -10,13 +10,13 @@ function newPlaylist() {
 }
 
  // När användaren har klickat på knappen hämta från API:et låtar som är lika långa som resan från den valda genren
- async function displayPlayListByGenre(genre) {
+ async function displayPlayListByGenre(genre, accessToken) {
     console.log("Get playlist by: ",genre)
-    await getPlayListByGenre(genre).then(plist => {
+    await getPlayListByGenre(genre, accessToken).then(plist => {
         displayPlayListSuggestion(plist)
     })
     getRandomPlayList(genre)
-};
+}
 
 
 

@@ -1,7 +1,7 @@
 //Funktion som hämtar genrer från spotify
 async function getAvailableGenre(accessToken){
     const data = await fetch(
-        `http://localhost/spotify/genre/seeds/${accessToken}`,
+        `http://localhost/spotify/genre/seeds?access_token=${accessToken}`,
         { method: "GET" }
       )
         .then((res) => res.json())
@@ -11,7 +11,7 @@ async function getAvailableGenre(accessToken){
 
 async function getUserProfile(accessToken){
     const data = await fetch(
-        `http://localhost/spotify/user/profile/${accessToken}`,
+        `http://localhost/spotify/user/profile?access_token=${accessToken}`,
         { method: "GET" }
       )
         .then((res) => res.json())
@@ -31,9 +31,9 @@ async function getTokens(code){
       return data;
 }
 
-async function getPlayListByGenre(genre){
+async function getPlayListByGenre(genre, accessToken){
   const data = await fetch(
-    `http://localhost/spotify/search/playlist/${genre}`,
+    `http://localhost/spotify/search/playlist/${genre}?access_token=${accessToken}`,
     { method: "GET" }
   )
     .then((res) => res.json())

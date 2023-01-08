@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 
 public class Tokens {
+    @JsonProperty("access_token")
     private AccessToken accessToken;
+    @JsonProperty("refresh_token")
     private RefreshToken refreshToken;
 
     public Tokens() {}
