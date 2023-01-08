@@ -7,6 +7,7 @@ import io.javalin.http.HttpStatus;
 import langpendlaren.api.http.ErrorHandler;
 import langpendlaren.api.spotify.json.loginpage.LoginPage;
 import langpendlaren.api.spotify.json.playlist.Body;
+import langpendlaren.api.spotify.json.playlist.PlaylistJson;
 import langpendlaren.api.spotify.json.playlist.PlaylistList;
 import langpendlaren.api.spotify.json.seeds.Seeds;
 import langpendlaren.api.spotify.json.tokens.Tokens;
@@ -16,6 +17,7 @@ import se.michaelthelin.spotify.exceptions.detailed.BadRequestException;
 import se.michaelthelin.spotify.exceptions.detailed.UnauthorizedException;
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 import se.michaelthelin.spotify.model_objects.specification.Paging;
+import se.michaelthelin.spotify.model_objects.specification.Playlist;
 import se.michaelthelin.spotify.model_objects.specification.PlaylistSimplified;
 
 import java.io.IOException;
@@ -137,7 +139,15 @@ public class SpotifyEndPoints {
 
             String name = body.getName();
             String description = body.getDescription();
-            context.result(spotifyAPI.createPlayList(accessToken, name, description)); //TODO returnera id?
+            try {
+                Playlist playlist = spotifyAPI.createPlayList(accessToken, name, description);
+                PlaylistJson playlistJson = new PlaylistJson();
+                playlistJson.setId(playlist.getId());
+                playlistJson.setName(playlist.getName());
+                context.json(playlistJson); //TODO returnera id?
+            } catch(IOException | ParseException | SpotifyWebApiException e) {
+                ErrorHandler.sendErrorMessage(context, e);
+            }
         });
 
         javalin.delete("/spotify/playlist/delete/{id}", context -> {
