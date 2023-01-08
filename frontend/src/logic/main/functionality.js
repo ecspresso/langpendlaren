@@ -4,7 +4,7 @@ import {millisecondsToHoursAndMinutes, clearHTMLElementByElementId} from "../../
 import { getAvailableGenre, getUserProfile, getTokens, createPlayListByName } from "../spotify/spotify_events.js";
 import {savePlayList, getRandomPlayList, displayPlayListByGenre} from "../spotify/spotify_functionality.js"
 import { getGenreTemplate, displayAllGenre } from "../spotify/spotify_templates.js";
-const testAccessToken = "BQBkY8nO5OijaeA_p2D19W6diLjqdwY_IRnLOV6V1r30Aw-EaZvDdWaJ_P-9zGXaCO2OtG002QW8UPuKr4tw5gMOb13xU0pVwtUAcAPef9qjm6N_wsI8GZL-xbTIwBnpCVdkgBjZAgESPwNMmQmCTgsffwOc574xhHxLAoOXFGG9DEA7y5xarnFePokih9p2ilD46z4wBUHJgHhtwoCb5RbPqiq2rw0TaotgKgPsOaHjllGOBrvmD7GD4mZTECM";
+const testAccessToken = "BQBY-9zrYlgSC3WJzuRjDrxj72-av7iybZXB1XkPMP-yfNBA1yjIzsqVqcguKnD0ifBcJW4JAyNyBMDucbWP2NtfP6nsJXEigRe34xBzc154JVwCYIad423Fit7DHAL7lAPXI5KyS-4q9tiKujG7h8idBvymvW_LPYBqES6kPb1XUz6Y-sERTJGiXZUrH-g0nFhIetaMiuJgpZ19qwZJg8iIHlLQ3K94X-6pY9dxB-zxTM0yDzeryoJ5EyDUd88";
 //const testRefreshToken = "BQB-r-B3VIVwuQK4-im22_qOgH5MdL4NtJzMWegRbWl46zlnQd254lnuK3vQNeVWeYJ5DOdAQilVaxPboZLwh85SLmUuwpiWQXzZ85o7I3tufps1fWbl08lWdhJ7ueVrigbjVCHF-CF3DDI9eHX01K0Rlt_oJ1yfDAbdrgTUuWhFeIC7u38VpeS0W7lA5ifb5Rld1r2evUauwZXxOfBciUvk3oO2XpU4hLQ3LnamlO0Yg9Z07vzn2bDWMWB3nwg";
 
 
@@ -50,17 +50,16 @@ ipcRenderer.on("spotifyReady", async function (event, code) {
 /**
  * Hanterar spotify Clikc events.
  */
- function handleSpotifyClickEvents(){
+function handleSpotifyClickEvents(){
   // Create play list
   document.getElementById("createPlayList").addEventListener("click", () => {
     const name = document.getElementById("pname");
     const desc = document.getElementById("pdescription");
     console.log(name, )
     if(name !== "" || desc !== ""){
-      createPlayListByName(localStorage.getItem("access_token"), name.value, desc.value).then(res => {
-        console.log(res);
-        document.getElementById("playListCreatorWraper").innerHTML = `<div> <p>Playlist is created successful, <br> name: ${name.value}, description: ${desc.value} </p></div>`;
-      }).catch(e => console.assert(e));
+      console.log("start creating..")
+      const data = createPlayListByName(testAccessToken, name.value, desc.value);
+      console.log(data)
     }
   });
 
