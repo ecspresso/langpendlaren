@@ -1,8 +1,17 @@
 function getGenreTemplate(travelTime){
+    //Vi vill att när man skickar formuläret så ska skapa spellista endpointen köras med access token, name och description
     return `
         <div class='center_me'>
             <h2 class>Generera spellista</h2>
             <p>Din reselängd är </p><h4>${travelTime}H</h4>
+
+            <form>
+            <label for="name">Name:</label><br>
+            <input type="text" id="name" name="name"><br>
+            <label for="description">Description:</label><br>
+            <textarea id="description" name="description"></textarea><br><br>
+            <input type="submit" value="Create Playlist">
+            </form>
 
             <p>Find play list by genre.</p>
             <label for="genre">Välj genre:</label>
