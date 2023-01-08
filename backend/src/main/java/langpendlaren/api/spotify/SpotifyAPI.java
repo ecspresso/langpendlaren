@@ -111,16 +111,13 @@ public class SpotifyAPI {
 
     /**
      * Users id //FIXME! return profile.
+     *
      * @return user id
      */
-    public String getUserId(String accessToken) throws IOException, ParseException, SpotifyWebApiException {
-        String userId;
-
+    public User getUserId(String accessToken) throws IOException, ParseException, SpotifyWebApiException {
         spotifyApiWrapper.setAccessToken(accessToken);
         GetCurrentUsersProfileRequest userProfile = spotifyApiWrapper.getCurrentUsersProfile().build();
-        userId = userProfile.execute().getId();
-
-        return userId;
+        return userProfile.execute();
     }
 
     // Playlist
@@ -130,7 +127,7 @@ public class SpotifyAPI {
      */
     public Playlist createPlayList(String accessToken, String name, String description) throws IOException, ParseException, SpotifyWebApiException {
         CreatePlaylistRequest createPlayList;
-        String userId = getUserId(accessToken);
+        String userId = getUserId(accessToken).getId();
         synchronized(lock) {
             this.spotifyApiWrapper.setAccessToken(accessToken);
             createPlayList = this.spotifyApiWrapper.createPlaylist(userId, name).public_(false).description(description).build();
@@ -141,12 +138,13 @@ public class SpotifyAPI {
 
     /**
      * Remove item (tracks) from play list
-     * @param pId play list id
+     *
+     * @param pId  play list id
      * @param tIds truck ids
      */
-    public String removeItemFromPlayList(String accessToken, String pId, String tIds){
-        final JsonArray trackJson = JsonParser.parseString("[{\"localhost:8080\":\"spotify:track:01iyCAUm8EvOFqVWYJ3dVX\"}]").getAsJsonArray();
-        System.out.println("Track JSON: " + trackJson);
+    public SnapshotResult removeItemFromPlayList(String accessToken, String pId, String tIds) throws IOException, ParseException, SpotifyWebApiException {
+        final JsonArray trackJson = JsonParser.parseString(String.format("[{\"uri\":\"spotify:track:%s\"}]", tIds)).getAsJsonArray();
+        // System.out.println("Track JSON: " + trackJson);
         final RemoveItemsFromPlaylistRequest removeItemsFromPlaylistRequest ;
 
         synchronized(lock) {
@@ -156,49 +154,35 @@ public class SpotifyAPI {
                 .build();
         }
 
-        try {
-            final SnapshotResult snapshotResult = removeItemsFromPlaylistRequest.execute();
-            System.out.println("Snapshot ID: " + snapshotResult.getSnapshotId());
-            return snapshotResult.getSnapshotId();
-        } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Error: " + e.getMessage());
-            return null;
-        }
+        return removeItemsFromPlaylistRequest.execute();
     }
 
     /**
      * Delete a play list by id
      * @param id playlist id
      */
-    public String deletePlayList(String accessToken, String id) throws IOException, ParseException, SpotifyWebApiException {
+    public void deletePlayList(String accessToken, String id) throws IOException, ParseException, SpotifyWebApiException {
         spotifyApiWrapper.setAccessToken(accessToken);
         UnfollowPlaylistRequest request = spotifyApiWrapper.unfollowPlaylist(id).build();
-        return request.execute();
+        request.execute();
     }
 
     /**
      * Add a track to play list.
+     *
      * @param pId playlist id
      * @param tId track id
      * @return confirmation
      */
-    public String addToPlayList(String accessToken, String pId, String tId) {
+    public SnapshotResult addToPlayList(String accessToken, String pId, String tId) throws IOException, ParseException, SpotifyWebApiException {
         spotifyApiWrapper.setAccessToken(accessToken);
 
-        final String[] uris = new String[]{"spotify:track:01iyCAUm8EvOFqVWYJ3dVX", "spotify:episode:4GI3dxEafwap1sFiTGPKd1"};
+        final String[] uris = new String[]{String.format("spotify:track:%s", tId)};
         final AddItemsToPlaylistRequest addItemsToPlaylistRequest = this.spotifyApiWrapper
                 .addItemsToPlaylist(pId, uris)
                 .build();
 
-        try {
-            final SnapshotResult snapshotResult = addItemsToPlaylistRequest.execute();
-
-            System.out.println("Snapshot ID: " + snapshotResult.getSnapshotId());
-            return snapshotResult.getSnapshotId();
-        } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Error: " + e.getMessage());
-            return null;
-        }
+        return addItemsToPlaylistRequest.execute();
     }
 
 
