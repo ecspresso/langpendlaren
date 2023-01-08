@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import io.javalin.http.HttpStatus;
+import langpendlaren.api.http.ErrorHandler;
 import langpendlaren.api.http.json.error.Error;
 import langpendlaren.api.trafikverket.json.departures.Departures;
 import langpendlaren.api.trafikverket.json.departures.DeparturesJson;
@@ -34,18 +35,8 @@ public class TrafikverketEndPoints {
                 StationShortNames shortNames = new StationShortNames();
                 shortNames.addStations(shortNamesJson);
                 context.json(shortNames);
-            } catch(JsonProcessingException e) {
-                e.printStackTrace();
-                Error error = new Error();
-                error.setErrorMessage("JsonProcessingException", e.getMessage());
-                context.status(HttpStatus.INTERNAL_SERVER_ERROR);
-                context.json(error);
             } catch(IOException e) {
-                e.printStackTrace();
-                Error error = new Error();
-                error.setErrorMessage("IOException", e.getMessage());
-                context.status(HttpStatus.INTERNAL_SERVER_ERROR);
-                context.json(error);
+                ErrorHandler.sendErrorMessage(context, e);
             }
         });
 
@@ -57,18 +48,8 @@ public class TrafikverketEndPoints {
                 Departures departures = new Departures();
                 departures.addAnnouncements(departuresJson);
                 context.json(departures);
-            } catch(JsonProcessingException e) {
-                e.printStackTrace();
-                Error error = new Error();
-                error.setErrorMessage("JsonProcessingException", e.getMessage());
-                context.status(HttpStatus.INTERNAL_SERVER_ERROR);
-                context.json(error);
             } catch(IOException e) {
-                e.printStackTrace();
-                Error error = new Error();
-                error.setErrorMessage("IOException", e.getMessage());
-                context.status(HttpStatus.INTERNAL_SERVER_ERROR);
-                context.json(error);
+                ErrorHandler.sendErrorMessage(context, e);
             }
         });
 
@@ -80,18 +61,8 @@ public class TrafikverketEndPoints {
                 Stops stops = new Stops();
                 stops.addAnnouncements(stopsJson);
                 context.json(stops);
-            } catch(JsonProcessingException e) {
-                e.printStackTrace();
-                Error error = new Error();
-                error.setErrorMessage("JsonProcessingException", e.getMessage());
-                context.status(HttpStatus.INTERNAL_SERVER_ERROR);
-                context.json(error);
             } catch(IOException e) {
-                e.printStackTrace();
-                Error error = new Error();
-                error.setErrorMessage("IOException", e.getMessage());
-                context.status(HttpStatus.INTERNAL_SERVER_ERROR);
-                context.json(error);
+                ErrorHandler.sendErrorMessage(context, e);
             }
         });
     }

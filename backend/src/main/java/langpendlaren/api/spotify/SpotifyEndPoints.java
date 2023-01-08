@@ -4,10 +4,14 @@ package langpendlaren.api.spotify;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
+import langpendlaren.api.http.ErrorHandler;
+import langpendlaren.api.http.json.error.Error;
 import langpendlaren.api.spotify.json.loginpage.LoginPage;
+import langpendlaren.api.spotify.json.seeds.Seeds;
 import langpendlaren.api.spotify.json.tokens.Tokens;
 import org.apache.hc.core5.http.ParseException;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
+import se.michaelthelin.spotify.exceptions.detailed.UnauthorizedException;
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 
 import java.io.IOException;
@@ -54,15 +58,8 @@ public class SpotifyEndPoints {
                 AuthorizationCodeCredentials tokens = spotifyAPI.auth(code);
                 Tokens tokensJson = new Tokens(tokens.getAccessToken(), tokens.getExpiresIn(), tokens.getRefreshToken());
                 context.json(tokensJson);
-            } catch (IOException e) {
-                context.status(HttpStatus.INTERNAL_SERVER_ERROR);
-                context.json("{'error': 'IOException'}");
-            } catch (ParseException e) {
-                context.status(HttpStatus.INTERNAL_SERVER_ERROR);
-                context.json("{'error': 'ParseException'}");
-            } catch (SpotifyWebApiException e) {
-                context.status(HttpStatus.INTERNAL_SERVER_ERROR);
-                context.json("{'error': 'SpotifyWebApiException'}");
+            } catch (IOException | ParseException | SpotifyWebApiException e) {
+                ErrorHandler.sendErrorMessage(context, e);
             }
         });
 
@@ -70,7 +67,14 @@ public class SpotifyEndPoints {
         * Hämta en lista av alla genrer seeds.
          */
         javalin.get("/spotify/genre/seeds", context -> {
-            context.json(spotifyAPI.genreSeeds());
+            try {
+                String[] seeds = spotifyAPI.genreSeeds();
+                Seeds json = new Seeds();
+                json.setSeeds(seeds);
+                context.json(json);
+            } catch(UnauthorizedException e) {
+                ErrorHandler.sendErrorMessage(context, e);
+            }
         });
 
         // -- User
