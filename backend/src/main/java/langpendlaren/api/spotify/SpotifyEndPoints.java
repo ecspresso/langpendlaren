@@ -138,7 +138,7 @@ public class SpotifyEndPoints {
             context.result(spotifyAPI.addToPlayList(pId, tId));
         });
 
-        javalin.put("/spotify/playlist/deletetracks/{pid}/{tids}", context -> {
+        javalin.delete("/spotify/playlist/deletetracks/{pid}/{tids}", context -> {
             String pId = context.pathParam("pid");
             String tIds = context.pathParam("tids");
 
