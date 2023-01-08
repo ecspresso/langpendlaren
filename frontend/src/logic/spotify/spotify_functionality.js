@@ -8,7 +8,17 @@ function savePlayList(){
 function newPlaylist() {
 }
 
+ // När användaren har klickat på knappen hämta från API:et låtar som är lika långa som resan från den valda genren
+ function getPlayListByGenre(genre) {
+    console.log("Get playlist by: ",genre)
+};
 
 
 
-export {savePlayList, newPlaylist}
+function getRandomPlayList(listOfGenre){
+    const max = listOfGenre.length;
+    const randomNumber = Math.floor(Math.random() * max);
+    console.log(randomNumber, listOfGenre[randomNumber]);
+}
+
+export { savePlayList, newPlaylist, getPlayListByGenre, getRandomPlayList }
