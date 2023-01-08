@@ -59,7 +59,7 @@ public class SpotifyEndPoints {
                 Tokens tokensJson = new Tokens(tokens.getAccessToken(), tokens.getExpiresIn(), tokens.getRefreshToken());
                 context.json(tokensJson);
             } catch (IOException | ParseException | SpotifyWebApiException e) {
-                ErrorHandler.sendErrorMessage(context, e);
+                ErrorHandler.sendErrorMessage(context, e, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         });
 
@@ -73,7 +73,7 @@ public class SpotifyEndPoints {
                 json.setSeeds(seeds);
                 context.json(json);
             } catch(UnauthorizedException e) {
-                ErrorHandler.sendErrorMessage(context, e);
+                ErrorHandler.sendErrorMessage(context, e, HttpStatus.UNAUTHORIZED);
             }
         });
 

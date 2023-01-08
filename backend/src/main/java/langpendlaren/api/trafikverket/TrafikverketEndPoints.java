@@ -2,6 +2,7 @@ package langpendlaren.api.trafikverket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
+import io.javalin.http.HttpStatus;
 import langpendlaren.api.http.ErrorHandler;
 import langpendlaren.api.trafikverket.json.departures.Departures;
 import langpendlaren.api.trafikverket.json.departures.DeparturesJson;
@@ -33,7 +34,7 @@ public class TrafikverketEndPoints {
                 shortNames.addStations(shortNamesJson);
                 context.json(shortNames);
             } catch(IOException e) {
-                ErrorHandler.sendErrorMessage(context, e);
+                ErrorHandler.sendErrorMessage(context, e, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         });
 
@@ -46,7 +47,7 @@ public class TrafikverketEndPoints {
                 departures.addAnnouncements(departuresJson);
                 context.json(departures);
             } catch(IOException e) {
-                ErrorHandler.sendErrorMessage(context, e);
+                ErrorHandler.sendErrorMessage(context, e, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         });
 
@@ -59,7 +60,7 @@ public class TrafikverketEndPoints {
                 stops.addAnnouncements(stopsJson);
                 context.json(stops);
             } catch(IOException e) {
-                ErrorHandler.sendErrorMessage(context, e);
+                ErrorHandler.sendErrorMessage(context, e, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         });
     }
