@@ -1,7 +1,10 @@
 ﻿$u = (Invoke-RestMethod http://localhost/spotify/login).spotify_auth_uri
 $u | clip
+$u2 = (Invoke-RestMethod $u)
+$u2
 
 $at = Get-Clipboard
+$at | clip
 $r  = Get-Clipboard
 
 (Invoke-RestMethod http://localhost/spotify/user/profile/$at) # user profile
@@ -18,3 +21,9 @@ $body = @{name="emile";description="kaffe"} |ConvertTo-Json
 $body = @{name="emile"} |ConvertTo-Json
 Remove-Variable body
 (Invoke-RestMethod http://localhost/spotify/playlist/create?access_token=$at -Method POST -body $body)
+
+(Invoke-RestMethod http://localhost/spotify/search/playlist/pop?access_token=$at)
+$pl = (Invoke-RestMethod http://localhost/spotify/search/playlist/pop?access_token=$at)
+$pl |fl
+
+$plof = (Invoke-RestMethod "http://localhost/spotify/search/playlist/pop&offset=10&access_token=$at")

@@ -6,6 +6,8 @@ import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import langpendlaren.api.http.ErrorHandler;
 import langpendlaren.api.spotify.json.loginpage.LoginPage;
+import langpendlaren.api.spotify.json.playlist.Body;
+import langpendlaren.api.spotify.json.playlist.PlaylistList;
 import langpendlaren.api.spotify.json.seeds.Seeds;
 import langpendlaren.api.spotify.json.tokens.Tokens;
 import org.apache.hc.core5.http.ParseException;
@@ -13,6 +15,8 @@ import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 import se.michaelthelin.spotify.exceptions.detailed.BadRequestException;
 import se.michaelthelin.spotify.exceptions.detailed.UnauthorizedException;
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
+import se.michaelthelin.spotify.model_objects.specification.Paging;
+import se.michaelthelin.spotify.model_objects.specification.PlaylistSimplified;
 
 import java.io.IOException;
 import java.net.URI;
@@ -123,10 +127,10 @@ public class SpotifyEndPoints {
                 return;
             }
 
-            langpendlaren.api.spotify.json.playlist.Body body;
+            Body body;
 
             try {
-                body = context.bodyAsClass(langpendlaren.api.spotify.json.playlist.Body.class);
+                body = context.bodyAsClass(Body.class);
             } catch(Exception e) {
                 ErrorHandler.sendErrorMessage(context, e, "Body is missing or not correct", HttpStatus.BAD_REQUEST);
                 return;
@@ -206,14 +210,28 @@ public class SpotifyEndPoints {
 
         // -- Search playlist
         javalin.get("/spotify/search/playlist/{type}", context -> {
+            // Get access token
             String accessToken;
             if((accessToken = getAccessToken(context)) == null) {
                 return;
             }
 
             String type = context.pathParam("type");
-            context.json(spotifyAPI.searchPlayList(accessToken, type));
+            Paging<PlaylistSimplified> paging;
+
+            try {
+                int offset = Integer.parseInt(context.queryParam("offset"));
+                paging = spotifyAPI.searchPlayList(accessToken, type, offset);
+            } catch(NumberFormatException | NullPointerException e) {
+                paging = spotifyAPI.searchPlayList(accessToken, type);
+            }
+
+            PlaylistList list = new PlaylistList();
+            list.addPlaylists(type, paging);
+            context.json(list);
         });
+
+
 
         // -- Artists
         javalin.get("/spotify/artist/profile/{id}", context -> {
