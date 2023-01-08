@@ -139,7 +139,8 @@ public class SpotifyEndPoints {
         });
 
         // -- Playlist
-        javalin.post("/spotify/playlist/create", context -> {
+        // /spotify/playlist/create ------------------------------------------------------------------------------------
+        javalin.post("/spotify/playlist/", context -> {
             String accessToken;
             if((accessToken = getAccessToken(context)) == null) {
                 return;
@@ -167,8 +168,8 @@ public class SpotifyEndPoints {
             }
         });
 
-
-        javalin.delete("/spotify/playlist/delete/{id}", context -> {
+        // /spotify/playlist/delete/{id} -------------------------------------------------------------------------------
+        javalin.delete("/spotify/playlist/{id}", context -> {
             String accessToken;
             if((accessToken = getAccessToken(context)) == null) {
                 return;
@@ -186,7 +187,8 @@ public class SpotifyEndPoints {
             };
         });
 
-        javalin.put("/spotify/playlist/add/{pid}/{tid}", context -> {
+        // /spotify/playlist/add/{pid}/{tid} ---------------------------------------------------------------------------
+        javalin.put("/spotify/playlist/{pid}/{tid}", context -> {
             String accessToken;
             if((accessToken = getAccessToken(context)) == null) {
                 return;
@@ -204,7 +206,8 @@ public class SpotifyEndPoints {
             }
         });
 
-        javalin.delete("/spotify/playlist/deletetracks/{pid}/{tid}", context -> {
+        // /spotify/playlist/deletetracks/{pid}/{tid} ------------------------------------------------------------------
+        javalin.delete("/spotify/playlist/track/{pid}/{tid}", context -> {
             String accessToken;
             if((accessToken = getAccessToken(context)) == null) {
                 return;
