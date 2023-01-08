@@ -59,4 +59,17 @@ async function createPlayListByName(accessToken, name, description){
   return data;
 }
 
-export { getAvailableGenre, getUserProfile, getTokens, getPlayListByGenre, createPlayListByName };
+async function getTracksByGenre(genre, accessToken){
+  console.log("Contol: ", accessToken, genre)
+  const data = await fetch(
+    `http://localhost/spotify/search/track/${genre}?access_token=${accessToken}`
+    ,
+    { method: "GET",}
+  )
+  .then(res => res.json())
+  .catch(e => console.assert(e))
+  console.log(data);
+  return data;
+}
+
+export { getAvailableGenre, getUserProfile, getTokens, getPlayListByGenre, createPlayListByName, getTracksByGenre };

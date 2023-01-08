@@ -31,23 +31,22 @@ function getGenreTemplate(travelTime){
             </div>
 
             <div style="padding: 1rem; border-top:1px solid gray;">
-                <div>
-                <div id="playlist_suggestions">
-                    <h3>Play list suggestions</h3>
-                    <p>No suggestions</p>
-                    <div id="p_suggestion"></div>
-                </div>
-                </div>
                 <div id="song_suggestions">
                     <h3>Song list suggestions</h3>
                     <table id="timeTableDeparture">
                         <tr>
                             <th>Name</th>
-                            <th>Antal låter</th>
-                            <th>En låt</th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </table>
                 </div>
+                <div id="playlist_suggestions">
+                    <h3>Play list suggestions</h3>
+                    <p>No suggestions</p>
+                    <div id="p_suggestion"></div>
+                </div>
+                
             </div>
         
             <div id="flex_buttons">

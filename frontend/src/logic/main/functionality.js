@@ -2,9 +2,8 @@ const ipc = window.require("electron").ipcRenderer;
 const ipcRenderer = require("electron").ipcRenderer;
 import {millisecondsToHoursAndMinutes, clearHTMLElementByElementId} from "../../util/util.js";
 import { getAvailableGenre, getUserProfile, getTokens, createPlayListByName } from "../spotify/spotify_events.js";
-import {savePlayList, getRandomPlayList, displayPlayListByGenre} from "../spotify/spotify_functionality.js"
+import {savePlayList, getRandomPlayList, displayTracks} from "../spotify/spotify_functionality.js"
 import { getGenreTemplate, displayAllGenre } from "../spotify/spotify_templates.js";
-const testAccessToken = "BQB6Q0AUsTIyT59AgVV80Hvmu6M1MR3X-a3YvxgvKVLekfw3mVECB11wyeKzs59OCDWtHjWiIweVLr91JuludmWPgRUq_g2s67yWhi5H7PJtbaC6dZ19emJ14rq2FO7sR1NKgsS2DqaygxrZTdTrFUcqrKyvEOmirAbgKEOUf0FXkZEGN5B7OM6yMXTpg9RwUU_v1z9D5FEu1-GFJv7SvHmeeKibMg4iUiSRJO2tTxRMFFwi-DxFuDkW8nnvq1A";
 //const testRefreshToken = "BQB-r-B3VIVwuQK4-im22_qOgH5MdL4NtJzMWegRbWl46zlnQd254lnuK3vQNeVWeYJ5DOdAQilVaxPboZLwh85SLmUuwpiWQXzZ85o7I3tufps1fWbl08lWdhJ7ueVrigbjVCHF-CF3DDI9eHX01K0Rlt_oJ1yfDAbdrgTUuWhFeIC7u38VpeS0W7lA5ifb5Rld1r2evUauwZXxOfBciUvk3oO2XpU4hLQ3LnamlO0Yg9Z07vzn2bDWMWB3nwg";
 
 
@@ -23,7 +22,8 @@ ipcRenderer.on("spotifyReady", async function (event, code) {
   clearHTMLElementByElementId("main_content");
 
   await getTokens(code).then(token => {
-      localStorage.setItem("access_token", token.access_token.value);
+      // localStorage.setItem("access_token", token.access_token.value);
+      localStorage.setItem("access_token", "BQAQ02uKVdNLpKEqYqAvCuyGR8916IPB1GPMKkl3-GeKT_-Z_KjH-MSAnoGWJCIw1NUcEGIA-desnIqPARbaapPKvTACkm1aeikbda6teKa3Cn0GxbKePyM42mmJAPt1MylZTlySRTmYJo5ZRSiL4Otwp0Vuvn3iBc9zJ-00W4J5rYIhBlFJ4EE0vCQQYMGCx_1chpUz-oLJiAATY3QGCgLpONlrD8CrB8K74SiqjVCkqyOjbvxFii3S5fEOXB0");
       localStorage.setItem("access_token_expire", token.access_token.expires_in);
       localStorage.setItem("refresh_token", token.refresh_token.value);
   });
@@ -35,11 +35,9 @@ ipcRenderer.on("spotifyReady", async function (event, code) {
   
   // Lägg till ny innehåll
   $("#main_content").append(template);
-
-  const accessToken = localStorage.getItem("access_token");
   
   // Filla upp med alla genre
-  await getAvailableGenre(testAccessToken).then(genre => {
+  await getAvailableGenre(localStorage.getItem("access_token")).then(genre => {
     displayAllGenre(genre.seeds);
   });
 
@@ -58,7 +56,7 @@ function handleSpotifyClickEvents(){
     console.log(name, )
     if(name !== "" || desc !== ""){
       console.log("start creating..")
-      createPlayListByName(testAccessToken, name.value, desc.value).then(result => {
+      createPlayListByName(localStorage.getItem("access_token"), name.value, desc.value).then(result => {
         console.log(result);
         document.getElementById("playListCreatorWraper").innerHTML = `<div>
           <h4 style="color: green;">Successful created!</h4>
@@ -73,7 +71,8 @@ function handleSpotifyClickEvents(){
   document.getElementById("send_genre_button").addEventListener("click", () => {
     var select = document.getElementById("genres");
     var genre = select.options[select.selectedIndex].text;
-    displayPlayListByGenre(genre, localStorage.getItem("access_token"));
+
+    displayTracks(genre, localStorage.getItem("access_token"));
   });
 
   // När användaren har klickat på knappen läggs nya låtar till i spellistan på användarens konto

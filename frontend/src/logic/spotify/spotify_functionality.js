@@ -1,4 +1,4 @@
-import { getPlayListByGenre } from "./spotify_events.js";
+import { getTracksByGenre } from "./spotify_events.js";
 import { displayPlayListSuggestion } from "./spotify_templates.js";
 
 
@@ -10,10 +10,15 @@ function newPlaylist() {
 }
 
  // När användaren har klickat på knappen hämta från API:et låtar som är lika långa som resan från den valda genren
- async function displayPlayListByGenre(genre, accessToken) {
-    await getPlayListByGenre(genre, accessToken).then(plist => {
-        displayPlayListSuggestion(plist);
+ function displayTracks(genre, travelTime, accessToken) {
+    // find tracks.
+    console.log("control 1: ", accessToken);
+    getTracksByGenre(genre, accessToken).then(res => {
+        console.log(res);
     });
+    // filter out 
+    
+    
 }
 
 
@@ -27,4 +32,4 @@ function getRandomPlayList(listOfGenre){
     console.log(randomNumber, listOfGenre[randomNumber]);
 }
 
-export { savePlayList, newPlaylist, displayPlayListByGenre, getRandomPlayList }
+export { savePlayList, newPlaylist, displayTracks, getRandomPlayList }

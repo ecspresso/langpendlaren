@@ -252,20 +252,24 @@ public class SpotifyAPI {
 
     /**
      * Search tracks by name
-     * @param name search key
      * @return a list of track
      */
-    public ArrayList<Map> searchTracks(String accessToken, String name){
+    public Track[] searchTracks(String accessToken, String genre){
         spotifyApiWrapper.setAccessToken(accessToken);
         // Behöver vi verklingen denna metoden?
-        final SearchTracksRequest searchPlaylistsRequest = this.spotifyApiWrapper.searchTracks(name)
+        final SearchTracksRequest searchTracksRequest = this.spotifyApiWrapper.searchTracks(genre)
+                .limit(10)
+                  .offset(0)
+                  .includeExternal("audio")
                 .build();
 
         try {
-            final Paging<Track> trackPaging = searchPlaylistsRequest.execute();
+            System.out.println("Pulling...");
+            final Paging<Track> trackPaging = searchTracksRequest.execute();
 
             System.out.println("Total: " + trackPaging.getTotal());
-            return new ArrayList<>(); //FIXME!
+
+            return trackPaging.getItems();
         } catch (IOException | SpotifyWebApiException | ParseException e) {
             System.out.println("Error: " + e.getMessage());
             return null;
@@ -295,9 +299,6 @@ public class SpotifyAPI {
     }
 
     public Paging<PlaylistSimplified> searchPlayList(String accessToken, String type) throws IOException, ParseException, SpotifyWebApiException {
-        return searchPlayList(accessToken, type, 0);
-    }
-    public Paging<PlaylistSimplified> searchPlayList(String accessToken, String type, int offset) throws IOException, ParseException, SpotifyWebApiException {
         spotifyApiWrapper.setAccessToken(accessToken);
 
         SearchPlaylistsRequest searchPlaylistsRequest = this.spotifyApiWrapper.searchPlaylists(type)

@@ -16,13 +16,14 @@ import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 import se.michaelthelin.spotify.exceptions.detailed.BadRequestException;
 import se.michaelthelin.spotify.exceptions.detailed.UnauthorizedException;
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
-import se.michaelthelin.spotify.model_objects.specification.Paging;
-import se.michaelthelin.spotify.model_objects.specification.Playlist;
-import se.michaelthelin.spotify.model_objects.specification.PlaylistSimplified;
+import se.michaelthelin.spotify.model_objects.specification.*;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SpotifyEndPoints {
     private final Javalin javalin;
@@ -223,25 +224,17 @@ public class SpotifyEndPoints {
         // });
 
         // -- Search playlist
-        javalin.get("/spotify/search/playlist/{type}", context -> {
+        javalin.get("/spotify/search/track/{type}", context -> {
             // Get access token
             String accessToken;
             if((accessToken = getAccessToken(context)) == null) {
                 return;
             }
-
             String type = context.pathParam("type");
-            Paging<PlaylistSimplified> paging;
-
-            try {
-                int offset = Integer.parseInt(context.queryParam("offset"));
-                paging = spotifyAPI.searchPlayList(accessToken, type, offset);
-            } catch(NumberFormatException | NullPointerException e) {
-                paging = spotifyAPI.searchPlayList(accessToken, type);
-            }
-
-            PlaylistList list = new PlaylistList();
-            list.addPlaylists(type, paging);
+            System.out.println("Access: "+ accessToken + " type: "+ type);
+            Track[] track = spotifyAPI.searchTracks(accessToken, type);
+            ArrayList list = new ArrayList<>();
+            System.out.println("tracks: " +track);
             context.json(list);
         });
 
@@ -259,7 +252,7 @@ public class SpotifyEndPoints {
         // });
     }
 
-    private String getAccessToken(Context context) {
+    private String getAccessToken(io.javalin.http.Context context) {
         String accessToken = context.queryParam("access_token");
 
         if(accessToken == null || accessToken.isBlank()) {
@@ -269,4 +262,5 @@ public class SpotifyEndPoints {
             return accessToken;
         }
     }
+
 }
