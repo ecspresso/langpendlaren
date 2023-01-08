@@ -19,11 +19,14 @@ $a | ConvertTo-Json -Depth 100
 
 $body = @{name="emile";description="kaffe"} |ConvertTo-Json
 $body = @{name="emile"} |ConvertTo-Json
+$body = @{description="kaffe"} |ConvertTo-Json
 Remove-Variable body
 (Invoke-RestMethod http://localhost/spotify/playlist/create?access_token=$at -Method POST -body $body)
 
 (Invoke-RestMethod http://localhost/spotify/search/playlist/pop?access_token=$at)
 $pl = (Invoke-RestMethod http://localhost/spotify/search/playlist/pop?access_token=$at)
-$pl |fl
+$pl | select next, previous
 
-$plof = (Invoke-RestMethod "http://localhost/spotify/search/playlist/pop&offset=10&access_token=$at")
+$plof = (Invoke-RestMethod "http://localhost/spotify/search/playlist/pop?offset=10&access_token=$at")
+$plof | select next, previous
+

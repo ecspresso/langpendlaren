@@ -12,6 +12,7 @@ import se.michaelthelin.spotify.model_objects.specification.*;
 import se.michaelthelin.spotify.requests.data.albums.GetAlbumRequest;
 import se.michaelthelin.spotify.requests.data.albums.GetSeveralAlbumsRequest;
 import se.michaelthelin.spotify.requests.data.artists.GetArtistRequest;
+import se.michaelthelin.spotify.requests.data.follow.UnfollowPlaylistRequest;
 import se.michaelthelin.spotify.requests.data.playlists.AddItemsToPlaylistRequest;
 import se.michaelthelin.spotify.requests.data.playlists.CreatePlaylistRequest;
 import se.michaelthelin.spotify.requests.data.playlists.RemoveItemsFromPlaylistRequest;
@@ -112,18 +113,12 @@ public class SpotifyAPI {
      * Users id //FIXME! return profile.
      * @return user id
      */
-    public String getUserId(String accessToken) {
+    public String getUserId(String accessToken) throws IOException, ParseException, SpotifyWebApiException {
         String userId;
 
         spotifyApiWrapper.setAccessToken(accessToken);
         GetCurrentUsersProfileRequest userProfile = spotifyApiWrapper.getCurrentUsersProfile().build();
-        try {
-            userId = userProfile.execute().getId();
-            System.out.println("userid: "+ userId);
-        } catch(IOException | SpotifyWebApiException | ParseException e) {
-            e.printStackTrace();
-            userId = e.getMessage();
-        }
+        userId = userProfile.execute().getId();
 
         return userId;
     }
@@ -131,8 +126,9 @@ public class SpotifyAPI {
     // Playlist
 
     /**
+     *
      */
-    public String createPlayList(String accessToken, String name, String description){
+    public Playlist createPlayList(String accessToken, String name, String description) throws IOException, ParseException, SpotifyWebApiException {
         CreatePlaylistRequest createPlayList;
         String userId = getUserId(accessToken);
         synchronized(lock) {
@@ -140,16 +136,7 @@ public class SpotifyAPI {
             createPlayList = this.spotifyApiWrapper.createPlaylist(userId, name).public_(false).description(description).build();
         }
 
-        try {
-            Playlist playlist = createPlayList.execute();
-            System.out.println("Name: " + playlist.getName() + " id: " + playlist.getId());
-            playListToId.put(playlist.getName(), playlist.getId());
-            return playlist.getId();
-        } catch (IOException | SpotifyWebApiException | ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
-
+        return createPlayList.execute();
     }
 
     /**
@@ -183,9 +170,10 @@ public class SpotifyAPI {
      * Delete a play list by id
      * @param id playlist id
      */
-    public void deletePlayList(String accessToken, String id) {
+    public String deletePlayList(String accessToken, String id) throws IOException, ParseException, SpotifyWebApiException {
         spotifyApiWrapper.setAccessToken(accessToken);
-        // No code provided for deleting a playlist.
+        UnfollowPlaylistRequest request = spotifyApiWrapper.unfollowPlaylist(id).build();
+        return request.execute();
     }
 
     /**

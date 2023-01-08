@@ -7,6 +7,7 @@ import io.javalin.http.HttpStatus;
 import langpendlaren.api.http.ErrorHandler;
 import langpendlaren.api.spotify.json.loginpage.LoginPage;
 import langpendlaren.api.spotify.json.playlist.Body;
+import langpendlaren.api.spotify.json.playlist.PlaylistJson;
 import langpendlaren.api.spotify.json.playlist.PlaylistList;
 import langpendlaren.api.spotify.json.seeds.Seeds;
 import langpendlaren.api.spotify.json.tokens.Tokens;
@@ -16,6 +17,7 @@ import se.michaelthelin.spotify.exceptions.detailed.BadRequestException;
 import se.michaelthelin.spotify.exceptions.detailed.UnauthorizedException;
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 import se.michaelthelin.spotify.model_objects.specification.Paging;
+import se.michaelthelin.spotify.model_objects.specification.Playlist;
 import se.michaelthelin.spotify.model_objects.specification.PlaylistSimplified;
 
 import java.io.IOException;
@@ -110,7 +112,6 @@ public class SpotifyEndPoints {
         });
 
         // -- User
-        //TODO Ändra access token till query param
         javalin.get("/spotify/user/profile", context -> {
             String accessToken;
             if((accessToken = getAccessToken(context)) == null) {
@@ -138,7 +139,15 @@ public class SpotifyEndPoints {
 
             String name = body.getName();
             String description = body.getDescription();
-            context.result(spotifyAPI.createPlayList(accessToken, name, description)); //TODO returnera id?
+            try {
+                Playlist playlist = spotifyAPI.createPlayList(accessToken, name, description);
+                PlaylistJson playlistJson = new PlaylistJson();
+                playlistJson.setId(playlist.getId());
+                playlistJson.setName(playlist.getName());
+                context.json(playlistJson); //TODO returnera id?
+            } catch(IOException | ParseException | SpotifyWebApiException e) {
+                ErrorHandler.sendErrorMessage(context, e);
+            }
         });
 
         javalin.delete("/spotify/playlist/delete/{id}", context -> {
@@ -148,7 +157,12 @@ public class SpotifyEndPoints {
             }
 
             String id = context.pathParam("id");
-            spotifyAPI.deletePlayList(accessToken, id);
+            try {
+                String deleted = spotifyAPI.deletePlayList(accessToken, id);
+                System.out.println(deleted);
+            } catch(IOException | ParseException | SpotifyWebApiException e) {
+                ErrorHandler.sendErrorMessage(context, e);
+            };
         });
 
         javalin.put("/spotify/playlist/add/{pid}/{tid}", context -> {
@@ -177,36 +191,36 @@ public class SpotifyEndPoints {
         });
 
         // -- Albums
-        javalin.get("/spotify/album/{id}", context -> {
-            String accessToken;
-            if((accessToken = getAccessToken(context)) == null) {
-                return;
-            }
+        // javalin.get("/spotify/album/{id}", context -> {
+        //     String accessToken;
+        //     if((accessToken = getAccessToken(context)) == null) {
+        //         return;
+        //     }
+        //
+        //     String id = context.pathParam("id");
+        //     context.json(spotifyAPI.getAlbumById(accessToken, id));
+        // });
 
-            String id = context.pathParam("id");
-            context.json(spotifyAPI.getAlbumById(accessToken, id));
-        });
-
-        javalin.get("/spotify/album/{ids}", context ->{
-            String accessToken;
-            if((accessToken = getAccessToken(context)) == null) {
-                return;
-            }
-
-            String ids = context.pathParam("ids");
-            context.json(spotifyAPI.getAlbums(accessToken, ids));
-        });
+        // javalin.get("/spotify/album/{ids}", context ->{
+        //     String accessToken;
+        //     if((accessToken = getAccessToken(context)) == null) {
+        //         return;
+        //     }
+        //
+        //     String ids = context.pathParam("ids");
+        //     context.json(spotifyAPI.getAlbums(accessToken, ids));
+        // });
 
         // -- Search
-        javalin.get("/spotify/search/track/{name}", context -> {
-            String accessToken;
-            if((accessToken = getAccessToken(context)) == null) {
-                return;
-            }
-
-            String name = context.pathParam("name");
-            context.json(spotifyAPI.searchTracks(accessToken, name));
-        });
+        // javalin.get("/spotify/search/track/{name}", context -> {
+        //     String accessToken;
+        //     if((accessToken = getAccessToken(context)) == null) {
+        //         return;
+        //     }
+        //
+        //     String name = context.pathParam("name");
+        //     context.json(spotifyAPI.searchTracks(accessToken, name));
+        // });
 
         // -- Search playlist
         javalin.get("/spotify/search/playlist/{type}", context -> {
@@ -234,15 +248,15 @@ public class SpotifyEndPoints {
 
 
         // -- Artists
-        javalin.get("/spotify/artist/profile/{id}", context -> {
-            String accessToken;
-            if((accessToken = getAccessToken(context)) == null) {
-                return;
-            }
-
-            String id = context.pathParam("id");
-            context.json(spotifyAPI.getArtist(accessToken, id));
-        });
+        // javalin.get("/spotify/artist/profile/{id}", context -> {
+        //     String accessToken;
+        //     if((accessToken = getAccessToken(context)) == null) {
+        //         return;
+        //     }
+        //
+        //     String id = context.pathParam("id");
+        //     context.json(spotifyAPI.getArtist(accessToken, id));
+        // });
     }
 
     private String getAccessToken(Context context) {

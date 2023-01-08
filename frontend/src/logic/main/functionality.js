@@ -4,7 +4,7 @@ import {millisecondsToHoursAndMinutes, clearHTMLElementByElementId} from "../../
 import { getAvailableGenre, getUserProfile, getTokens, createPlayListByName } from "../spotify/spotify_events.js";
 import {savePlayList, getRandomPlayList, displayPlayListByGenre} from "../spotify/spotify_functionality.js"
 import { getGenreTemplate, displayAllGenre } from "../spotify/spotify_templates.js";
-const testAccessToken = "BQBY-9zrYlgSC3WJzuRjDrxj72-av7iybZXB1XkPMP-yfNBA1yjIzsqVqcguKnD0ifBcJW4JAyNyBMDucbWP2NtfP6nsJXEigRe34xBzc154JVwCYIad423Fit7DHAL7lAPXI5KyS-4q9tiKujG7h8idBvymvW_LPYBqES6kPb1XUz6Y-sERTJGiXZUrH-g0nFhIetaMiuJgpZ19qwZJg8iIHlLQ3K94X-6pY9dxB-zxTM0yDzeryoJ5EyDUd88";
+const testAccessToken = "BQB6Q0AUsTIyT59AgVV80Hvmu6M1MR3X-a3YvxgvKVLekfw3mVECB11wyeKzs59OCDWtHjWiIweVLr91JuludmWPgRUq_g2s67yWhi5H7PJtbaC6dZ19emJ14rq2FO7sR1NKgsS2DqaygxrZTdTrFUcqrKyvEOmirAbgKEOUf0FXkZEGN5B7OM6yMXTpg9RwUU_v1z9D5FEu1-GFJv7SvHmeeKibMg4iUiSRJO2tTxRMFFwi-DxFuDkW8nnvq1A";
 //const testRefreshToken = "BQB-r-B3VIVwuQK4-im22_qOgH5MdL4NtJzMWegRbWl46zlnQd254lnuK3vQNeVWeYJ5DOdAQilVaxPboZLwh85SLmUuwpiWQXzZ85o7I3tufps1fWbl08lWdhJ7ueVrigbjVCHF-CF3DDI9eHX01K0Rlt_oJ1yfDAbdrgTUuWhFeIC7u38VpeS0W7lA5ifb5Rld1r2evUauwZXxOfBciUvk3oO2XpU4hLQ3LnamlO0Yg9Z07vzn2bDWMWB3nwg";
 
 
@@ -58,8 +58,14 @@ function handleSpotifyClickEvents(){
     console.log(name, )
     if(name !== "" || desc !== ""){
       console.log("start creating..")
-      const data = createPlayListByName(testAccessToken, name.value, desc.value);
-      console.log(data)
+      createPlayListByName(testAccessToken, name.value, desc.value).then(result => {
+        console.log(result);
+        document.getElementById("playListCreatorWraper").innerHTML = `<div>
+          <h4 style="color: green;">Successful created!</h4>
+          <p>PlayListName: ${result.name} </p>
+          <p>PlayListName: ${desc.value} </p>
+        </div>`
+      });
     }
   });
 

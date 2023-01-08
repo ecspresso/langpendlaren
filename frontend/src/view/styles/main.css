@@ -502,15 +502,30 @@ button:hover {
   border-radius: 10px;
 
 }
+#pname{
+  border: 1px solid lightgray;
+  background: white;
+  border-radius: 5px;
+  width: 200px;
+  height: 2.5rem;
+  
+}
+
+#pdescription{
+  border: 1px solid lightgray;
+  background: white;
+  border-radius: 5px;
+  width: 200px;
+  height: 2.5rem;
+}
 
 #song_suggestions {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  border-top: 1px solid gray;
 
-  border: 1px solid black;
-
-  padding: 10px;
+  padding: 1rem;
 
   margin-bottom: 10px;
 }
