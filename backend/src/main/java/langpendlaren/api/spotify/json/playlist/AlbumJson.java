@@ -55,6 +55,14 @@ public class AlbumJson {
         public void setName(String name) {
             this.name = name;
         }
+
+        public Integer getDuration() {
+            return duration;
+        }
+
+        public void setDuration(Integer duration) {
+            this.duration = duration;
+        }
     }
 
     // static class Track {
