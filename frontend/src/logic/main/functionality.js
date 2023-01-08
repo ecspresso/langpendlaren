@@ -26,7 +26,7 @@ ipcRenderer.on("spotifyReady", async function (event, code) {
 
   const userProfile = getUserProfile(tokens[0]);
   
-  //const genre = getAvailableGenre();
+  const genre = getAvailableGenre();
   // Lägg till ny innehåll
   $("#main_content").append(template);
   handleSpotifyClickEvents();

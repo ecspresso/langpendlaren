@@ -1,4 +1,4 @@
-package langpendlaren.api.json.loginpage;
+package langpendlaren.api.spotify.json.loginpage;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

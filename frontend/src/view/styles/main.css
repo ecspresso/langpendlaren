@@ -209,7 +209,16 @@ button:hover {
 #flex_buttons {
   display: flex;
   align-items: center;
-  flex-direction: column;
+  justify-content: center;
+  flex-direction: row;
+  row-gap: 10px;
+  column-gap: 10px;
+}
+
+#flex_buttons > .basic_button {
+  width: auto;
+  padding: 20px;
+  height: auto;
 }
 
 #station {
@@ -496,6 +505,7 @@ button:hover {
 
 #song_suggestions {
   display: flex;
+  flex-direction: column;
   justify-content: center;
 
   border: 1px solid black;
@@ -503,6 +513,14 @@ button:hover {
   padding: 10px;
 
   margin-bottom: 10px;
+}
+
+#song_suggestions > h3 {
+  text-align: center;
+}
+
+#song_suggestions th {
+  width: auto;
 }
 
 .container {

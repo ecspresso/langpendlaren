@@ -3,11 +3,9 @@ package langpendlaren.api.spotify;
 
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-import io.javalin.http.Cookie;
-import io.javalin.http.Handler;
 import io.javalin.http.HttpStatus;
-import langpendlaren.api.json.loginpage.LoginPage;
-import langpendlaren.api.json.tokens.Tokens;
+import langpendlaren.api.spotify.json.loginpage.LoginPage;
+import langpendlaren.api.spotify.json.tokens.Tokens;
 import org.apache.hc.core5.http.ParseException;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;

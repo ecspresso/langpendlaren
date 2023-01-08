@@ -1,4 +1,4 @@
-package langpendlaren.api.json.tokens;
+package langpendlaren.api.spotify.json.tokens;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

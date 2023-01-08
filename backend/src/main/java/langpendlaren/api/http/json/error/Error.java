@@ -1,4 +1,4 @@
-package langpendlaren.api.http.json;
+package langpendlaren.api.http.json.error;
 
 /**
  * Holds an error message being sent instead when something goes wrong.

@@ -2,9 +2,8 @@ function getGenreTemplate(travelTime){
     return `
         <div class='center_me'>
             <h2 class>Generera spellista</h2>
-            <p>Din reselängd är <h4> ${travelTime}H</h4></p>
-        </div>
-        <div>
+            <p>Din reselängd är </p><h4>${travelTime}H</h4>
+
             <p>Find play list by genre.</p>
             <label for="genre">Välj genre:</label>
             
@@ -25,8 +24,8 @@ function getGenreTemplate(travelTime){
         </div>
         
         <div id="flex_buttons">
-            <button type="button" id="savePlayList">Save playlist</button>
-            <button type="button" id="generatePlaylist">Generate new play list</button>
+            <button class="basic_button" type="button" id="savePlayList">Save playlist</button>
+            <button class="basic_button" type="button" id="generatePlaylist">Generate new play list</button>
         </div>
         `;
     }
