@@ -14,37 +14,52 @@ function newPlaylist() {
     const tarckIds = [];
     getTracksByGenre(genre, accessToken).then(album => {
         let timeCounter = 0;
+        console.log(album)
         for(let i = 0; i < album.length; ++i){
             if(timeCounter < travelTime){
                 tarckIds.push(album.id);
             }
             timeCounter = timeCounter + album[i].duration;
+            console.log({timeCounter});
         }
+        
+        console.log({tarckIds});
+        
     });
     
     // Add tracks to playList
-    //addToPlayList(accessToken, tracks, pId);
+    if(tarckIds.length > 0){
+        for(const id of tarckIds){
+            console.log("adding...")
+            addToPlayList(accessToken, id, pId).then(res => {
+                console.log(res);
+            });
+        }
+    }
+     // Pull out all tracks from playlist and show on the screen to play.
+        getPlayListTracksByPlayListId(accessToken, pId).then(res => {
+            const album = res.album;
+            const image = "url....";
+            const duration = 12;
+            const name = "";
+            for(let i = 0; i < album.length; ++i){
+                jQuery("#tracksTable tr:last").after(`<tr>
+                        <td>${i+1}</td>
+                        <td><img src="${image}"></td>
+                        <td>${name}</td>
+                        <td>${duration}</td>
+                        <td><button 
+                        class="basic_button"
+                        type='button'
+                        onclick="playMusic()">Välj resa</button></td>
+                    </tr>"
+                `);
+            }
+        });
 
-    // Pull out all tracks in playlist and show on the screen to play.
-    // getPlayListTracksByPlayListId(accessToken, pId).then(res => {
-    //     const album = res.album;
-    //     const image = "url....";
-    //     const duration = 12;
-    //     const name = "";
-    //     for(let i = 0; i < album.length; ++i){
-    //         jQuery("#tracksTable tr:last").after(`<tr>
-    //                 <td>${i+1}</td>
-    //                 <td><img src="${image}"></td>
-    //                 <td>${name}</td>
-    //                 <td>${duration}</td>
-    //                 <td><button 
-    //                 class="basic_button"
-    //                 type='button'
-    //                 onclick="playMusic()">Välj resa</button></td>
-    //             </tr>"
-    //         `);
-    //     }
-    // });
+    
+
+
     
 }
 
