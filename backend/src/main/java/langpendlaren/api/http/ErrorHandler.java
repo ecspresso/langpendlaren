@@ -7,7 +7,7 @@ public class ErrorHandler {
     public static void sendErrorMessage(Context context, Exception exception) {
         exception.printStackTrace();
         Error error = new Error();
-        error.setErrorMessage("kaffe", exception.getMessage());
+        error.setErrorMessage(exception.getClass().getSimpleName(), exception.getMessage());
         context.json(error);
     }
 }
