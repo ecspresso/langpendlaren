@@ -90,12 +90,11 @@ public class SpotifyEndPoints {
          */
         javalin.get("/spotify/genre/seeds/{accessToken}", context -> {
             String accessToken = context.pathParam("accessToken");
-            System.out.println("Genre accessToken: " + accessToken);
             try {
                 String[] seeds = spotifyAPI.genreSeeds(accessToken);
-                //Seeds json = new Seeds();
-                //json.setSeeds(seeds);
-                context.json(seeds);
+                Seeds json = new Seeds();
+                json.setSeeds(seeds);
+                context.json(json);
             } catch(UnauthorizedException e) {
                 ErrorHandler.sendErrorMessage(context, e, "You must login first.", HttpStatus.UNAUTHORIZED);
             }
