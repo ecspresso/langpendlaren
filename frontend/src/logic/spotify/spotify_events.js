@@ -43,7 +43,7 @@ async function getPlayListByGenre(genre, accessToken){
 
 async function createPlayListByName(accessToken, name, description){
   const data = await fetch(
-    `http://localhost/spotify/playlist/create/?access_token=${accessToken}`
+    `http://localhost/spotify/playlist/?access_token=${accessToken}`
     ,
     { method: "POST",
       headers: {
@@ -60,9 +60,32 @@ async function createPlayListByName(accessToken, name, description){
 }
 
 async function getTracksByGenre(genre, accessToken){
-  console.log("Contol: ", accessToken, genre)
   const data = await fetch(
     `http://localhost/spotify/search/track/${genre}?access_token=${accessToken}`
+    ,
+    { method: "GET",}
+  )
+  .then(res => res.json())
+  .catch(e => console.assert(e))
+  console.log(data)
+  return data;
+}
+
+async function addToPlayList(accessToken, trackIds, pId){
+  const data = await fetch(
+    `http://localhost/spotify/playlist/${pId}/${trackIds}?access_token=${accessToken}`
+    ,
+    { method: "PUT",}
+    )
+  .then(res => res.json())
+  .catch(e => console.assert(e))
+  console.log(data);
+  return data;
+}
+
+async function getPlayListTracksByPlayListId(accessToken, pId){
+  const data = await fetch(
+    `http://localhost/spotify/playlist/${pId}?access_token=${accessToken}`
     ,
     { method: "GET",}
   )
@@ -72,16 +95,4 @@ async function getTracksByGenre(genre, accessToken){
   return data;
 }
 
-async function addToPlayList(accessToken, trackIds, pId){
-  const data = await fetch(
-    `http://localhost/spotify/playlist/add/${trackIds}/${pId}?access_token=${accessToken}`
-    ,
-    { method: "PUT",}
-  )
-  .then(res => res.json())
-  .catch(e => console.assert(e))
-  console.log(data);
-  return data;
-}
-
-export { getAvailableGenre, getUserProfile, getTokens, getPlayListByGenre, createPlayListByName, getTracksByGenre, addToPlayList };
+export { getAvailableGenre, getUserProfile, getTokens, getPlayListByGenre, createPlayListByName, getTracksByGenre, addToPlayList, getPlayListTracksByPlayListId };

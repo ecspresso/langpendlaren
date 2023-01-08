@@ -1,4 +1,4 @@
-import { getTracksByGenre } from "./spotify_events.js";
+import { getTracksByGenre, addToPlayList, getPlayListTracksByPlayListId } from "./spotify_events.js";
 
 
 function savePlayList(){
@@ -12,10 +12,8 @@ function newPlaylist() {
  function displayTracks(genre, travelTime, accessToken, pId) {
     // find tracks.
     const tarckIds = [];
-    getTracksByGenre(genre, accessToken).then(res => {
-        console.log(res);
+    getTracksByGenre(genre, accessToken).then(album => {
         let timeCounter = 0;
-        var album = res.albumns;
         for(let i = 0; i < album.length; ++i){
             if(timeCounter < travelTime){
                 tarckIds.push(album.id);
@@ -25,28 +23,28 @@ function newPlaylist() {
     });
     
     // Add tracks to playList
-    addToPlayList(accessToken, tracks, pId);
+    //addToPlayList(accessToken, tracks, pId);
 
     // Pull out all tracks in playlist and show on the screen to play.
-    getPlayListById(pId).then(res => {
-        const album = res.album;
-        const image = "url....";
-        const duration = 12;
-        const name = "";
-        for(let i = 0; i < album.length; ++i){
-            jQuery("#tracksTable tr:last").after(`<tr>
-                    <td>${i+1}</td>
-                    <td><img src="${image}"></td>
-                    <td>${name}</td>
-                    <td>${duration}</td>
-                    <td><button 
-                    class="basic_button"
-                    type='button'
-                    onclick="playMusic()">Välj resa</button></td>
-                </tr>"
-            `);
-        }
-    });
+    // getPlayListTracksByPlayListId(accessToken, pId).then(res => {
+    //     const album = res.album;
+    //     const image = "url....";
+    //     const duration = 12;
+    //     const name = "";
+    //     for(let i = 0; i < album.length; ++i){
+    //         jQuery("#tracksTable tr:last").after(`<tr>
+    //                 <td>${i+1}</td>
+    //                 <td><img src="${image}"></td>
+    //                 <td>${name}</td>
+    //                 <td>${duration}</td>
+    //                 <td><button 
+    //                 class="basic_button"
+    //                 type='button'
+    //                 onclick="playMusic()">Välj resa</button></td>
+    //             </tr>"
+    //         `);
+    //     }
+    // });
     
 }
 
