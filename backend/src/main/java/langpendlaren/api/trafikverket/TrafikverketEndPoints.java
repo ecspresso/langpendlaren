@@ -1,11 +1,8 @@
 package langpendlaren.api.trafikverket;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
-import io.javalin.http.HttpStatus;
 import langpendlaren.api.http.ErrorHandler;
-import langpendlaren.api.http.json.error.Error;
 import langpendlaren.api.trafikverket.json.departures.Departures;
 import langpendlaren.api.trafikverket.json.departures.DeparturesJson;
 import langpendlaren.api.trafikverket.json.stationshortnames.StationShortNames;
