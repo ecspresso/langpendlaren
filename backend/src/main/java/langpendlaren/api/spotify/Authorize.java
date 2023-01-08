@@ -21,7 +21,7 @@ public class Authorize {
     public URI authorize() {
         // Scope for defining what we need from the API
         String scope = "playlist-read-private,user-follow-modify,playlist-read-collaborative,user-follow-read,user-read-currently-playing,playlist-modify-private, playlist-modify-public";
-        AuthorizationCodeUriRequest authorizationCodeUriRequest = this.spotifyApiWrapper.authorizationCodeUri().scope(scope).show_dialog(false).build();
+        AuthorizationCodeUriRequest authorizationCodeUriRequest = this.spotifyApiWrapper.authorizationCodeUri().scope(scope).show_dialog(true).build();
         return authorizationCodeUriRequest.execute();
     }
 

@@ -28,7 +28,6 @@ public class SpotifyEndPoints {
         } catch(URISyntaxException e) {
             throw new RuntimeException(e);
         }
-
         endPoints();
     }
 
