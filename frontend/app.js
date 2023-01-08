@@ -38,13 +38,11 @@ ipcMain.on("spotifyLogin", () => {
     });
 
     authWindow.webContents.on("will-navigate", function (event, url) {
-      event.preventDefault();
-      handleSpotifyAuth(authWindow, url);
+      handleSpotifyAuth(authWindow, event, url);
     });
 
     authWindow.webContents.on("will-redirect", function (event, url) {
-      event.preventDefault();
-      handleSpotifyAuth(authWindow, url);
+      handleSpotifyAuth(authWindow, event, url);
     });
 
 
@@ -54,12 +52,12 @@ ipcMain.on("spotifyLogin", () => {
   });
 });
 
-function handleSpotifyAuth(authWindow, url) {
+function handleSpotifyAuth(authWindow, event, url) {
   let realUrl = new URL(url);
-  if(realUrl.host.match("spotify\.com|apple\.com|facebook\.com|google\.com")) {
-    authWindow.loadURL(url);
-  } else {
-    let code = realUrl.searchParams.get("code");
+  let code = realUrl.searchParams.get("code")
+
+  if(code != null) {
+    event.preventDefault();
     mainWindow.webContents.send("spotifyReady", code);
     authWindow.close();
   }
