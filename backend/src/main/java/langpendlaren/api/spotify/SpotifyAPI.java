@@ -8,7 +8,13 @@ import se.michaelthelin.spotify.SpotifyApi;
 import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 import se.michaelthelin.spotify.model_objects.special.SnapshotResult;
-import se.michaelthelin.spotify.model_objects.specification.*;
+import se.michaelthelin.spotify.model_objects.specification.Album;
+import se.michaelthelin.spotify.model_objects.specification.Artist;
+import se.michaelthelin.spotify.model_objects.specification.Paging;
+import se.michaelthelin.spotify.model_objects.specification.Playlist;
+import se.michaelthelin.spotify.model_objects.specification.PlaylistSimplified;
+import se.michaelthelin.spotify.model_objects.specification.Track;
+import se.michaelthelin.spotify.model_objects.specification.User;
 import se.michaelthelin.spotify.requests.data.albums.GetAlbumRequest;
 import se.michaelthelin.spotify.requests.data.albums.GetSeveralAlbumsRequest;
 import se.michaelthelin.spotify.requests.data.artists.GetArtistRequest;
@@ -236,9 +242,10 @@ public class SpotifyAPI {
 
     /**
      * Search tracks by name
+     *
      * @return a list of track
      */
-    public Track[] searchTracks(String accessToken, String genre){
+    public Paging<Track> searchTracks(String accessToken, String genre) throws IOException, ParseException, SpotifyWebApiException {
         spotifyApiWrapper.setAccessToken(accessToken);
         // Behöver vi verklingen denna metoden?
         final SearchTracksRequest searchTracksRequest = this.spotifyApiWrapper.searchTracks(genre)
@@ -246,17 +253,7 @@ public class SpotifyAPI {
                   .offset(0)
                   .includeExternal("audio")
                 .build();
-
-        try {
-            final Paging<Track> trackPaging = searchTracksRequest.execute();
-
-            System.out.println("Total: " + trackPaging.getTotal());
-
-            return trackPaging.getItems();
-        } catch (IOException | SpotifyWebApiException | ParseException e) {
-            System.out.println("Error: " + e.getMessage());
-            return null;
-        }
+        return searchTracksRequest.execute();
     }
 
     /**

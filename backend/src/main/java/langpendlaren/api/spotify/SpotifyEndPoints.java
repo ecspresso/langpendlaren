@@ -2,15 +2,14 @@ package langpendlaren.api.spotify;
 
 
 import io.javalin.Javalin;
-import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import langpendlaren.api.http.ErrorHandler;
 import langpendlaren.api.spotify.json.loginpage.LoginPage;
+import langpendlaren.api.spotify.json.playlist.AlbumJson;
 import langpendlaren.api.spotify.json.playlist.Body;
 import langpendlaren.api.spotify.json.playlist.Delete;
-import langpendlaren.api.spotify.json.playlist.TrackJson;
 import langpendlaren.api.spotify.json.playlist.PlaylistJson;
-import langpendlaren.api.spotify.json.playlist.PlaylistList;
+import langpendlaren.api.spotify.json.playlist.TrackJson;
 import langpendlaren.api.spotify.json.seeds.Seeds;
 import langpendlaren.api.spotify.json.spotifyUser.SpotifyUserJson;
 import langpendlaren.api.spotify.json.tokens.Tokens;
@@ -19,18 +18,16 @@ import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
 import se.michaelthelin.spotify.exceptions.detailed.BadRequestException;
 import se.michaelthelin.spotify.exceptions.detailed.UnauthorizedException;
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
-import se.michaelthelin.spotify.model_objects.specification.*;
 import se.michaelthelin.spotify.model_objects.special.SnapshotResult;
 import se.michaelthelin.spotify.model_objects.specification.Paging;
 import se.michaelthelin.spotify.model_objects.specification.Playlist;
-import se.michaelthelin.spotify.model_objects.specification.PlaylistSimplified;
+import se.michaelthelin.spotify.model_objects.specification.Track;
 import se.michaelthelin.spotify.model_objects.specification.User;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SpotifyEndPoints {
     private final Javalin javalin;
@@ -232,11 +229,15 @@ public class SpotifyEndPoints {
             if((accessToken = getAccessToken(context)) == null) {
                 return;
             }
+
             String type = context.pathParam("type");
-            System.out.println("Access: "+ accessToken + " type: "+ type);
-            Track[] track = spotifyAPI.searchTracks(accessToken, type);
-            ArrayList list = new ArrayList<>();
-            context.json(list);
+            try {
+                Paging<Track> tracks = spotifyAPI.searchTracks(accessToken, type);
+                AlbumJson albumJson = new AlbumJson(tracks);
+                context.json(albumJson);
+            } catch(IOException | ParseException | SpotifyWebApiException e) {
+                ErrorHandler.sendErrorMessage(context, e);
+            }
         });
     }
 
