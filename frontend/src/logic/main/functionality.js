@@ -34,8 +34,7 @@ ipcRenderer.on("spotifyReady", async function (event, code) {
   $("#main_content").append(template);
 
   // Filla upp med alla genre
-  await getAvailableGenre(testAccessToken).then(genre => displayAllGenre(genre));
-
+  await getAvailableGenre(testRefreshToken).then(genre => displayAllGenre(genre));
 
   // Hanterar klick event
   handleSpotifyClickEvents();
@@ -45,6 +44,11 @@ ipcRenderer.on("spotifyReady", async function (event, code) {
  * Hanterar spotify Clikc events.
  */
  function handleSpotifyClickEvents(){
+  document.getElementById("send_genre_button").addEventListener("click", () => {
+    var select = document.getElementById("genres");
+    var text = select.options[select.selectedIndex].text;
+    console.log(text);
+  });
   // När användaren har klickat på knappen läggs nya låtar till i spellistan på användarens konto
   document.getElementById("savePlayList").addEventListener("click", savePlayList());
   // När användaren har klickat på knappen gör en ny API-hämtning med nya låtar (ett could krav enligt)
