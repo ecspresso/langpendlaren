@@ -306,7 +306,10 @@ public class SpotifyAPI {
         }
     }
 
-    public PlaylistSimplified[] searchPlayList(String accessToken, String type) throws IOException, ParseException, SpotifyWebApiException {
+    public Paging<PlaylistSimplified> searchPlayList(String accessToken, String type) throws IOException, ParseException, SpotifyWebApiException {
+        return searchPlayList(accessToken, type, 0);
+    }
+    public Paging<PlaylistSimplified> searchPlayList(String accessToken, String type, int offset) throws IOException, ParseException, SpotifyWebApiException {
         spotifyApiWrapper.setAccessToken(accessToken);
 
         SearchPlaylistsRequest searchPlaylistsRequest = this.spotifyApiWrapper.searchPlaylists(type)
@@ -315,10 +318,7 @@ public class SpotifyAPI {
           .offset(0)
           .includeExternal("audio")
                 .build();
-        final Paging<PlaylistSimplified> playlistSimplifiedPaging = searchPlaylistsRequest.execute();
-
-        System.out.println("Total: " + playlistSimplifiedPaging.getTotal());
-        return playlistSimplifiedPaging.getItems();
+        return searchPlaylistsRequest.execute();
     }
 
 }

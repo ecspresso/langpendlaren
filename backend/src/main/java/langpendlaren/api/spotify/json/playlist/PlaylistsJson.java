@@ -1,4 +1,4 @@
-package langpendlaren.api.spotify.json.playlists;
+package langpendlaren.api.spotify.json.playlist;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
