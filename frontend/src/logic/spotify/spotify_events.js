@@ -31,4 +31,14 @@ async function getTokens(code){
       return data;
 }
 
-export { getAvailableGenre, getUserProfile, getTokens };
+async function getPlayListByGenre(genre){
+  const data = await fetch(
+    `http://localhost/spotify/search/playlist/${genre}`,
+    { method: "GET" }
+  )
+    .then((res) => res.json())
+    .catch((e) => console.assert(e));
+  return data;
+}
+
+export { getAvailableGenre, getUserProfile, getTokens, getPlayListByGenre };

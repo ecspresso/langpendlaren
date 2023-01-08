@@ -2,7 +2,7 @@ const ipc = window.require("electron").ipcRenderer;
 const ipcRenderer = require("electron").ipcRenderer;
 import {millisecondsToHoursAndMinutes, clearHTMLElementByElementId} from "../../util/util.js";
 import { getAvailableGenre, getUserProfile, getTokens } from "../spotify/spotify_events.js";
-import {savePlayList, getRandomPlayList, getPlayListByGenre} from "../spotify/spotify_functionality.js"
+import {savePlayList, getRandomPlayList, displayPlayListByGenre} from "../spotify/spotify_functionality.js"
 import { getGenreTemplate, displayAllGenre } from "../spotify/spotify_templates.js";
 let listOfGenre;
 /**
@@ -22,7 +22,7 @@ ipcRenderer.on("spotifyReady", async function (event, code) {
   const tokens = [];
   await getTokens(code).then(token => tokens.push(token.accessToken.value));
   const travelTime = millisecondsToHoursAndMinutes(localStorage.getItem("spotifyTime"));
-  const testAccessToken = "BQAREYMX4nsUj-tx6YfrKq-jY7YZhjgyDxe8zx40v87wTtQO6TtY1rEXTmTJ2h8AFI-ZS8xBlBnKLgjpK0KUDJU4MhP2teh4XlrFo7znmm63F_C3L4IZembVKD6v3AKyjkEvIPDl1VDZKmwFFnlP5ReKWKJBGxVKr_u0hYchar8AsL-m-JGDrcp0Z71l1wEOvYb8e52w3Kbo9W6dwcmGPrsfgARyeX5JW0_MrOYlfTgTP-acpSXx3JdD6ehF1XQ";
+  const testAccessToken = "BQA0c4ov_D6NubWC3oAluWU5HcZuZbIPTv6249IDQD-KP7OTGf4VzZf8z0wLVJnEqF7irzqklE-r-Pa203VRWIXcERtxc9o0SZzMBZbLl6cO5q4Z5yV3loHFBhinU7ZhrlpsPiSR4-fcm_HHioEJAeefFXPrwBwYQTrR2tPv_nBZw6F4Ti7aeI7-yP8S4ncZ5yYXiZJUWfwdWUiGAbYhIJ1E87XIuE-8oVsixR5CP0d3g9x1MuC63HmsJ4cWTnE";
   //const testRefreshToken = "BQB-r-B3VIVwuQK4-im22_qOgH5MdL4NtJzMWegRbWl46zlnQd254lnuK3vQNeVWeYJ5DOdAQilVaxPboZLwh85SLmUuwpiWQXzZ85o7I3tufps1fWbl08lWdhJ7ueVrigbjVCHF-CF3DDI9eHX01K0Rlt_oJ1yfDAbdrgTUuWhFeIC7u38VpeS0W7lA5ifb5Rld1r2evUauwZXxOfBciUvk3oO2XpU4hLQ3LnamlO0Yg9Z07vzn2bDWMWB3nwg";
 
 
@@ -51,8 +51,7 @@ ipcRenderer.on("spotifyReady", async function (event, code) {
   document.getElementById("send_genre_button").addEventListener("click", () => {
     var select = document.getElementById("genres");
     var genre = select.options[select.selectedIndex].text;
-    getPlayListByGenre(genre);
-    
+    displayPlayListByGenre(genre);
   });
 
   // När användaren har klickat på knappen läggs nya låtar till i spellistan på användarens konto

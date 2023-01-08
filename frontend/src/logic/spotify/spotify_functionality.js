@@ -1,4 +1,5 @@
-
+import { getPlayListByGenre } from "./spotify_events.js";
+import { displayPlayListSuggestion } from "./spotify_templates.js";
 
 
 function savePlayList(){
@@ -9,8 +10,11 @@ function newPlaylist() {
 }
 
  // När användaren har klickat på knappen hämta från API:et låtar som är lika långa som resan från den valda genren
- function getPlayListByGenre(genre) {
+ async function displayPlayListByGenre(genre) {
     console.log("Get playlist by: ",genre)
+    await getPlayListByGenre(genre).then(plist => {
+        displayPlayListSuggestion(plist)
+    })
 };
 
 
@@ -21,4 +25,4 @@ function getRandomPlayList(listOfGenre){
     console.log(randomNumber, listOfGenre[randomNumber]);
 }
 
-export { savePlayList, newPlaylist, getPlayListByGenre, getRandomPlayList }
+export { savePlayList, newPlaylist, displayPlayListByGenre, getRandomPlayList }

@@ -164,6 +164,12 @@ public class SpotifyEndPoints {
             context.json(spotifyAPI.searchTracks(name));
         });
 
+        // -- Search playlist
+        javalin.get("/spotify/search/playlist/{type}", context -> {
+            String type = context.pathParam("type");
+            context.json(spotifyAPI.searchPlayList(type));
+        });
+
         // -- Artists
         javalin.get("/spotify/artist/profile/{id}", context -> {
             String id = context.pathParam("id");
