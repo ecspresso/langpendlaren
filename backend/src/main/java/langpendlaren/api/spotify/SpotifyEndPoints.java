@@ -127,7 +127,7 @@ public class SpotifyEndPoints {
             }
         });
 
-        javalin.post("/spotify/playlist/delete/{id}", context -> {
+        javalin.delete("/spotify/playlist/delete/{id}", context -> {
             String id = context.pathParam("id");
             spotifyAPI.deletePlayList(id);
         });
