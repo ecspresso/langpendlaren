@@ -91,6 +91,10 @@ public class SpotifyAPI {
         return authorize.getAccessToken(code);
     }
 
+    public AuthorizationCodeCredentials refreshAccessToken(String refreshToken) throws IOException, ParseException, SpotifyWebApiException {
+        return authorize.refreshToken(refreshToken);
+    }
+
     // User
 
     /**
