@@ -42,9 +42,8 @@ async function getPlayListByGenre(genre, accessToken){
 }
 
 async function createPlayListByName(accessToken, name, description){
-  console.log("check info: ", accessToken, name, description);
   const data = await fetch(
-    `http://localhost/spotify/playlist/create`
+    `http://localhost/spotify/playlist/create/?access_token=${accessToken}`
     ,
     { method: "POST",
       headers: {
@@ -52,7 +51,6 @@ async function createPlayListByName(accessToken, name, description){
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ 
-        "accessToken": accessToken, 
         "name": name,
         "description": description,
       })},

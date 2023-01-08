@@ -57,8 +57,10 @@ ipcRenderer.on("spotifyReady", async function (event, code) {
     const desc = document.getElementById("pdescription");
     console.log(name, )
     if(name !== "" || desc !== ""){
-      createPlayListByName(testAccessToken, name.value, desc.value);
-      document.getElementById("playListCreatorWraper").innerHTML = `<div> <p>Playlist is created successful, <br> name: ${name}, description: ${desc} </p></div>`;
+      createPlayListByName(localStorage.getItem("access_token"), name.value, desc.value).then(res => {
+        console.log(res);
+        document.getElementById("playListCreatorWraper").innerHTML = `<div> <p>Playlist is created successful, <br> name: ${name.value}, description: ${desc.value} </p></div>`;
+      }).catch(e => console.assert(e));
     }
   });
 
