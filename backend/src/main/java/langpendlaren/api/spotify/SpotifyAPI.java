@@ -250,7 +250,7 @@ public class SpotifyAPI {
         try {
             final Paging<Track> trackPaging = searchTracksRequest.execute();
 
-            System.out.println("Total: " + trackPaging.getTotal());
+            System.out.println("Total: " + trackPaging.getItems()[0].getAlbum().getId());
 
             return trackPaging.getItems();
         } catch (IOException | SpotifyWebApiException | ParseException e) {

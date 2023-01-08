@@ -23,7 +23,7 @@ ipcRenderer.on("spotifyReady", async function (event, code) {
 
   await getTokens(code).then(token => {
       // localStorage.setItem("access_token", token.access_token.value);
-      localStorage.setItem("access_token", "BQAQ02uKVdNLpKEqYqAvCuyGR8916IPB1GPMKkl3-GeKT_-Z_KjH-MSAnoGWJCIw1NUcEGIA-desnIqPARbaapPKvTACkm1aeikbda6teKa3Cn0GxbKePyM42mmJAPt1MylZTlySRTmYJo5ZRSiL4Otwp0Vuvn3iBc9zJ-00W4J5rYIhBlFJ4EE0vCQQYMGCx_1chpUz-oLJiAATY3QGCgLpONlrD8CrB8K74SiqjVCkqyOjbvxFii3S5fEOXB0");
+      localStorage.setItem("access_token", "BQBObz3rzKNpdsouKm2x0E2jNf31-qkbj7AFTMstpbwvylKszmKa3_YIWoulr3AMBnrlmXZrKMnanK86HEN95L-ZcIpZq4aKmOUSgUMPeevaYwlEV7GhQp5ESX8rXtZgfGNE6fboLQhn_OBsUZO-x8HFWb5V-AYk21UpYRQAg_fRYOoFQ2GlSAk_A_iSpKa3zUAGtJciMzhFLTt0Me1Z4dt8bHw0ieElgQ95DxJM_qrTPoD0cgzUjYQAPJP0ymo");
       localStorage.setItem("access_token_expire", token.access_token.expires_in);
       localStorage.setItem("refresh_token", token.refresh_token.value);
   });

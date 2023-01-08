@@ -84,4 +84,4 @@ async function addToPlayList(accessToken, trackIds, pId){
   return data;
 }
 
-export { getAvailableGenre, getUserProfile, getTokens, getPlayListByGenre, createPlayListByName, getTracksByGenre };
+export { getAvailableGenre, getUserProfile, getTokens, getPlayListByGenre, createPlayListByName, getTracksByGenre, addToPlayList };
