@@ -12,3 +12,9 @@ $r  = Get-Clipboard
 $a = (Invoke-RestMethod http://localhost/spotify/login/refresh?refresh_token=$r) # förnya access token kräver ?refresh_token=
 $at = $a.accessToken.value
 $a | ConvertTo-Json -Depth 100
+
+
+$body = @{name="emile";description="kaffe"} |ConvertTo-Json
+$body = @{name="emile"} |ConvertTo-Json
+Remove-Variable body
+(Invoke-RestMethod http://localhost/spotify/playlist/create?access_token=$at -Method POST -body $body)

@@ -133,12 +133,12 @@ public class SpotifyAPI {
 
     /**
      */
-    public String createPlayList(String accessToken, String name, String dec){
+    public String createPlayList(String accessToken, String name, String description){
         CreatePlaylistRequest createPlayList;
         String userId = getUserId(accessToken);
         synchronized(lock) {
             this.spotifyApiWrapper.setAccessToken(accessToken);
-            createPlayList = this.spotifyApiWrapper.createPlaylist(userId, name).public_(false).description(dec).build();
+            createPlayList = this.spotifyApiWrapper.createPlaylist(userId, name).public_(false).description(description).build();
         }
 
         try {

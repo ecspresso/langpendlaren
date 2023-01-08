@@ -2,7 +2,6 @@ package langpendlaren.api.spotify;
 
 
 import io.javalin.Javalin;
-import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import langpendlaren.api.http.ErrorHandler;
 import langpendlaren.api.spotify.json.loginpage.LoginPage;
@@ -63,10 +62,6 @@ public class SpotifyEndPoints {
             } catch(IOException | SpotifyWebApiException | ParseException e) {
                 ErrorHandler.sendErrorMessage(context, e);
             }
-            // URI uri = spotifyAPI.getLoginPage();
-            // LoginPage json = new LoginPage();
-            // json.setUri(uri);
-            // context.json(json);
         });
 
         /*
@@ -75,6 +70,10 @@ public class SpotifyEndPoints {
          */
         javalin.get("/spotify/authenticated", context -> {
             String code = context.queryParam("code");
+
+            if(code == null || code.isBlank()) {
+                ErrorHandler.sendErrorMessage(context, new BadRequestException(), "Code is missing", HttpStatus.BAD_REQUEST);
+            }
 
             try {
                 AuthorizationCodeCredentials tokenCredentials = spotifyAPI.auth(code);
@@ -101,31 +100,52 @@ public class SpotifyEndPoints {
         });
 
         // -- User
+        //TODO Ändra access token till query param
         javalin.get("/spotify/user/profile/{accessToken}", context -> {
             String accessToken = context.pathParam("accessToken");
             context.json(spotifyAPI.getUserId(accessToken));
         });
 
         // -- Playlist
-        javalin.post("/spotify/playlist/create/{name}/{des}", context -> {
-            String name = context.pathParam("name");
-            String des = context.pathParam("des");
+        javalin.post("/spotify/playlist/create", context -> {
+            langpendlaren.api.spotify.json.playlist.Body body;
 
-            context.result(spotifyAPI.createPlayList(getAccessToken(context), name, des));
+            try {
+                body = context.bodyAsClass(langpendlaren.api.spotify.json.playlist.Body.class);
+            } catch(Exception e) {
+                ErrorHandler.sendErrorMessage(context, e, "Body is missing or not correct", HttpStatus.BAD_REQUEST);
+                return;
+            }
+
+            String name = body.getName();
+            String description = body.getDescription();
+            String accessToken = context.queryParam("access_token");
+
+            if(accessToken == null || accessToken.isBlank()) {
+                ErrorHandler.sendErrorMessage(context, new BadRequestException(), "Access token is missing", HttpStatus.BAD_REQUEST);
+            } else {
+                context.result(spotifyAPI.createPlayList(accessToken, name, description));
+            }
         });
+
         javalin.post("/spotify/playlist/delete/{id}", context -> {
             String id = context.pathParam("id");
             spotifyAPI.deletePlayList(id);
         });
+
         javalin.put("/spotify/playlist/add/{pid}/{tid}", context -> {
             String pId = context.pathParam("pid");
             String tId = context.pathParam("tid");
             context.result(spotifyAPI.addToPlayList(pId, tId));
         });
+
         javalin.put("/spotify/playlist/deletetracks/{pid}/{tids}", context -> {
             String pId = context.pathParam("pid");
             String tIds = context.pathParam("tids");
-            context.result(spotifyAPI.removeItemFromPlayList(getAccessToken(context), pId, tIds));
+
+
+            //FIXME broken
+            context.result(spotifyAPI.removeItemFromPlayList("", pId, tIds));
         });
 
         // -- Albums
@@ -133,6 +153,7 @@ public class SpotifyEndPoints {
             String id = context.pathParam("id");
             context.json(spotifyAPI.getAlbumById(id));
         });
+
         javalin.get("/spotify/album/{ids}", context ->{
             String ids = context.pathParam("ids");
             context.json(spotifyAPI.getAlbums(ids));
@@ -149,10 +170,5 @@ public class SpotifyEndPoints {
             String id = context.pathParam("id");
             context.json(spotifyAPI.getArtist(id));
         });
-    }
-
-    private String getAccessToken(Context context) {
-        // TODO Kontrollera kaka och förnya vid behov.
-        return context.cookie("accessToken");
     }
 }
