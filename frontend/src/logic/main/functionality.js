@@ -18,12 +18,14 @@ import { getGenreTemplate, displayAllGenre } from "../spotify/spotify_templates.
  * Körs när spotify sida renderat färdigt.
  */
 ipcRenderer.on("spotifyReady", async function (event, code) {
+  localStorage.removeItem("timeCounter");
+  localStorage.removeItem("offset");
   // Rensa upp innehåll by id
   clearHTMLElementByElementId("main_content");
 
   await getTokens(code).then(token => {
-      // localStorage.setItem("access_token", token.access_token.value);
-      localStorage.setItem("access_token", "BQBObz3rzKNpdsouKm2x0E2jNf31-qkbj7AFTMstpbwvylKszmKa3_YIWoulr3AMBnrlmXZrKMnanK86HEN95L-ZcIpZq4aKmOUSgUMPeevaYwlEV7GhQp5ESX8rXtZgfGNE6fboLQhn_OBsUZO-x8HFWb5V-AYk21UpYRQAg_fRYOoFQ2GlSAk_A_iSpKa3zUAGtJciMzhFLTt0Me1Z4dt8bHw0ieElgQ95DxJM_qrTPoD0cgzUjYQAPJP0ymo");
+      localStorage.setItem("access_token", token.access_token.value);
+      // localStorage.setItem("access_token", "BQBObz3rzKNpdsouKm2x0E2jNf31-qkbj7AFTMstpbwvylKszmKa3_YIWoulr3AMBnrlmXZrKMnanK86HEN95L-ZcIpZq4aKmOUSgUMPeevaYwlEV7GhQp5ESX8rXtZgfGNE6fboLQhn_OBsUZO-x8HFWb5V-AYk21UpYRQAg_fRYOoFQ2GlSAk_A_iSpKa3zUAGtJciMzhFLTt0Me1Z4dt8bHw0ieElgQ95DxJM_qrTPoD0cgzUjYQAPJP0ymo");
       localStorage.setItem("access_token_expire", token.access_token.expires_in);
       localStorage.setItem("refresh_token", token.refresh_token.value);
   });

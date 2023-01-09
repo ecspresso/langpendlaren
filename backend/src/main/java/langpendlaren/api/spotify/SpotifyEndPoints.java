@@ -136,6 +136,25 @@ public class SpotifyEndPoints {
         });
 
         // -- Playlist
+        javalin.get("/spotify/playlist/{pId}", context -> {
+            String accessToken;
+            if((accessToken = getAccessToken(context)) == null) {
+                return;
+            }
+
+            String playlistId = context.pathParam("pId");
+            try {
+                Playlist playstList = spotifyAPI.getPlaylistByPlaylistId(accessToken, playlistId);
+                PlaylistJson playlistJson = new PlaylistJson();
+                playlistJson.setName(playstList.getName());
+                playlistJson.setId(playstList.getId());
+                // playlistJson.setCoverImg(playstList.ge);
+                context.json(playlistJson);
+            } catch(IOException | ParseException | SpotifyWebApiException e) {
+                ErrorHandler.sendErrorMessage(context, e);
+            }
+        });
+
         // /spotify/playlist/create ------------------------------------------------------------------------------------
         javalin.post("/spotify/playlist/", context -> {
             String accessToken;

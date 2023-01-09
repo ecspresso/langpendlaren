@@ -291,5 +291,9 @@ public class SpotifyAPI {
         return searchPlaylistsRequest.execute();
     }
 
+    public Playlist getPlaylistByPlaylistId(String accessToken, String playlistId) throws IOException, ParseException, SpotifyWebApiException {
+        spotifyApiWrapper.setAccessToken(accessToken);
+        return spotifyApiWrapper.getPlaylist(playlistId).build().execute();
+    }
 }
 

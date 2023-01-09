@@ -8,59 +8,56 @@ function savePlayList(){
 function newPlaylist() {
 }
 
- // När användaren har klickat på knappen hämta från API:et låtar som är lika långa som resan från den valda genren
- function displayTracks(genre, travelTime, accessToken, pId) {
+// När användaren har klickat på knappen hämta från API:et låtar som är lika långa som resan från den valda genren
+function displayTracks(genre, travelTime, accessToken, pId) {
     // find tracks.
-    const tarckIds = [];
-    getTracksByGenre(genre, accessToken).then(album => {
-        let timeCounter = 0;
-        console.log(album)
-        for(let i = 0; i < album.length; ++i){
-            if(timeCounter < travelTime){
-                tarckIds.push(album.id);
+    const tracks = [];
+    let timeCounter = 0;
+    let offset = "0";
+
+
+    getTracksByGenre(genre, accessToken, offset).then(data => {
+        for(let i = 0; i < data.albums.length; i++) {
+            let thisAlbum = data.albums[i];
+            for(let j = 0; j < thisAlbum.tracks.length; j++) {
+                tracks.push(thisAlbum.tracks[j]);
             }
-            timeCounter = timeCounter + album[i].duration;
-            console.log({timeCounter});
         }
-        
-        console.log({tarckIds});
-        
-    });
-    
-    // Add tracks to playList
-    if(tarckIds.length > 0){
-        for(const id of tarckIds){
-            console.log("adding...")
-            addToPlayList(accessToken, id, pId).then(res => {
-                console.log(res);
-            });
-        }
-    }
-     // Pull out all tracks from playlist and show on the screen to play.
-        getPlayListTracksByPlayListId(accessToken, pId).then(res => {
-            const album = res.album;
-            const image = "url....";
-            const duration = 12;
-            const name = "";
-            for(let i = 0; i < album.length; ++i){
-                jQuery("#tracksTable tr:last").after(`<tr>
-                        <td>${i+1}</td>
-                        <td><img src="${image}"></td>
-                        <td>${name}</td>
-                        <td>${duration}</td>
-                        <td><button 
-                        class="basic_button"
-                        type='button'
-                        onclick="playMusic()">Välj resa</button></td>
-                    </tr>"
-                `);
+
+        offset = data.offset;
+    }).then(() => {
+        // Add tracks to playList
+        if(tracks.length > 0){
+            for(const track of tracks){
+                console.log("adding...")
+                addToPlayList(accessToken, track.id, pId).then(res => {
+                    console.log(res);
+                });
             }
-        });
+        }
+        // Pull out all tracks from playlist and show on the screen to play.
+        // getPlayListTracksByPlayListId(accessToken, pId).then(res => {
 
-    
-
-
-    
+        for(let i = 0; i < tracks.length; ++i){
+            let thisTrack = tracks[i];
+            jQuery("#tracksTable tr:last").after(`<tr>
+                    <td>${i+1}</td>
+                    <td><img src="${thisTrack.imageUri}"></td>
+                    <td>${thisTrack.name}</td>
+                    <td>${thisTrack.durationMs}ms</td>
+                    <td><button 
+                    class="basic_button"
+                    type='button'
+                    onclick="playMusic()">Välj resa</button></td>
+                </tr>"
+            `);
+        }
+        // });
+    })
+    // .then(() => {
+    //     localStorage.setItem("timeCounter", timeCounter);
+    //     localStorage.setItem("offset", offset);
+    // });
 }
 
 
