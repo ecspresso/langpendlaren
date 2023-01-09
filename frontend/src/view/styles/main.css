@@ -2,8 +2,14 @@ body {
   margin: 0;
   scroll-behavior: smooth;
   font-family: "Raleway", sans-serif;
-  background: white;
+  background: url("../imgs/Taieri.svg");
+  background-repeat: no-repeat;
+  background-position: right top;
+  background-size: 50%;
+  height: 100vh;
 }
+
+
 
 #station_header {
   text-align: center;
@@ -26,14 +32,27 @@ h1 {
 }
 
 header {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  left: 1rem;
+  top: 1rem;
+  padding: 0 3rem;
   background-color: #605df2;
-  width: 100%;
-  padding: 2px;
-  margin-bottom: 10px;
+  border-radius: 28px 193px 193px 193px;
+  -moz-border-radius: 28px 193px 193px 193px;
+  -webkit-border-radius: 28px 193px 193px 193px;
 }
 header h1 {
   color: white;
   text-align: center;
+}
+header div{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .flex-container {
@@ -140,17 +159,19 @@ img.track {
   border-radius: 10px;
 }
 
+
 #reset_button {
-  background: #605df2;
+  gap: 1rem;
   background-color: #2f2cf0;
   color: white;
-  margin-left: 37.5%;
-  width: 25%;
-  height: 40px;
+  padding: 0.5rem 1rem;
   border: none;
   transition: 0.2s;
-  border-radius: 10px;
-  margin-bottom: 5px;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+#reset_button i {
+  margin-left: 1rem;
 }
 
 #send_genre_button {
@@ -287,13 +308,6 @@ button:hover {
   border-radius: 10px;
 }
 
-#timeTableDeparture th {
-  border-bottom: 1px solid gray;
-  width: 100%;
-  height: 100%;
-  font-weight: bold;
-  padding: 0.5rem;
-}
 
 #tracksTable th {
   border-bottom: 1px solid gray;
@@ -302,11 +316,18 @@ button:hover {
   font-weight: bold;
   padding: 0.5rem;
 }
-
-#timeTableDeparture td {
+#tracksTable td {
   border-bottom: 1px solid lightgray;
 }
-#tracksTable td {
+#timeTableDeparture th {
+  border-bottom: 1px solid gray;
+  width: 100%;
+  height: 100%;
+  font-weight: bold;
+  padding: 0.5rem;
+}
+
+#timeTableDeparture td {
   border-bottom: 1px solid lightgray;
 }
 
@@ -590,4 +611,140 @@ button:hover {
 
 #showBtn {
   margin-top: 2%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+#tracksTable {
+  padding: 1rem;
+  text-align: center;
+  margin-top: 2%;
+  margin-left: auto;
+  margin-right: auto;
+  border: 5px solid #eee;
+  border-radius: 10px;
+}
+
+#tracksTable tbody {
+  text-align: center;
+  margin-top: 2%;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 10px;
+}
+
+
+#tracksTable th {
+  border-bottom: 1px solid gray;
+  width: 100%;
+  height: 100%;
+  font-weight: bold;
+  padding: 0.5rem;
+}
+#tracksTable td {
+  border-bottom: 1px solid lightgray;
+}
+
+
+
+.center_me{
+  display: flex;
+  flex-direction: column;
+  padding: 3rem;
+  width: 60%;
+}
+
+.s_title {
+  color: #333;
+}
+
+#part_one, #part_two, #part_three, #part_four{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 1rem;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  background: rgb(245, 246, 249);
+  border-bottom: 1px solid lightgray;
+}
+
+#playListCreatorWraper{
+  display:flex; 
+  align-items:center; 
+  flex-direction:column; justify-content:center; padding: 1rem;
+}
+
+.sub_title{
+  color: #605df2;
+}
+
+.s_inputs{
+  display:flex; 
+  gap: 0.5rem; 
+  align-items:flex-start; 
+  justify-content: flex-start;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 5px;
+  height: 100px;
+}
+.s_inputs label{
+  margin: 0;
+  padding: 0;
+}
+
+.s_inputs div{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  padding: 0;
+  margin: 0;
+  
+}
+.s_inputs input{
+  color: #333;
+  background: #eee;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem;
+  
+}
+
+textarea{
+  background: #eee;
+  border: 0;
+  height: 2rem;
+  border-radius: 5px;
+}
+
+#createPlayList{
+  background: #605df2;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  border: 0;
+  color: white;
+  margin-top: 5px;
+  transition: 0.3s;
+}
+
+
+
+
+
+.basic_button{
+  width: fit-content;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
 }
