@@ -39,7 +39,7 @@ header {
   align-items: center;
   left: 1rem;
   top: 1rem;
-  padding: 0 3rem;
+  padding: 0 2rem;
   background-color: #605df2;
   border-radius: 28px 193px 193px 193px;
   -moz-border-radius: 28px 193px 193px 193px;
@@ -48,6 +48,7 @@ header {
 header h1 {
   color: white;
   text-align: center;
+  font-size: 1rem;
 }
 header div{
   display: flex;
@@ -161,14 +162,17 @@ img.track {
 
 
 #reset_button {
+  position: absolute;
+  z-index: 2;
+  top: 1rem;
+  right: 10rem;
   gap: 1rem;
-  background-color: #2f2cf0;
+  background-color: #fb3585;
   color: white;
   padding: 0.5rem 1rem;
   border: none;
   transition: 0.2s;
   border-radius: 5px;
-  margin-bottom: 1rem;
 }
 #reset_button i {
   margin-left: 1rem;

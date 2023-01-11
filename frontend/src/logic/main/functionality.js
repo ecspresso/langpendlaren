@@ -24,8 +24,8 @@ ipcRenderer.on("spotifyReady", async function (event, code) {
   clearHTMLElementByElementId("main_content");
 
   await getTokens(code).then(token => {
-      localStorage.setItem("access_token", token.access_token.value);
-      //localStorage.setItem("access_token", "BQCKxHlYyDMimP8ViZ4f8K9l4d1b7pBPR_aBv_rHljjc0Lk23Wmy4Hoq5OYmR02_RbPm7g3HhnsREKWys_s-oElNdIiIHUTbBjCVnIzXEpZhJ73EP5zNCRSTHtbH9IN6ZmvQmgvjAoEfjO8IPQSgXuqgOb0AriFQJHXFytcqqWEKvzqY-How3uD6sZOm1nYbQ2HzoaU_KquHsJdtVQOScoNTRWhKZ2O9_iBaUVneu_1haTxuYeyVDKRxUiGc42E");
+      //localStorage.setItem("access_token", token.access_token.value);
+      localStorage.setItem("access_token", "BQBSiAwBDBqLdlOXJOAFAtbar7WCXIlxuEbXhFsQYvRbsVJaq96WX_yaC-CY5ixSKJFf1j1nS0EhPN_GY-Hqw1uYkTzkjR9cY4lIxlqTbiOwMPhigObfgiaDP3_00YA_oFsKLq4H_87s2ZX28aKKC1PZBDx5JBqEozxjQJg_SGUcbEVz3YVdfkgoUZptr--lT0w8QbqDSZ7K7VX8_AlXin2-wx2SiFOO1qfF43tOadmy6Mxu6HodlgCLt_dNUGs");
       localStorage.setItem("access_token_expire", token.access_token.expires_in);
       localStorage.setItem("refresh_token", token.refresh_token.value);
   });
