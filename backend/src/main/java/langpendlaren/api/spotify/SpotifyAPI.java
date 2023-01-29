@@ -26,12 +26,17 @@ import se.michaelthelin.spotify.requests.data.search.simplified.SearchPlaylistsR
 import se.michaelthelin.spotify.requests.data.search.simplified.SearchTracksRequest;
 import se.michaelthelin.spotify.requests.data.users_profile.GetCurrentUsersProfileRequest;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,21 +53,16 @@ public class SpotifyAPI {
     private Properties prop;
     private Map<String, String> playListToId = new HashMap();
 
-    public SpotifyAPI() throws URISyntaxException {
+    public SpotifyAPI() throws URISyntaxException, IOException {
         // Läs in inställningar från fil.
         prop = new Properties();
         FileReader fileReader;
 
-        try {
-            URL fileUrl = this.getClass().getClassLoader().getResource("spotify.properties");
-            File file = new File(Objects.requireNonNull(fileUrl).toURI());
-            fileReader =  new FileReader(file);
-            prop.load(fileReader);
-            fileReader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+        InputStream stream = getClass().getClassLoader().getResourceAsStream("spotify.properties");
+        if(stream == null) {
+            throw new IOException("Kunde inte hitta filen spotify.properties");
+        } else {
+            prop.load(stream);
         }
 
         connectApi(prop);

@@ -37,7 +37,7 @@ public class SpotifyEndPoints {
         this.javalin = javalin;
         try {
             spotifyAPI = new SpotifyAPI();
-        } catch(URISyntaxException e) {
+        } catch(URISyntaxException | IOException e) {
             throw new RuntimeException(e);
         }
         endPoints();
