@@ -22,3 +22,7 @@ nvm install node
 chmod +x install.sh
 ./install.sh # <-- fungerar inte: ./install.sh: line 1: electron-packager: command not found
 ```
+
+
+** Setup guid for langpendlaren **
+<h1>hello</h1>
