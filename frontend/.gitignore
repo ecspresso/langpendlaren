@@ -1,5 +1,5 @@
 ./node_modules
 package-lock.json
-/release-builds/frontend-darwin-x64/*
-/release-builds/frontend-linux-x64/*
-/release-builds/frontend-win32-x64/*
+./release-builds/frontend-darwin-x64/*
+./release-builds/frontend-linux-x64/*
+./release-builds/frontend-win32-x64/*
