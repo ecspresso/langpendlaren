@@ -12,11 +12,10 @@
   "license": "ISC",
   "devDependencies": {
     "electron": "^22.0.0",
-    "pre-commit": "^1.2.2",
-    "electron-packager": "^8.1.0"
+    "electron-packager": "^8.1.0",
+    "pre-commit": "^1.2.2"
   },
   "dependencies": {
-    "electron-fetch": "^1.9.1",
-    "prettier": "^2.8.1"
+    "electron-fetch": "^1.9.1"
   }
 }
