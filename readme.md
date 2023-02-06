@@ -10,4 +10,4 @@
 
 <h3>Frontend</h3>
 <p>From terminal navigate to frontend and run commond: <h4> - npm install</h4> <h4> - npm start</h4></p>
-<p>Navigera till frontend från terminalen och kör följande kommando: <h4> npm install </h4> <h4> npm start </h4></p>
+<p>Navigera till frontend från terminalen och kör följande kommando: <h4> - npm install </h4> <h4> - npm start </h4></p>
