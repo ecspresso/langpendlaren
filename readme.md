@@ -11,3 +11,10 @@
 <h3>Frontend</h3>
 <p>From terminal navigate to frontend and run commond: <h4> - npm install</h4> <h4> - npm start</h4></p>
 <p>Navigera till frontend från terminalen och kör följande kommando: <h4> - npm install </h4> <h4> - npm start </h4></p>
+
+<h1>Om spotify inte fungerar</h1>
+<p>Om spotify kan inte hitta spelistan beror på genre, forsök köra med refresh token. </p>
+<p> 1. Starta server från intellij på localhost genom att Main.java körs </p>
+<p> Öppna länken för att få en refresh token:</p>
+<h4>http://localhost/spotify/login/refresh?refresh_token=AQCYnCqni9-EB5f6QvOmtmlOZx2_tyhMaehDUae0H-lpJxEZQ1H84jOxgFl_75BO4X7IUGATizacjZoZ2lxxL2hn88eaZQMzQ6wafR5SjwEqEAcAGYXaXGxoLKDLsIWRCGY<h4>
+<p>Läggs in i rad 28 under functionality.js </p>
