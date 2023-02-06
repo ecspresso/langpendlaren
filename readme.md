@@ -1,20 +1,79 @@
-<h1> Guide för langpendlaren </h1>
-<h3>Krav för att starta upp applikationen</h3>
-<p>Kontrollera att Node.js och NPM är installerat på din maskin, annars installera dessa</p>
+# Guide för langpendlaren
+# How to run
+## Krav/Restriktioner
+Spotifys API ser inte att fungera helt med gratiskonton, måste vara ett betalkonto.
+Se till att ha Java 17 eller senare installerat och `java` i PATH.
 
-<h3>Backend</h3>
-<p>Navigera till backend från terminalen och öppna projekteten i en IDE, exekvera sedan filen Main.java</p>
-<p>Om IDEn inte hittar/identifierar klasser eller paket, sätt isåfall upp SDK 17.</p>
-<p>Gå till fil -> projektstruktur -> projekt -> SDK -> SDK 17</p>
-<p>Exekvera sedan filen Main.java och kontrollera att servern körs</p>
+## Backend
+1. Ladda ner `Backend.jar` (https://github.com/ecspresso/langpendlaren/releases/download/1/Backend.jar).
+2. Starta med `java -jar Backend.jar`.
 
-<h3>Frontend</h3>
-<p>From terminal navigate to frontend and run commond: <h4> - npm install</h4> <h4> - npm start</h4></p>
-<p>Navigera till frontend från terminalen och kör följande kommando: <h4> - npm install </h4> <h4> - npm start </h4></p>
+### För att köra i IDE
+Navigera till backend från terminalen och öppna projekteten i en IDE, exekvera sedan filen Main.java
+Om IDEn inte hittar/identifierar klasser eller paket, sätt isåfall upp SDK 17.
+Gå till fil -> projektstruktur -> projekt -> SDK -> SDK 17
+Exekvera sedan filen Main.java och kontrollera att servern körs
 
-<h1>Om spotify inte fungerar</h1>
-<p>Om spotify kan inte hitta spelistan beror på genre, forsök köra med refresh token. </p>
-<p> 1. Starta server från intellij på localhost genom att Main.java körs </p>
-<p> Öppna länken för att få en refresh token:</p>
-<h4>http://localhost/spotify/login/refresh?refresh_token=AQCYnCqni9-EB5f6QvOmtmlOZx2_tyhMaehDUae0H-lpJxEZQ1H84jOxgFl_75BO4X7IUGATizacjZoZ2lxxL2hn88eaZQMzQ6wafR5SjwEqEAcAGYXaXGxoLKDLsIWRCGY<h4>
-<p>Läggs in i rad 28 under functionality.js </p>
+### Linux
+Servern kör på port 80 och det kan kräva utökad behörighet, starta i så fall med med sudo: `sudo java -jar Backend.jar`.
+
+## Frontend
+### Windows
+1. Ladda ner `frontend.Setup.1.0.0.exe`.
+2. Exekvera `frontend.Setup.1.0.0.exe`. Installationen kommer att installera programmet `Frontend` i katalogen `C:\Users\<username>\AppData\Local\Programs\frontend`. Programmet startar automatiskt efter installationen.
+
+### Linux
+1. Ladda ner `Frontend.AppImage`.
+2. Gör programmet körbart med `chmod +x Frontend.AppImage`
+3. Kör programmet.
+
+### Terminalen
+Följande kräver att Node.js och NPM är installerat (se how to build: one-stop-shop).
+1. Clona repo.
+2. Navigera till langpendlaren/frontend och kör `npm install` och `npm start`.
+
+# How to build
+## Krav
+Kontrollera att följande är installerade din maskin, annars installera dessa
+1. Node.js
+2. NPM
+3. Maven
+
+## Backend
+```bash
+cd langpendlaren/backend
+maven package
+```
+
+## Frontend
+```bash
+npm install --save-dev electron-builder
+npx electron-builder build
+```
+
+# One-Stop-Shop-script
+Start till slut automatiering för att bygga backend och frontend i Linux.
+```bash
+# Installera JDK 17, git och maven
+sudo apt install openjdk-17-jdk-headless git maven -y
+# Hämta all kod
+git clone https://github.com/ecspresso/langpendlaren
+# Flytta till backen
+cd langpendlaren/backend
+# Bygg jar filen
+mvn package
+# Flytta till frontend
+cd ../frontend/
+# Installera nvm
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+# Lägg till nvm utan att starta om terminalen
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+# Installera NodeJS
+nvm install node
+# Installera electron-builder
+npm install --save-dev electron-builder
+# Bygg projektet
+npx electron-builder build
+```
