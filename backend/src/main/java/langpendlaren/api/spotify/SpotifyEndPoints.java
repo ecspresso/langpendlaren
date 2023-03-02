@@ -1,29 +1,21 @@
 package langpendlaren.api.spotify;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import io.javalin.http.HttpStatus;
 import langpendlaren.api.http.ErrorHandler;
 import langpendlaren.api.spotify.json.loginpage.LoginPage;
-import langpendlaren.api.spotify.json.playlist.BodyTrack;
-import langpendlaren.api.spotify.json.playlist.AlbumJson;
 import langpendlaren.api.spotify.json.playlist.Body;
+import langpendlaren.api.spotify.json.playlist.BodyTrack;
 import langpendlaren.api.spotify.json.playlist.Delete;
 import langpendlaren.api.spotify.json.playlist.PlaylistJson;
+import langpendlaren.api.spotify.json.playlist.SnapshotId;
 import langpendlaren.api.spotify.json.playlist.TrackJson;
 import langpendlaren.api.spotify.json.seeds.Seeds;
+import langpendlaren.api.spotify.json.seeds.SeedsJson;
 import langpendlaren.api.spotify.json.spotifyUser.SpotifyUserJson;
 import langpendlaren.api.spotify.json.tokens.Tokens;
-import org.apache.hc.core5.http.ParseException;
-import se.michaelthelin.spotify.exceptions.SpotifyWebApiException;
-import se.michaelthelin.spotify.exceptions.detailed.BadRequestException;
-import se.michaelthelin.spotify.exceptions.detailed.UnauthorizedException;
-import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
-import se.michaelthelin.spotify.model_objects.special.SnapshotResult;
-import se.michaelthelin.spotify.model_objects.specification.Paging;
-import se.michaelthelin.spotify.model_objects.specification.Playlist;
-import se.michaelthelin.spotify.model_objects.specification.Track;
-import se.michaelthelin.spotify.model_objects.specification.User;
 
 import java.io.IOException;
 import java.net.URI;
@@ -32,6 +24,7 @@ import java.net.URISyntaxException;
 public class SpotifyEndPoints {
     private final Javalin javalin;
     private final SpotifyAPI spotifyAPI;
+    private final ObjectMapper mapper = new ObjectMapper();
 
     public SpotifyEndPoints(Javalin javalin){
         this.javalin = javalin;
@@ -69,32 +62,32 @@ public class SpotifyEndPoints {
             String code = context.queryParam("code");
 
             if(code == null || code.isBlank()) {
-                ErrorHandler.sendErrorMessage(context, new BadRequestException(), "Code is missing", HttpStatus.BAD_REQUEST);
+                ErrorHandler.sendErrorMessage(context, new Exception(), "Code is missing", HttpStatus.BAD_REQUEST);
             }
 
             try {
                 String tokenCredentials = spotifyAPI.auth(code);
                 Tokens tokensJson = new Tokens(tokenCredentials);
                 context.json(tokensJson);
-            } catch (IOException | ParseException | SpotifyWebApiException e) {
+            } catch (Exception e) {
                 ErrorHandler.sendErrorMessage(context, e);
             }
         });
 
-        /**
+        /*
          * Förnya access token.
          */
         javalin.get("/spotify/login/refresh", context -> {
             String refreshToken = context.queryParam("refresh_token");
             if(refreshToken == null || refreshToken.isBlank()) {
-                ErrorHandler.sendErrorMessage(context, new BadRequestException(), "Refresh token is missing.", HttpStatus.BAD_REQUEST);
+                ErrorHandler.sendErrorMessage(context, new Exception(), "Refresh token is missing.", HttpStatus.BAD_REQUEST);
             }
 
             try {
                 String tokenCredentials = spotifyAPI.refreshAccessToken(refreshToken);
                 Tokens tokens = new Tokens(tokenCredentials);
                 context.json(tokens);
-            } catch(IOException | SpotifyWebApiException | ParseException e) {
+            } catch(Exception e) {
                 ErrorHandler.sendErrorMessage(context, e);
             }
         });
@@ -107,13 +100,9 @@ public class SpotifyEndPoints {
             }
 
             try {
-                User user = spotifyAPI.getUserId(accessToken);
-                SpotifyUserJson json = new SpotifyUserJson();
-                json.setId(user.getId());
-                json.setUserUri(user.getUri());
-                json.setUserName(user.getDisplayName());
-                context.json(json);
-            } catch(IOException | ParseException | SpotifyWebApiException e) {
+                SpotifyUserJson spotifyUserJson = mapper.readValue(spotifyAPI.getUser(accessToken), SpotifyUserJson.class);
+                context.json(spotifyUserJson);
+            } catch(Exception e) {
                 ErrorHandler.sendErrorMessage(context, e);
             }
         });
@@ -128,14 +117,13 @@ public class SpotifyEndPoints {
             }
 
             try {
-                String[] seeds = spotifyAPI.genreSeeds(accessToken);
+                SeedsJson seedsJson = mapper.readValue(spotifyAPI.genreSeeds(accessToken), SeedsJson.class);
                 Seeds json = new Seeds();
-                json.setSeeds(seeds);
+                json.setSeeds(seedsJson.getGenres());
                 context.json(json);
-            } catch(UnauthorizedException e) {
-                ErrorHandler.sendErrorMessage(context, e, "You must login first.", HttpStatus.UNAUTHORIZED);
+            } catch(Exception e) {
+                ErrorHandler.sendErrorMessage(context, e);
             }
-
         });
 
 
@@ -149,13 +137,9 @@ public class SpotifyEndPoints {
 
             String playlistId = context.pathParam("pId");
             try {
-                Playlist playstList = spotifyAPI.getPlaylistByPlaylistId(accessToken, playlistId);
-                PlaylistJson playlistJson = new PlaylistJson();
-                playlistJson.setName(playstList.getName());
-                playlistJson.setId(playstList.getId());
-                // playlistJson.setCoverImg(playstList.ge);
+                PlaylistJson playlistJson = mapper.readValue(spotifyAPI.getPlaylistByPlaylistId(accessToken, playlistId), PlaylistJson.class);
                 context.json(playlistJson);
-            } catch(IOException | ParseException | SpotifyWebApiException e) {
+            } catch(Exception e) {
                 ErrorHandler.sendErrorMessage(context, e);
             }
         });
@@ -179,12 +163,11 @@ public class SpotifyEndPoints {
             String name = body.getName();
             String description = body.getDescription();
             try {
-                Playlist playlist = spotifyAPI.createPlayList(accessToken, name, description);
-                PlaylistJson playlistJson = new PlaylistJson();
-                playlistJson.setId(playlist.getId());
-                playlistJson.setName(playlist.getName());
-                context.json(playlistJson);
-            } catch(IOException | ParseException | SpotifyWebApiException e) {
+                String playlist = spotifyAPI.createPlayList(accessToken, name, description);
+                System.out.println(playlist);
+                // FIXME: Fixa?
+                context.json(playlist);
+            } catch(Exception e) {
                 ErrorHandler.sendErrorMessage(context, e);
             }
         });
@@ -203,7 +186,7 @@ public class SpotifyEndPoints {
                 Delete deleted = new Delete();
                 deleted.setId(id);
                 context.json(deleted);
-            } catch(IOException | ParseException | SpotifyWebApiException e) {
+            } catch(Exception e) {
                 ErrorHandler.sendErrorMessage(context, e);
             };
         });
@@ -227,10 +210,10 @@ public class SpotifyEndPoints {
             }
 
             try {
-                SnapshotResult result = spotifyAPI.addToPlayList(accessToken, pId, body.getTrackId());
+                SnapshotId result = mapper.readValue(spotifyAPI.addToPlayList(accessToken, pId, body.getTrackId()), SnapshotId.class);
                 TrackJson trackJson = new TrackJson(result.getSnapshotId(), pId, body.getTrackId());
                 context.json(trackJson);
-            } catch(IOException | ParseException | SpotifyWebApiException e) {
+            } catch(Exception e) {
                 ErrorHandler.sendErrorMessage(context, e);
             }
         });
@@ -245,13 +228,9 @@ public class SpotifyEndPoints {
             String pId = context.pathParam("pid");
             String tId = context.pathParam("tid");
 
-            try {
-                SnapshotResult result = spotifyAPI.removeItemFromPlayList(accessToken, pId, tId);
-                TrackJson trackJson = new TrackJson(result.getSnapshotId(), pId, tId);
-                context.json(trackJson);
-            } catch(IOException | ParseException | SpotifyWebApiException e) {
-                ErrorHandler.sendErrorMessage(context, e);
-            }
+            SnapshotId result = mapper.readValue(spotifyAPI.removeItemFromPlayList(accessToken, pId, tId), SnapshotId.class);
+            TrackJson trackJson = new TrackJson(result.getSnapshotId(), pId, tId);
+            context.json(trackJson);
         });
 
         // -- Search playlist
@@ -263,13 +242,10 @@ public class SpotifyEndPoints {
             }
 
             String type = context.pathParam("type");
-            try {
-                Paging<Track> tracks = spotifyAPI.searchTracks(accessToken, type);
-                AlbumJson albumJson = new AlbumJson(tracks);
-                context.json(albumJson);
-            } catch(IOException | ParseException | SpotifyWebApiException e) {
-                ErrorHandler.sendErrorMessage(context, e);
-            }
+            String tracks = spotifyAPI.searchTracks(accessToken, type);
+            System.out.println(tracks);
+            // AlbumJson albumJson = new AlbumJson(tracks);
+            // context.json(albumJson);
         });
     }
 
@@ -277,7 +253,7 @@ public class SpotifyEndPoints {
         String accessToken = context.queryParam("access_token");
 
         if(accessToken == null || accessToken.isBlank()) {
-            ErrorHandler.sendErrorMessage(context, new BadRequestException(), "Access token is missing", HttpStatus.BAD_REQUEST);
+            ErrorHandler.sendErrorMessage(context, new Exception(), "Access token is missing", HttpStatus.BAD_REQUEST);
             return null;
         } else {
             return accessToken;

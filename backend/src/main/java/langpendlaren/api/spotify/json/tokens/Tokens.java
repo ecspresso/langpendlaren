@@ -3,7 +3,6 @@ package langpendlaren.api.spotify.json.tokens;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 
 public class Tokens {
     @JsonProperty("access_token")

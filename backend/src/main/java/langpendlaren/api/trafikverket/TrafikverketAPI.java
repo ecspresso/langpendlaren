@@ -1,5 +1,6 @@
 package langpendlaren.api.trafikverket;
 
+import langpendlaren.api.http.ErrorHandler;
 import langpendlaren.api.http.Http;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.core5.http.io.entity.StringEntity;
@@ -102,7 +103,7 @@ public class TrafikverketAPI extends Http {
         return post(xml);
     }
 
-    private String post(String xml) {
+    private String post(String xml) throws IOException {
         HttpPost httpPost = new HttpPost("https://api.trafikinfo.trafikverket.se/v2/data.json");
         httpPost.addHeader("contentType", "text/xml");
         httpPost.addHeader("dataType", "json");
