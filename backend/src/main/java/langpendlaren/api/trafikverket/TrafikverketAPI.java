@@ -1,16 +1,16 @@
 package langpendlaren.api.trafikverket;
 
 import langpendlaren.api.http.Http;
-import org.apache.http.HttpHost;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.core5.http.io.entity.StringEntity;
+
 
 import java.io.IOException;
 import java.time.LocalDate;
 
 public class TrafikverketAPI extends Http {
     public TrafikverketAPI() {
-        super(new HttpHost("https://api.trafikinfo.trafikverket.se/v2/data.json"));
+        super("https://api.trafikinfo.trafikverket.se/v2/data.json");
         apikey = "ab3f9656870c4625adfaaca4b76caeae";
     }
     private final String apikey;
@@ -102,7 +102,7 @@ public class TrafikverketAPI extends Http {
         return post(xml);
     }
 
-    private String post(String xml) throws IOException {
+    private String post(String xml) {
         HttpPost httpPost = new HttpPost("https://api.trafikinfo.trafikverket.se/v2/data.json");
         httpPost.addHeader("contentType", "text/xml");
         httpPost.addHeader("dataType", "json");

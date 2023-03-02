@@ -1,6 +1,8 @@
 package langpendlaren.api.spotify.json.tokens;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import se.michaelthelin.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 
 public class Tokens {
@@ -9,11 +11,13 @@ public class Tokens {
     @JsonProperty("refresh_token")
     private RefreshToken refreshToken;
 
-    public Tokens() {}
 
-    public Tokens(AuthorizationCodeCredentials credentials) {
-        this.accessToken = new AccessToken(credentials.getAccessToken(), credentials.getExpiresIn());
-        this.refreshToken = new RefreshToken(credentials.getRefreshToken());
+    public Tokens(String credentials) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        TokensJson tokensJson = mapper.readValue(credentials, TokensJson.class);
+
+        accessToken = new AccessToken(tokensJson.getAccessToken(), tokensJson.getExpiresIn());
+        refreshToken = new RefreshToken(tokensJson.getRefreshToken());
     }
 
     public AccessToken getAccessToken() {

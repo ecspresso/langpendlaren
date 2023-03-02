@@ -1,7 +1,7 @@
 //Funktion som hämtar genrer från spotify
 async function getAvailableGenre(accessToken){
     const data = await fetch(
-        `http://localhost/spotify/genre/seeds?access_token=${accessToken}`,
+        `http://localhost:8080/spotify/genre/seeds?access_token=${accessToken}`,
         { method: "GET" }
       )
         .then((res) => res.json())
@@ -11,7 +11,7 @@ async function getAvailableGenre(accessToken){
 
 async function getUserProfile(accessToken){
     const data = await fetch(
-        `http://localhost/spotify/user/profile?access_token=${accessToken}`,
+        `http://localhost:8080/spotify/user/profile?access_token=${accessToken}`,
         { method: "GET" }
       )
         .then((res) => res.json())
@@ -23,7 +23,7 @@ async function getUserProfile(accessToken){
 
 async function getTokens(code){
     const data = await fetch(
-        `http://localhost/spotify/authenticated?code=${code}`,
+        `http://localhost:8080/spotify/authenticated?code=${code}`,
         { method: "GET" }
       )
         .then((res) => res.json())
@@ -33,7 +33,7 @@ async function getTokens(code){
 
 async function getPlayListByGenre(genre, accessToken){
   const data = await fetch(
-    `http://localhost/spotify/search/playlist/${genre}?access_token=${accessToken}`,
+    `http://localhost:8080/spotify/search/playlist/${genre}?access_token=${accessToken}`,
     { method: "GET" }
   )
     .then((res) => res.json())
@@ -43,7 +43,7 @@ async function getPlayListByGenre(genre, accessToken){
 
 async function createPlayListByName(accessToken, name, description){
   const data = await fetch(
-    `http://localhost/spotify/playlist/?access_token=${accessToken}`
+    `http://localhost:8080/spotify/playlist/?access_token=${accessToken}`
     ,
     { method: "POST",
       headers: {
@@ -61,7 +61,7 @@ async function createPlayListByName(accessToken, name, description){
 
 async function getTracksByGenre(genre, accessToken, offset){
   const data = await fetch(
-    `http://localhost/spotify/search/track/${genre}?access_token=${accessToken}&?offset=${offset}`
+    `http://localhost:8080/spotify/search/track/${genre}?access_token=${accessToken}&?offset=${offset}`
     ,
     { method: "GET",}
   )
@@ -72,7 +72,7 @@ async function getTracksByGenre(genre, accessToken, offset){
 
 async function addToPlayList(accessToken, tId, pId){
   const data = await fetch(
-    `http://localhost/spotify/playlist/${pId}?access_token=${accessToken}`
+    `http://localhost:8080/spotify/playlist/${pId}?access_token=${accessToken}`
     ,
     { method: "PUT",
       body: JSON.stringify({
@@ -87,7 +87,7 @@ async function addToPlayList(accessToken, tId, pId){
 
 async function getPlayListTracksByPlayListId(accessToken, pId){
   const data = await fetch(
-    `http://localhost/spotify/playlist/${pId}?access_token=${accessToken}`
+    `http://localhost:8080/spotify/playlist/${pId}?access_token=${accessToken}`
     ,
     { method: "GET",}
   )

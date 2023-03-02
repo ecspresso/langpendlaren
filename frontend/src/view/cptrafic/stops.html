@@ -48,7 +48,7 @@
 
         //Hämtar stopp som användaren kan välja mellan via vårt eget API
         const getStops = async () => {
-                const data = await fetch(`http://localhost/trafikverket/trains/stops`, {method: "GET"}).then((res) => res.json()).catch((e) => console.assert(e));
+                const data = await fetch(`http://localhost:8080/trafikverket/trains/stops`, {method: "GET"}).then((res) => res.json()).catch((e) => console.assert(e));
                 const trainAnnouncements = data.RESPONSE.RESULT[0].TrainAnnouncement;
                 console.log(trainAnnouncements);
                 renderTrainAnnouncement(trainAnnouncements)

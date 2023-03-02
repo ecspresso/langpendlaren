@@ -53,7 +53,7 @@
   //Hämtar avgångar för alla tåg som avgår från den station man tidigare valt, skriver sedan ut information om tåget
   //Användaren väljer en av tågen för att sedan få fram vilka stationer den stannar vid
   const getTrains = async () => {
-    const data = await fetch(`http://localhost/trafikverket/departures`, {
+    const data = await fetch(`http://localhost:8080/trafikverket/departures`, {
       method: "GET",
     })
       .then((res) => res.json())

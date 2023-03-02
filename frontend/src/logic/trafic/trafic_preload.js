@@ -5,7 +5,7 @@ function preLoadTrainStations() {
   $.ajax({
     type: "GET",
     dataType: "json",
-    url: "http://localhost/trafikverket/stations",
+    url: "http://localhost:8080/trafikverket/stations",
     success: function (response) {
       if (response == null) return;
       try {

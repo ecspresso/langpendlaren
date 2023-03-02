@@ -7,7 +7,7 @@ import langpendlaren.api.trafikverket.TrafikverketEndPoints;
 
 public class WebServer {
     private final Javalin javalin;
-    private final Integer port = 80;
+    private final Integer port = 8080;
     public WebServer() {
         javalin = Javalin.create(config -> config.plugins.enableCors(cors -> cors.add(CorsPluginConfig::anyHost)));
 

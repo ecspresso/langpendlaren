@@ -58,7 +58,7 @@
 <script>
   const getStations = async () => {
     const station = document.getElementById("station");
-    const data = await fetch(`http://localhost/trafikverket/stations`, {
+    const data = await fetch(`http://localhost:8080/trafikverket/stations`, {
       method: "GET",
     })
       .then((res) => res.json())
@@ -99,10 +99,10 @@
 
   // }
 
-  // const stations = await fetch("http://localhost/trafikverket/stations", {method: "GET"});
+  // const stations = await fetch("http://localhost:8080/trafikverket/stations", {method: "GET"});
   // console.log(stations.json());
 
-  // readTextFile("http://localhost/trafikverket/stations", function(information){
+  // readTextFile("http://localhost:8080/trafikverket/stations", function(information){
   //     var data = JSON.parse(information);
   //     var data2 = data.RESPONSE.RESULT;
 
@@ -146,7 +146,7 @@
   // }
 
   // document.getElementById("searchbar").addEventListener("onload", async () => {
-  // const result = fetch('http://localhost/trafikverket/stations', {
+  // const result = fetch('http://localhost:8080/trafikverket/stations', {
   //       method: "GET",
   //       headers: {
   //         'Accept:': 'application/json',

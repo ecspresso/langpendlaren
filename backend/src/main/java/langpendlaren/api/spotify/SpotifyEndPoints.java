@@ -73,7 +73,7 @@ public class SpotifyEndPoints {
             }
 
             try {
-                AuthorizationCodeCredentials tokenCredentials = spotifyAPI.auth(code);
+                String tokenCredentials = spotifyAPI.auth(code);
                 Tokens tokensJson = new Tokens(tokenCredentials);
                 context.json(tokensJson);
             } catch (IOException | ParseException | SpotifyWebApiException e) {
@@ -91,7 +91,7 @@ public class SpotifyEndPoints {
             }
 
             try {
-                AuthorizationCodeCredentials tokenCredentials = spotifyAPI.refreshAccessToken(refreshToken);
+                String tokenCredentials = spotifyAPI.refreshAccessToken(refreshToken);
                 Tokens tokens = new Tokens(tokenCredentials);
                 context.json(tokens);
             } catch(IOException | SpotifyWebApiException | ParseException e) {

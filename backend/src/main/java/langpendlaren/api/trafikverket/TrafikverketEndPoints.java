@@ -27,6 +27,7 @@ public class TrafikverketEndPoints {
     public void endPoints(){
         // Hämtar alla stationer
         javalin.get("/trafikverket/stations", context -> {
+            System.out.println("Hämtar alla stationer");
             try {
                 String json = trafikverketAPI.getStationNames();
                 StationShortNamesJson shortNamesJson = mapper.readValue(json, StationShortNamesJson.class);

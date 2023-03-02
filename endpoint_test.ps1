@@ -7,8 +7,8 @@ $at = Get-Clipboard
 $at | clip
 $r  = Get-Clipboard
 
-(Invoke-RestMethod http://localhost/spotify/user/profile/$at) # user profile
-(Invoke-RestMethod http://localhost/spotify/genre/seeds) | convertto-json # seeds
+(Invoke-RestMethod http://localhost/spotify/user/profile?access_token=$at) | convertto-json -Depth 100 # user profile
+(Invoke-RestMethod http://localhost/spotify/genre/seeds?access_token=$at) | convertto-json # seeds
 
 (Invoke-RestMethod http://localhost/spotify/authenticated) # skaffa access token kräver ?code=
 
@@ -21,7 +21,8 @@ $body = @{name="emile";description="kaffe"} |ConvertTo-Json
 $body = @{name="emile"} |ConvertTo-Json
 $body = @{description="kaffe"} |ConvertTo-Json
 Remove-Variable body
-(Invoke-RestMethod http://localhost/spotify/playlist/create?access_token=$at -Method POST -body $body)
+(Invoke-RestMethod "http://localhost/spotify/playlist?access_token=$($at)" -Method POST -body $body) | ConvertTo-Json
+
 
 (Invoke-RestMethod http://localhost/spotify/search/playlist/pop?access_token=$at)
 $pl = (Invoke-RestMethod http://localhost/spotify/search/playlist/pop?access_token=$at)
@@ -44,7 +45,18 @@ $d
 Invoke-RestMethod "http://localhost/spotify/user/profile?access_token=$at"
 
 
-$track = "6p8eFfPw3nQkf37aT3AkmK"
-$plst = "3Q0TPrX8wilm5zKKOPhYIo"
+$track = "7AUVdpcqbxLSCOQqKHjPx7"
+$plst = "0WdNC7mrRWmyUpXpbEbFjk"
+$body = @{trackId="$track"} | ConvertTo-Json
 
-$rm = (Invoke-RestMethod -Method PUT -Uri "http://localhost/spotify/playlist/add/$plst/$track`?access_token=$at"); $rm
+(Invoke-RestMethod -Method DELETE -Uri "http://localhost/spotify/playlist/track/$plst/$track/?access_token=$at") | convertto-json
+
+$t = (Invoke-RestMethod "http://localhost/spotify/search/track/pop?access_token=$at")
+$t | ConvertTo-Json -Depth 100
+
+(Invoke-RestMethod "http://localhost/spotify/user/profile?access_toke=$at")
+
+
+
+
+(Invoke-RestMethod "http://localhost/spotify/playlist/7vCaVSzfVoKxl1FbRupxux?access_token=$at" -Method Delete) | ConvertTo-Json

@@ -21,7 +21,7 @@
 
     <script>
       document.getElementById("login").addEventListener("click", async () => {
-        const loginLink = await fetch("http://localhost/spotify/login", {
+        const loginLink = await fetch("http://localhost:8080/spotify/login", {
           method: "GET",
         });
         const data = await loginLink.json();

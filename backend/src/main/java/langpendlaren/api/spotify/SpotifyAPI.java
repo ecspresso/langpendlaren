@@ -45,13 +45,18 @@ import java.util.Properties;
 
 public class SpotifyAPI {
     // Spotify wrapper
-    private SpotifyApi spotifyApiWrapper;
     // Authorize class
     private final Authorize authorize;
     // Lock for synchronize work
     private final Object lock = new Object();
     private Properties prop;
     private Map<String, String> playListToId = new HashMap();
+
+    public static void main(String[] args) throws URISyntaxException, IOException {
+        SpotifyAPI spotifyAPI = new SpotifyAPI();
+        String s = spotifyAPI.getLoginPage().toString();
+        System.out.println(s);
+    }
 
     public SpotifyAPI() throws URISyntaxException, IOException {
         // Läs in inställningar från fil.
@@ -65,25 +70,14 @@ public class SpotifyAPI {
             prop.load(stream);
         }
 
-        connectApi(prop);
-        // Klass för att hantera Spotify inloggning.
-        authorize = new Authorize(spotifyApiWrapper);
-    }
-
-    /**
-     * Kopplar till apien
-     * @param prop lokala info
-     * @throws URISyntaxException
-     */
-    private void connectApi(Properties prop) throws URISyntaxException {
         // Hemliga saker för vår app.
         String clientId = prop.getProperty("clientId");
         String clientSecret = prop.getProperty("clientSecret");
         String redirect = prop.getProperty("redirect");
         // Var Spotify ska skicka tillbaka användaren.
         URI redirectURI = new URI(redirect);
-        // Wrapper för Spotifys API
-        this.spotifyApiWrapper = new SpotifyApi.Builder().setClientId(clientId).setClientSecret(clientSecret).setRedirectUri(redirectURI).build();
+        // Klass för att hantera Spotify inloggning.
+        authorize = new Authorize(clientId, clientSecret, redirectURI);
     }
 
     public String[] genreSeeds(String accessToken) throws IOException, ParseException, SpotifyWebApiException, URISyntaxException {
@@ -105,11 +99,11 @@ public class SpotifyAPI {
      * @param code an id from user acceptation
      * @return AuthorizationCodeCredentials som innehåller access token och refresh token.
      */
-    public AuthorizationCodeCredentials auth(String code) throws IOException, ParseException, SpotifyWebApiException {
+    public String auth(String code) throws IOException, ParseException, SpotifyWebApiException {
         return authorize.getAccessToken(code);
     }
 
-    public AuthorizationCodeCredentials refreshAccessToken(String refreshToken) throws IOException, ParseException, SpotifyWebApiException {
+    public String refreshAccessToken(String refreshToken) throws IOException, ParseException, SpotifyWebApiException {
         return authorize.refreshToken(refreshToken);
     }
 

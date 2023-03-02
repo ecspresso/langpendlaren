@@ -27,7 +27,7 @@ function createMainWindow() {
 // Hantera inloggning mot Spotify.
 // Skickar inloggningsfråga till vår server som skickar oss vidare till Spotify, och sedan tillbaka igen.
 ipcMain.on("spotifyLogin", () => {
-  fetch("http://localhost/spotify/login")
+  fetch("http://localhost:8080/spotify/login")
   .then((res) => res.json())
   .then((data) => {
     //https://stackoverflow.com/questions/37546656/handling-oauth2-redirect-from-electron-or-other-desktop-platforms

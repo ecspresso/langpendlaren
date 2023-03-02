@@ -57,7 +57,7 @@
   //Hämtar data från vårt api genom FETCH och skriver sedan ut tabell med datan från requesten
   const getStations = async () => {
     const searchKey = document.getElementById("station");
-    const data = await fetch(`http://localhost/trafikverket/stations`, {
+    const data = await fetch(`http://localhost:8080/trafikverket/stations`, {
       method: "GET",
     })
       .then((res) => res.json())

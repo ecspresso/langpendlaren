@@ -79,7 +79,7 @@ function search() {
   $.ajax({
     type: "GET",
     dataType: "json",
-    url: "http://localhost/trafikverket/departures/" + sign,
+    url: "http://localhost:8080/trafikverket/departures/" + sign,
     success: function (response) {
       if (response == null) return;
       if (response.train_announcement == null)
