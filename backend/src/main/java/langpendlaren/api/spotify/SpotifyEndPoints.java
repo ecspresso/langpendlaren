@@ -1,6 +1,7 @@
 package langpendlaren.api.spotify;
 
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import io.javalin.http.HttpStatus;
@@ -9,13 +10,16 @@ import langpendlaren.api.spotify.json.loginpage.LoginPage;
 import langpendlaren.api.spotify.json.playlist.Body;
 import langpendlaren.api.spotify.json.playlist.BodyTrack;
 import langpendlaren.api.spotify.json.playlist.Delete;
+import langpendlaren.api.spotify.json.playlist.Playlist;
 import langpendlaren.api.spotify.json.playlist.PlaylistJson;
 import langpendlaren.api.spotify.json.playlist.SnapshotId;
 import langpendlaren.api.spotify.json.playlist.TrackJson;
 import langpendlaren.api.spotify.json.seeds.Seeds;
 import langpendlaren.api.spotify.json.seeds.SeedsJson;
+import langpendlaren.api.spotify.json.spotifyUser.SpotifyUser;
 import langpendlaren.api.spotify.json.spotifyUser.SpotifyUserJson;
 import langpendlaren.api.spotify.json.tokens.Tokens;
+import langpendlaren.api.spotify.json.tracks.TracksJson;
 
 import java.io.IOException;
 import java.net.URI;
@@ -27,6 +31,7 @@ public class SpotifyEndPoints {
     private final ObjectMapper mapper = new ObjectMapper();
 
     public SpotifyEndPoints(Javalin javalin){
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         this.javalin = javalin;
         try {
             spotifyAPI = new SpotifyAPI();
@@ -101,7 +106,8 @@ public class SpotifyEndPoints {
 
             try {
                 SpotifyUserJson spotifyUserJson = mapper.readValue(spotifyAPI.getUser(accessToken), SpotifyUserJson.class);
-                context.json(spotifyUserJson);
+                SpotifyUser spotifyUser = new SpotifyUser(spotifyUserJson);
+                context.json(spotifyUser);
             } catch(Exception e) {
                 ErrorHandler.sendErrorMessage(context, e);
             }
@@ -138,7 +144,8 @@ public class SpotifyEndPoints {
             String playlistId = context.pathParam("pId");
             try {
                 PlaylistJson playlistJson = mapper.readValue(spotifyAPI.getPlaylistByPlaylistId(accessToken, playlistId), PlaylistJson.class);
-                context.json(playlistJson);
+                Playlist playlist = new Playlist(playlistJson);
+                context.json(playlist);
             } catch(Exception e) {
                 ErrorHandler.sendErrorMessage(context, e);
             }
@@ -163,9 +170,8 @@ public class SpotifyEndPoints {
             String name = body.getName();
             String description = body.getDescription();
             try {
-                String playlist = spotifyAPI.createPlayList(accessToken, name, description);
-                System.out.println(playlist);
-                // FIXME: Fixa?
+                PlaylistJson playlistJson = mapper.readValue(spotifyAPI.createPlaylist(accessToken, name, description), PlaylistJson.class);
+                Playlist playlist = new Playlist(playlistJson);
                 context.json(playlist);
             } catch(Exception e) {
                 ErrorHandler.sendErrorMessage(context, e);
@@ -242,10 +248,9 @@ public class SpotifyEndPoints {
             }
 
             String type = context.pathParam("type");
-            String tracks = spotifyAPI.searchTracks(accessToken, type);
-            System.out.println(tracks);
+            TracksJson tracksJson = mapper.readValue(spotifyAPI.searchTracks(accessToken, type), TracksJson.class);
             // AlbumJson albumJson = new AlbumJson(tracks);
-            // context.json(albumJson);
+            context.json(tracksJson);
         });
     }
 

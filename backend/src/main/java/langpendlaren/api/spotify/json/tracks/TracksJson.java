@@ -1,68 +1,80 @@
 package langpendlaren.api.spotify.json.tracks;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
 
 
-public class TracksJson {
+public record TracksJson (Tracks tracks) {
     /**
      * This class represents the unmarshalled reply form the server
      * for the endpoint "/spotify/_______".
      */
 
-    @JsonProperty("RESPONSE")
-    private Response response;
+    public record Tracks(String href,
+                         Items[] items,
+                         int limit,
+                         String next,
+                         int offset,
+                         String previous,
+                         int total) {}
 
-    public void setResponse(Response response){this.response = response;}
-    public Response getResponse(){
-        return response;
-    }
-    static class Response{
-        /**
-         * The property holds the array RESULT with the corresponding track objects.
-         */
-        @JsonProperty
-        private List<RecommendedTracks> tracksList;
+    public record Items (Album album,
+                         Artist[] artists,
+                         @JsonProperty("available_markets")
+                         String[] availableMarkets,
+                         @JsonProperty("disc_number")
+                         int discNumber,
+                         @JsonProperty("duration_ms")
+                         int durationMs,
+                         boolean explicit,
+                         @JsonProperty("external_ids")
+                         ExternalIds externalIds,
+                         @JsonProperty("external_urls")
+                         ExternalUrls externalUrls,
+                         String href,
+                         String id,
+                         @JsonProperty("is_local")
+                         boolean isLocal,
+                         String name,
+                         int popularity,
+                         @JsonProperty("preview_url")
+                         String previewUrl,
+                         @JsonProperty("track_number")
+                         int trackNumber,
+                         String type,
+                         String uri) {}
 
-        public List<RecommendedTracks> getTracksList(){
-            return tracksList;
-        }
-        public void setTracksList(List<RecommendedTracks> tracksList){
-            this.tracksList = tracksList;
-        }
-    }
+    public record Album (String albumType,
+                         Artist[] artists,
+                         @JsonProperty("available_markets")
+                         String[] availableMarkets,
+                         @JsonProperty("external_urls")
+                         ExternalUrls externalUrls,
+                         String href,
+                         String id,
+                         Images[] images,
+                         String name,
+                         @JsonProperty("release_date")
+                         String releaseDate,
+                         @JsonProperty("release_date_precision")
+                         String releaseDatePrecision,
+                         @JsonProperty("total_tracks")
+                         int totalTracks,
+                         String type,
+                         String uri) {}
 
-    /**
-     * This class represents the song track object.
-     */
-    static class RecommendedTracks{
-        @JsonProperty("tracks")
-        private List<TrackID> trackIDS; //this cant be right
+    public record Artist (@JsonProperty("external_urls") ExternalUrls externalUrls,
+                          String href,
+                          String id,
+                          String name,
+                          String type,
+                          String uri) {}
 
-        @JsonProperty("duration_ms")
-        private int duration;
+    public record ExternalIds (String spotify) {}
 
-        public void setDuration(int duration){
-            this.duration = duration;
-        }
-        public int getDuration(){
-            return duration;
-        }
-    }
+    public record ExternalUrls (String spotify) {}
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    static class TrackID{
-        @JsonProperty("id")
-        private String id;      //The unique song ID (ex."spotify:track:4iV5W9uYEdYUVa79Axb7Rh")
-
-        public void setID(String id){
-            this.id = id;
-        }
-        public String getID(){
-            return id;
-        }
-    }
-
+    public record Images (int height,
+                          String url,
+                          int width) {}
 }

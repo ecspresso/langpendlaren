@@ -26,12 +26,6 @@ public class SpotifyAPI extends Http {
     private final Properties prop;
     private Map<String, String> playListToId = new HashMap();
 
-    public static void main(String[] args) throws URISyntaxException, IOException {
-        SpotifyAPI spotifyAPI = new SpotifyAPI();
-        String s = spotifyAPI.getLoginPage().toString();
-        System.out.println(s);
-    }
-
     public SpotifyAPI() throws URISyntaxException, IOException {
         super("https://api.spotify.com/v1/");
         // Läs in inställningar från fil.
@@ -75,8 +69,8 @@ public class SpotifyAPI extends Http {
         HttpPost httpPost = new HttpPost(super.host + endpoint);
         httpPost.addHeader("Content-Type", "application/json");
         httpPost.setHeader("Authorization", "Bearer " + accessToken);
-        if(contentLength != null)
-            httpPost.addHeader("Content-Length", contentLength);
+        // if(contentLength != null)
+        //     httpPost.addHeader("Content-Length", contentLength);
         StringEntity entity = new StringEntity(body);
         httpPost.setEntity(entity);
         return super.post(httpPost);
@@ -141,7 +135,7 @@ public class SpotifyAPI extends Http {
     /**
      *
      */
-    public String createPlayList(String accessToken, String name, String description) throws IOException {
+    public String createPlaylist(String accessToken, String name, String description) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         SpotifyUserJson spotifyUserJson = mapper.readValue(getUser(accessToken), SpotifyUserJson.class);
         String userId = spotifyUserJson.getId();
@@ -253,7 +247,7 @@ public class SpotifyAPI extends Http {
     public String searchTracks(String accessToken, String genre) throws IOException {
         Header[] headers = new Header[1];
         headers[0] = new Header("Authorization", "Bearer " + accessToken);
-        return get(String.format("search?q=genre:%s&type=track&limit=106offset=0&include_external=audio", genre), headers);
+        return get(String.format("search?q=genre=%s&type=track&limit=10&offset=0&include_external=audio", genre), headers);
     }
 
     // /**
