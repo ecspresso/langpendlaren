@@ -234,9 +234,14 @@ public class SpotifyEndPoints {
             String pId = context.pathParam("pid");
             String tId = context.pathParam("tid");
 
-            SnapshotId result = mapper.readValue(spotifyAPI.removeItemFromPlayList(accessToken, pId, tId), SnapshotId.class);
-            TrackJson trackJson = new TrackJson(result.getSnapshotId(), pId, tId);
-            context.json(trackJson);
+            try {
+                String s = spotifyAPI.removeItemFromPlayList(accessToken, pId, tId);
+                SnapshotId result = mapper.readValue(s, SnapshotId.class);
+                TrackJson trackJson = new TrackJson(result.getSnapshotId(), pId, tId);
+                context.json(trackJson);
+            } catch(Exception e) {
+                ErrorHandler.sendErrorMessage(context, e);
+            }
         });
 
         // -- Search playlist
@@ -247,10 +252,13 @@ public class SpotifyEndPoints {
                 return;
             }
 
-            String type = context.pathParam("type");
-            TracksJson tracksJson = mapper.readValue(spotifyAPI.searchTracks(accessToken, type), TracksJson.class);
-            // AlbumJson albumJson = new AlbumJson(tracks);
-            context.json(tracksJson);
+            try {
+                String type = context.pathParam("type");
+                TracksJson tracksJson = mapper.readValue(spotifyAPI.searchTracks(accessToken, type), TracksJson.class);
+                context.json(tracksJson);
+            } catch(Exception e) {
+                ErrorHandler.sendErrorMessage(context, e);
+            }
         });
     }
 

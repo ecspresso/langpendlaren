@@ -65,7 +65,7 @@ public class SpotifyAPI extends Http {
         return super.get(httpGet);
     }
 
-    private String post(String endpoint, String accessToken, String body, Integer contentLength) throws IOException {
+    private String post(String endpoint, String accessToken, String body) throws IOException {
         HttpPost httpPost = new HttpPost(super.host + endpoint);
         httpPost.addHeader("Content-Type", "application/json");
         httpPost.setHeader("Authorization", "Bearer " + accessToken);
@@ -82,6 +82,16 @@ public class SpotifyAPI extends Http {
         httpDelete.setHeader("Authorization", "Bearer " + accessToken);
         return super.delete(httpDelete);
     }
+
+    private String delete(String endpoint, String accessToken, String body) throws IOException {
+        HttpDelete httpDelete = new HttpDelete(super.host + endpoint);
+        httpDelete.addHeader("Content-Type", "application/json");
+        httpDelete.setHeader("Authorization", "Bearer " + accessToken);
+        StringEntity entity = new StringEntity(body);
+        httpDelete.setEntity(entity);
+        return super.delete(httpDelete);
+    }
+
 
     /**
      * List of genres.
@@ -146,7 +156,7 @@ public class SpotifyAPI extends Http {
                 "public": false
             }
             """, name, description);
-        return post(String.format("users/%s/playlists", userId), accessToken, body, 92);
+        return post(String.format("users/%s/playlists", userId), accessToken, body);
     }
 
     /**
@@ -157,7 +167,7 @@ public class SpotifyAPI extends Http {
      */
     public String removeItemFromPlayList(String accessToken, String playlistId, String trackId) throws IOException {
         String body = String.format("{\"tracks\": [{\"uri\": \"spotify:track:%s\"}]}", trackId);
-        return post(String.format("playlists/%s/tracks", playlistId), accessToken, body, null);
+        return delete(String.format("playlists/%s/tracks", playlistId), accessToken, body);
     }
 
     /**
@@ -183,7 +193,7 @@ public class SpotifyAPI extends Http {
                 ]
             }
             """, trackId);
-        return post(String.format("playlists/%s/tracks", playlistId), accessToken, body, 49);
+        return post(String.format("playlists/%s/tracks", playlistId), accessToken, body);
     }
 
 
