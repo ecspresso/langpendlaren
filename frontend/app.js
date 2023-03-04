@@ -36,7 +36,7 @@ ipcMain.on("spotifyLogin", () => {
       height: 600,
       show: false
     });
-
+    // HÄR DET FUFFENS
     authWindow.webContents.on("will-navigate", function (event, url) {
       handleSpotifyAuth(authWindow, event, url);
     });
@@ -56,7 +56,7 @@ function handleSpotifyAuth(authWindow, event, url) {
   let realUrl = new URL(url);
   let code = realUrl.searchParams.get("code")
 
-  if(realUrl.host === "localhost") {
+  if(realUrl.host === "localhost:8080") {
     event.preventDefault();
     mainWindow.webContents.send("spotifyReady", code);
     authWindow.close();
