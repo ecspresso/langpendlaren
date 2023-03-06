@@ -16,21 +16,6 @@ public class TrafikverketAPI extends Http {
     }
     private final String apikey;
 
-    public String getTrainStops(int trainId) throws IOException {
-        String xml = String.format("""
-                <REQUEST>
-                    <LOGIN authenticationkey="%s" />
-                    <QUERY objecttype="TrainAnnouncement" schemaversion="1.3">
-                        <FILTER>
-                            <EQ name="AdvertisedTrainIdent" value="%s" />
-                        </FILTER>
-                    </QUERY>
-                </REQUEST>
-                """, apikey, trainId);
-
-        return post(xml);
-    }
-
     //Anger avgångar från en viss station genom station signature (exempelvis: Cst)
     public String getDepartures(String stationSignature) throws IOException {
         String xml = String.format("""
