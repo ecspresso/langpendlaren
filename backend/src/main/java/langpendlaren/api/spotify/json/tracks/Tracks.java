@@ -1,34 +1,21 @@
 package langpendlaren.api.spotify.json.tracks;
 
-import java.util.LinkedList;
-import java.util.List;
+public record Tracks(Items[] items, int offset, int total) {
+    public Tracks(TracksJson tracksJson) {
+        this(Tracks.setItems(tracksJson.tracks().items()), tracksJson.tracks().offset(), tracksJson.tracks().total());
+    }
 
-public class Tracks {
-    /**
-     * This class represents the marshalled reply from the server
-     * for the endpoint "/spotify/_______".
-     */
-    private List<Tracks> tracks = new LinkedList<>();
-
-    //Add GetSet later
-
-
-    public void addTracks(TracksJson json){
-
-        //Its so late i cant see straight so ill leave this mess to be cleaned up tomorrow
-        //List<TracksJson.TrackID> trackIDList = json.getResponse().getTracksList().get(0).
-
-        /*for(TracksJson.RecommendedTracks tracks : tracks){
-            this.tracks.add(new Tracks(
-                    tracks
-            ))*/
+    private static Items[] setItems(TracksJson.Items[] trackItems) {
+        Items[] items = new Items[trackItems.length];
+        for(int i = 0; i < trackItems.length; i++) {
+            items[i] = new Items(trackItems[i].id(), trackItems[i].name(), trackItems[i].album().images()[0].url(), trackItems[i].durationMs());
         }
-        class Track{
-            private String songID;
-            private String artist;
-            private String title;
-            private int durationMS;
-        }
+
+        return items;
+    }
+
+
+    public record Items(String id, String name, String imgSrc, int durationMs) {}
 }
 
 

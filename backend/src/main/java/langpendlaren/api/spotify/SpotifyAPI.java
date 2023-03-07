@@ -254,10 +254,10 @@ public class SpotifyAPI extends Http {
      *
      * @return a list of track
      */
-    public String searchTracks(String accessToken, String genre) throws IOException {
+    public String searchTracks(String accessToken, String genre, String offset) throws IOException {
         Header[] headers = new Header[1];
         headers[0] = new Header("Authorization", "Bearer " + accessToken);
-        return get(String.format("search?q=genre=%s&type=track&limit=10&offset=0&include_external=audio", genre), headers);
+        return get(String.format("search?q=genre=%s&type=track&limit=10&offset=%s&include_external=audio", genre, offset), headers);
     }
 
     // /**

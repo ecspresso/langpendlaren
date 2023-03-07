@@ -19,11 +19,13 @@ import langpendlaren.api.spotify.json.seeds.SeedsJson;
 import langpendlaren.api.spotify.json.spotifyUser.SpotifyUser;
 import langpendlaren.api.spotify.json.spotifyUser.SpotifyUserJson;
 import langpendlaren.api.spotify.json.tokens.Tokens;
+import langpendlaren.api.spotify.json.tracks.Tracks;
 import langpendlaren.api.spotify.json.tracks.TracksJson;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Objects;
 
 public class SpotifyEndPoints {
     private final Javalin javalin;
@@ -216,8 +218,8 @@ public class SpotifyEndPoints {
             }
 
             try {
-                SnapshotId result = mapper.readValue(spotifyAPI.addToPlayList(accessToken, pId, body.getTrackId()), SnapshotId.class);
-                TrackJson trackJson = new TrackJson(result.getSnapshotId(), pId, body.getTrackId());
+                SnapshotId result = mapper.readValue(spotifyAPI.addToPlayList(accessToken, pId, body.trackId()), SnapshotId.class);
+                TrackJson trackJson = new TrackJson(result.getSnapshotId(), pId, body.trackId());
                 context.json(trackJson);
             } catch(Exception e) {
                 ErrorHandler.sendErrorMessage(context, e);
@@ -247,15 +249,22 @@ public class SpotifyEndPoints {
         // -- Search playlist
         javalin.get("/spotify/search/track/{type}", context -> {
             // Get access token
+            System.out.println("Search track");
             String accessToken;
             if((accessToken = getAccessToken(context)) == null) {
                 return;
             }
 
+            String offset = context.queryParam("offset");
+            if(offset == null || offset.isBlank()) {
+                offset = "0";
+            }
+
             try {
                 String type = context.pathParam("type");
-                TracksJson tracksJson = mapper.readValue(spotifyAPI.searchTracks(accessToken, type), TracksJson.class);
-                context.json(tracksJson);
+                TracksJson tracksJson = mapper.readValue(spotifyAPI.searchTracks(accessToken, type, offset), TracksJson.class);
+                Tracks tracks = new Tracks(tracksJson);
+                context.json(tracks);
             } catch(Exception e) {
                 ErrorHandler.sendErrorMessage(context, e);
             }
