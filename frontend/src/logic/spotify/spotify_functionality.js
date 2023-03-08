@@ -8,6 +8,10 @@ function savePlayList(){
 function newPlaylist() {
 }
 
+function showPopup() {
+    window.alert("Alla låtar har blivit tillagda till spellistan du skapade!");
+}
+
 
 
 // När användaren har klickat på knappen hämta från API:et låtar som är lika långa som resan från den valda genren
@@ -40,10 +44,7 @@ async function displayTracks(genre, travelTime, accessToken, pId) {
                      <td><img src="${track.imgSrc}"></td>
                      <td>${track.name}</td>
                      <td>${dur}</td>
-                         <td><button
-                         class="basic_button"
-                         type='button'
-                         onclick="playMusic()">KNAPP?</button></td>
+                         
                  </tr>"
          `);
 
@@ -61,6 +62,9 @@ async function displayTracks(genre, travelTime, accessToken, pId) {
             console.log(res);
         });
     }
+
+    //Visa popup när loopen är klar
+    showPopup();
 
     // Pull out all tracks from playlist and show on the screen to play.
     //     getPlayListTracksByPlayListId(accessToken, pId).then(res => {

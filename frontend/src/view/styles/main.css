@@ -9,7 +9,9 @@ body {
   height: 100vh;
 }
 
-
+.center_me {
+  margin: auto;
+}
 
 #station_header {
   text-align: center;
