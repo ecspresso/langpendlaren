@@ -15,6 +15,12 @@ function savePlayList(){
     }
 }
 
+
+function showPopup() {
+    window.alert("Alla låtar har blivit tillagda till spellistan du skapade!");
+}
+
+
 function newPlaylist() {
 }
 
@@ -70,6 +76,8 @@ async function displayTracks(genre, travelTime, accessToken) {
     let base64 = btoa(JSON.stringify(allTracks))
     localStorage.setItem("songs", base64);
     localStorage.setItem("offset", offset);
+
+    showPopup();
 }
 
 

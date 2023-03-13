@@ -61,9 +61,9 @@ function handleSpotifyClickEvents(){
       createPlayListByName(localStorage.getItem("access_token"), name.value, desc.value).then(result => {
         localStorage.setItem("p_id", result.id);
         document.getElementById("playListCreatorWraper").innerHTML = `<div>
-          <h4 style="color: green;">Successful created!</h4>
-          <p>PlayListName: ${result.name} </p>
-          <p>PlayListName: ${desc.value} </p>
+          <h4 style="color: green;">Spellista skapad!</h4>
+          <p>Spellistans namn: ${result.name} </p>
+          <p>Beskrivning: ${desc.value} </p>
         </div>`
       });
     }
@@ -76,8 +76,6 @@ function handleSpotifyClickEvents(){
     displayTracks(genre, localStorage.getItem("spotifyTime"), localStorage.getItem("access_token"));
   });
 
-  // När användaren har klickat på knappen läggs nya låtar till i spellistan på användarens konto
-  document.getElementById("savePlayList").addEventListener("click", () => savePlayList());
   // När användaren har klickat på knappen gör en ny API-hämtning med nya låtar (ett could krav enligt)
 
   // displayTracks(genre, localStorage.getItem("spotifyTime"), localStorage.getItem("access_token"), localStorage.getItem("p_id"));
