@@ -13,6 +13,8 @@ function savePlayList(){
             console.log(res);
         });
     }
+
+    showPopup()
 }
 
 
@@ -77,7 +79,7 @@ async function displayTracks(genre, travelTime, accessToken) {
     localStorage.setItem("songs", base64);
     localStorage.setItem("offset", offset);
 
-    showPopup();
+    
 }
 
 

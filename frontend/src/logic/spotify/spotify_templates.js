@@ -40,6 +40,7 @@ function getGenreTemplate(travelTime){
             <div id="part_three">
                 <div id="song_suggestions">
                     <h4 class="sub_title">Dina låtar</h4>
+                    <p>Var god att bläddra ner och antingen spara låtarna till din lista eller generera nytt förslag</p>
                     <table id="tracksTable">
                         <tr>
                             <th>No</th>
@@ -49,9 +50,16 @@ function getGenreTemplate(travelTime){
                         </tr>
                     </table>
                 </div>
+
                 
             </div>
-        
+
+                <div id="part_four">
+                    <div>
+                        <button class="basic_button" type="button" id="savePlayList">Spara spellista</button>
+                        <button class="basic_button" type="button" id="generatePlaylist">Generera nya förslag</button>
+                    </div>
+                </div>
             
         </div>
     

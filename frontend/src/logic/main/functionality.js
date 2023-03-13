@@ -78,6 +78,9 @@ function handleSpotifyClickEvents(){
 
   // När användaren har klickat på knappen gör en ny API-hämtning med nya låtar (ett could krav enligt)
 
+  // När användaren har klickat på knappen läggs nya låtar till i spellistan på användarens konto
+  document.getElementById("savePlayList").addEventListener("click", () => savePlayList());
+  
   // displayTracks(genre, localStorage.getItem("spotifyTime"), localStorage.getItem("access_token"), localStorage.getItem("p_id"));
   document.getElementById("generatePlaylist").addEventListener("click", () => {
     var select = document.getElementById("genres");
