@@ -61,7 +61,7 @@ async function createPlayListByName(accessToken, name, description){
 
 async function getTracksByGenre(genre, accessToken, offset){
   const data = await fetch(
-    `http://localhost:8080/spotify/search/track/${genre}?access_token=${accessToken}&?offset=${offset}`
+    `http://localhost:8080/spotify/search/track/${genre}?access_token=${accessToken}&offset=${offset}`
     ,
     { method: "GET",}
   )

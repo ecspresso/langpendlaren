@@ -2,7 +2,6 @@ package langpendlaren.api.trafikverket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
-import io.javalin.http.HttpStatus;
 import langpendlaren.api.http.ErrorHandler;
 import langpendlaren.api.trafikverket.json.departures.Departures;
 import langpendlaren.api.trafikverket.json.departures.DeparturesJson;
@@ -27,6 +26,7 @@ public class TrafikverketEndPoints {
     public void endPoints(){
         // Hämtar alla stationer
         javalin.get("/trafikverket/stations", context -> {
+            System.out.println("hämtar stationer");
             try {
                 String json = trafikverketAPI.getStationNames();
                 StationShortNamesJson shortNamesJson = mapper.readValue(json, StationShortNamesJson.class);
@@ -36,10 +36,12 @@ public class TrafikverketEndPoints {
             } catch(IOException e) {
                 ErrorHandler.sendErrorMessage(context, e);
             }
+            System.out.println("Klar");
         });
 
         // Avgångar från en viss station, anges genom station signature
         javalin.get("/trafikverket/departures/{sign}", context -> {
+            System.out.println("Hämtar avgångar");
             try {
                 String json = trafikverketAPI.getDepartures(context.pathParam("sign"));
                 DeparturesJson departuresJson = mapper.readValue(json, DeparturesJson.class);
@@ -49,10 +51,12 @@ public class TrafikverketEndPoints {
             } catch(IOException e) {
                 ErrorHandler.sendErrorMessage(context, e);
             }
+            System.out.println("Klar");
         });
 
         // Hämta ut vilka stationer som ett tåg stannar på
         javalin.get("/trafikverket/trains/stops/{trainIdent}", context -> {
+            System.out.println("Hämtar vilka stationer tåget stannar på.");
             try {
                 String json = trafikverketAPI.getTrainStopStation(context.pathParam("trainIdent"));
                 StopsJson stopsJson = mapper.readValue(json, StopsJson.class);
@@ -62,6 +66,7 @@ public class TrafikverketEndPoints {
             } catch(IOException e) {
                 ErrorHandler.sendErrorMessage(context, e);
             }
+            System.out.println("Klar");
         });
     }
 }

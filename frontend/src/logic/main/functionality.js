@@ -73,13 +73,19 @@ function handleSpotifyClickEvents(){
   document.getElementById("send_genre_button").addEventListener("click", () => {
     var select = document.getElementById("genres");
     var genre = select.options[select.selectedIndex].text;
-    displayTracks(genre, localStorage.getItem("spotifyTime"), localStorage.getItem("access_token"), localStorage.getItem("p_id"));
+    displayTracks(genre, localStorage.getItem("spotifyTime"), localStorage.getItem("access_token"));
   });
 
   // När användaren har klickat på knappen läggs nya låtar till i spellistan på användarens konto
   document.getElementById("savePlayList").addEventListener("click", () => savePlayList());
   // När användaren har klickat på knappen gör en ny API-hämtning med nya låtar (ett could krav enligt)
-  document.getElementById("generatePlaylist").addEventListener("click", () => getRandomPlayList(listOfGenre));
+
+  // displayTracks(genre, localStorage.getItem("spotifyTime"), localStorage.getItem("access_token"), localStorage.getItem("p_id"));
+  document.getElementById("generatePlaylist").addEventListener("click", () => {
+    var select = document.getElementById("genres");
+    var genre = select.options[select.selectedIndex].text;
+    displayTracks(genre, localStorage.getItem("spotifyTime"), localStorage.getItem("access_token"));
+  });
 }
 
 /**
