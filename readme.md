@@ -5,8 +5,8 @@ Spotifys API ser inte att fungera helt med gratiskonton, måste vara ett betalko
 Se till att ha Java 17 eller senare installerat och `java` i PATH.
 
 ## Backend
-1. Ladda ner `Backend.jar` (https://github.com/ecspresso/langpendlaren/releases/download/1/Backend.jar).
-2. Starta med `java -jar Backend.jar`.
+1. Ladda ner `backendv2.jar` (https://github.com/ecspresso/langpendlaren/releases/download/2/backendv2.jar).
+2. Starta med `java -jar backendv2.jar`.
 
 ### För att köra i IDE
 Navigera till backend från terminalen och öppna projekteten i en IDE, exekvera sedan filen Main.java
@@ -15,7 +15,7 @@ Gå till fil -> projektstruktur -> projekt -> SDK -> SDK 17
 Exekvera sedan filen Main.java och kontrollera att servern körs
 
 ### Linux
-Servern kör på port 80 och det kan kräva utökad behörighet, starta i så fall med med sudo: `sudo java -jar Backend.jar`.
+Servern kör på port 8080. Starta med `java -jar backendv2.jar`.
 
 ## Frontend
 ### Windows
@@ -23,8 +23,8 @@ Servern kör på port 80 och det kan kräva utökad behörighet, starta i så fa
 2. Exekvera `frontend.Setup.1.0.0.exe`. Installationen kommer att installera programmet `Frontend` i katalogen `C:\Users\<username>\AppData\Local\Programs\frontend`. Programmet startar automatiskt efter installationen.
 
 ### Linux
-1. Ladda ner `Frontend.AppImage`.
-2. Gör programmet körbart med `chmod +x Frontend.AppImage`
+1. Ladda ner `frontendv2.AppImage` (https://github.com/ecspresso/langpendlaren/releases/download/2/frontendv2.AppImage).
+2. Gör programmet körbart med `chmod +x frontendv2.AppImage`
 3. Kör programmet.
 
 ### Terminalen
